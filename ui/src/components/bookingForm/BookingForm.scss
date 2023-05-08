@@ -1,0 +1,12 @@
+.patient-profile-form {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    height: 680px;
+    overflow: auto;
+    padding: 2px;
+
+    .patient-profile-field {
+        width: calc(50% - 12px);
+    }
+}

@@ -1,0 +1,29 @@
+.user-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.user-main-container {
+    width: 624px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin: 0 auto;
+    .user-main-detail {
+        width: calc(50% - 12px);
+    }
+}
+
+.update-button {
+    button {
+        margin: 32px auto 0px; 
+    }
+}
+
+.update-other-button {
+    button {
+        margin: 224px auto 0px;
+    }
+}

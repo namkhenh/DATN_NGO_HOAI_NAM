@@ -1,0 +1,55 @@
+.ms-DatePicker{
+    .ms-TextField{
+        .ms-TextField-wrapper {
+            >label {
+                color: rgb(50, 49, 48);
+                font-size: 16px;
+                font-family: 'Roboto', sans-serif !important;
+                padding-bottom: 4px;
+            }
+        }
+    }
+}
+
+.ms-TextField-fieldGroup {
+    border-radius: 4px;
+    border: 1px solid #cccccc;
+    height: 44px;
+
+    &:hover {
+        border-color: rgba(25, 118, 210, 0.5);
+    }
+
+    &.is-open {
+        border-color: rgba(25, 118, 210, 0.5);
+    }
+
+    .ms-TextField-field {
+        box-sizing: border-box;
+        line-height: 42px;
+        background-color: transparent;
+        border: none;
+        font-size: 16px;
+        font-family: 'Roboto', sans-serif !important;
+        height: 100%;
+    }
+
+    i {
+        padding: 0 8px;
+        line-height: 42px;
+    }
+}
+
+.common-dropdown-disabled {
+    .ms-TextField-fieldGroup {
+        background-color: rgb(244, 244, 244);
+        &:hover {
+            border-color: #cccccc;
+        }
+
+        i {
+            padding: 0 8px;
+            line-height: 42px;
+        }
+    }
+}
