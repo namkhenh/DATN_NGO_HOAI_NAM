@@ -1,6 +1,6 @@
 export enum AccountPermissionEnum {
     User,
-    Admin,
+    Care,
     Doctor,
-    Care
+    Admin,
 }

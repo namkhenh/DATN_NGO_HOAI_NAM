@@ -51,7 +51,7 @@ export default class Header extends React.Component<any, NavState> {
     componentDidMount(): void {
         this.setState({
             navContent: [
-                { content: 'Trang chủ', link:'/' },
+                { content: 'Trang chủ', link:'/trang-chu' },
                 { content: 'Về chúng tôi', link: '/ve-chung-toi' },
                 { content: 'Dịch vụ', link: '/dich-vu' },
                 { content: 'Đội ngũ', link: '/doi-ngu' },
@@ -110,7 +110,7 @@ export default class Header extends React.Component<any, NavState> {
                             })}
                         </div>
                         <div className="booking-button">
-                            <Button variant={ButtonVariantType.Contained} sx={{ textTransform: 'none' }} size="large" href={isLogined ? '/quan-ly/quan-ly-lich-kham/dat-lich-kham' : '/dang-nhap'} startIcon={<EventAvailableIcon/>}>Đặt lịch khám</Button>
+                            <Button variant={ButtonVariantType.Contained} sx={{ textTransform: 'none' }} size="large" href={'/quan-ly/dat-lich-kham'} startIcon={<EventAvailableIcon/>}>Đặt lịch khám</Button>
                         </div>
                         {isLogined ?
                         <div className="user-avatar">

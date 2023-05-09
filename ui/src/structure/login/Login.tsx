@@ -9,14 +9,18 @@ import SubmitButton from '../../common/button/SubmitButton'
 import { ButtonColorType, ButtonVariantType } from '../../model/enum/buttonEnum'
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import { Button } from '@mui/material'
+import { useNavigate } from 'react-router'
+import { AccountPermissionEnum } from '../../model/enum/accPermissionEnum'
 function Login() {
-
+    const navigate = useNavigate()
     const handleUpdateInfo = () => {
             let requestBody = {
 
             }
             const result = new Promise((resolve) => {
                 setTimeout(() => {
+                    localStorage.setItem('user', JSON.stringify({ role: AccountPermissionEnum.Admin }))
+                    navigate('/trang-chu')
                     resolve('success')
                 }, 4000);
             }).then(() => {/*  */

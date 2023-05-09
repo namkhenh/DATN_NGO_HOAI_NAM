@@ -7,7 +7,7 @@ import  MessageBar  from '../../common/messageBar/MessageBar';
 import { useStateValue } from '../../context/StateProvider';
 import { MessageBarStatus } from '../../model/enum/messageBarEnum';
 
-function Layout() {
+export function Layout() {
     return (
         <div className="layout">
             <Header/>
@@ -17,5 +17,3 @@ function Layout() {
         </div>
     );
 }
-
-export default Layout;
