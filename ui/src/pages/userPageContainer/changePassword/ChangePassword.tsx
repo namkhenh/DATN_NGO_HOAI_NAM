@@ -1,13 +1,13 @@
 import React, {useState} from "react";
 import "./ChangePassword.scss";
-import HeaderPage from "../../structure/headerPage/HeaderPage";
+import HeaderPage from "../../../structure/headerPage/HeaderPage";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import {TextField} from "../../common/textField/TextField";
-import SubmitButton from "../../common/button/SubmitButton";
-import {ButtonVariantType, LoadingPosition} from "../../model/enum/buttonEnum";
-import {useStateValue} from "../../context/StateProvider";
-import {MessageBarStatus} from "../../model/enum/messageBarEnum";
-import {actionType} from "../../context/Reducer";
+import {TextField} from "../../../common/textField/TextField";
+import SubmitButton from "../../../common/button/SubmitButton";
+import {ButtonVariantType, LoadingPosition} from "../../../model/enum/buttonEnum";
+import {useStateValue} from "../../../context/StateProvider";
+import {MessageBarStatus} from "../../../model/enum/messageBarEnum";
+import {actionType} from "../../../context/Reducer";
 
 function ChangePassword() {
     const [loadingButton, setLoading] = useState<boolean>(false)

@@ -1,16 +1,16 @@
 import React, {useState} from 'react'
 import './MyHealthPage.scss'
-import HeaderPage from '../../structure/headerPage/HeaderPage'
+import HeaderPage from '../../../structure/headerPage/HeaderPage'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import {Button} from '@mui/material';
-import BMI from '../../base/image/BMI.png'
-import BMR from '../../base/image/BMR.png'
-import heart from '../../base/image/heartbeat.png'
+import BMI from '../../../base/image/BMI.png'
+import BMR from '../../../base/image/BMR.png'
+import heart from '../../../base/image/heartbeat.png'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import {ButtonVariantType} from '../../model/enum/buttonEnum';
-import UpdateHealthForm from '../../components/updateHealthForm/UpdateHealthForm';
-import {MyHealthFormType} from '../../model/enum/myHealthEnum';
+import {ButtonVariantType} from '../../../model/enum/buttonEnum';
+import UpdateHealthForm from '../../../components/updateHealthForm/UpdateHealthForm';
+import {MyHealthFormType} from '../../../model/enum/myHealthEnum';
 
 function MyHealthPage() {
     const [openForm, setOpen] = useState<boolean>(false)

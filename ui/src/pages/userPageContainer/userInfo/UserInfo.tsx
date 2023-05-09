@@ -1,7 +1,7 @@
 import React from 'react';
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
-import flag from '../../base/image/anh-la-co-viet-nam-dep-1.png'
+import flag from '../../../base/image/anh-la-co-viet-nam-dep-1.png'
 import CakeOutlinedIcon from '@mui/icons-material/CakeOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import CreditCardOutlinedIcon from '@mui/icons-material/CreditCardOutlined';
@@ -16,15 +16,15 @@ import IconButton from '@mui/material/IconButton';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import './UserInfo.scss'
 import Tooltip from '@mui/material/Tooltip';
-import {ButtonVariantType} from '../../model/enum/buttonEnum';
-import {IUserAddress, IUserInfoViewModel, UserInfoDetailTabType} from '../../model/apimodel/userInfo';
+import {ButtonVariantType} from '../../../model/enum/buttonEnum';
+import {IUserAddress, IUserInfoViewModel, UserInfoDetailTabType} from '../../../model/apimodel/userInfo';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import UserMainInfo from '../userInfoEdit/userMainInfo/UserMainInfo';
 import UserOtherInfo from '../userInfoEdit/userOtherInfo/UserOtherInfo';
-import HeaderPage from '../../structure/headerPage/HeaderPage';
+import HeaderPage from '../../../structure/headerPage/HeaderPage';
 
 interface UserInfoState {
     userInfoState: IUserInfoViewModel

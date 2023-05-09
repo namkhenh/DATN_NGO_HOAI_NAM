@@ -1,6 +1,6 @@
 import React from 'react'
-import { Navigate, Outlet } from 'react-router'
-import { AccountPermissionEnum } from '../../model/enum/accPermissionEnum'
+import {Navigate, Outlet} from 'react-router'
+import {AccountPermissionEnum} from '../../model/enum/accPermissionEnum'
 
 const useAuth = () => {
     let user: any

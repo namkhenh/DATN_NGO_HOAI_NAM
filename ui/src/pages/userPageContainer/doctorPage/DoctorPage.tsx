@@ -1,8 +1,8 @@
 import React from 'react';
 import './DoctorPage.scss'
-import BackTopButton from '../../common/backTopButton/BackTopButton';
-import team1 from '../../base/image/lading-team.jpg'
-import LandingTeam from '../../components/landingTeam/LandingTeam';
+import BackTopButton from '../../../common/backTopButton/BackTopButton';
+import team1 from '../../../base/image/lading-team.jpg'
+import LandingTeam from '../../../components/landingTeam/LandingTeam';
 
 
 interface TeamItem {

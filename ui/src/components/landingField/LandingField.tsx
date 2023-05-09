@@ -1,4 +1,4 @@
-import React, { Component, ReactElement } from 'react';
+import React from 'react';
 import Link from '@mui/material/Link';
 import './LandingField.scss'
 

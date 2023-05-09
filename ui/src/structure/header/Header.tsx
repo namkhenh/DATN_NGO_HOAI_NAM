@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import './Header.scss'
 import logo from '../../base/image/Riordan_Clinic_logo.png'
-import { Button } from '@mui/material';
-import { Link, NavLink } from 'react-router-dom';
+import {Button} from '@mui/material';
+import {Link, NavLink} from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import team1 from '../../base/image/lading-team.jpg'
@@ -15,7 +15,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import HelpIcon from '@mui/icons-material/Help';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DialogView from '../../common/dialog/Dialog';
-import { ButtonVariantType } from '../../model/enum/buttonEnum';
+import {ButtonVariantType} from '../../model/enum/buttonEnum';
 
 interface INavData {
     content: string;

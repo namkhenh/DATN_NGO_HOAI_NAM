@@ -6,11 +6,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import { TransitionProps } from '@mui/material/transitions';
+import {TransitionProps} from '@mui/material/transitions';
 import SubmitButton from '../button/SubmitButton';
 import CloseIcon from '@mui/icons-material/Close';
 import './Dialog.scss'
-import { ButtonVariantType, LoadingPosition } from '../../model/enum/buttonEnum';
+import {ButtonVariantType, LoadingPosition} from '../../model/enum/buttonEnum';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {

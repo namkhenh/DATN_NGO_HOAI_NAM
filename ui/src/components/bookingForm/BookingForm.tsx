@@ -1,18 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import { IPatientProfileViewModel, PatientProfileDefaultView, PatientProfileModelProperty } from '../../model/apimodel/appointmentInfo';
-import { IDistrict, IProvince, IUserAddress, UserAddressModelProperty, UserSexView } from '../../model/apimodel/userInfo';
-import { IDropdownOption } from '@fluentui/react/lib/Dropdown';
-import { TextField } from '../../common/textField/TextField';
-import { Dropdown } from '../../common/dropdown/DropDown';
-import { DatePicker } from '../../common/datePicker/DatePicker';
-import { ProfileAction } from '../../model/enum/appointmentEnum';
+import React, {useEffect, useState} from 'react'
+import {
+    IPatientProfileViewModel,
+    PatientProfileDefaultView,
+    PatientProfileModelProperty
+} from '../../model/apimodel/appointmentInfo';
+import {IDistrict, IProvince, IUserAddress, UserAddressModelProperty, UserSexView} from '../../model/apimodel/userInfo';
+import {IDropdownOption} from '@fluentui/react/lib/Dropdown';
+import {TextField} from '../../common/textField/TextField';
+import {Dropdown} from '../../common/dropdown/DropDown';
+import {DatePicker} from '../../common/datePicker/DatePicker';
+import {ProfileAction} from '../../model/enum/appointmentEnum';
 import Skeleton from '@mui/material/Skeleton';
 import DialogView from '../../common/dialog/Dialog';
 import './BookingForm.scss'
-import { isStringEmpty, validateNumberField, validateRequire, validateRequireLimitCharacter, validateRequireLimitCharacterForm } from '../../utils/commonFunction';
-import { useStateValue } from '../../context/StateProvider';
-import { actionType } from '../../context/Reducer';
-import { MessageBarStatus } from '../../model/enum/messageBarEnum';
+import {
+    isStringEmpty,
+    validateNumberField,
+    validateRequire,
+    validateRequireLimitCharacter,
+    validateRequireLimitCharacterForm
+} from '../../utils/commonFunction';
+import {useStateValue} from '../../context/StateProvider';
+import {actionType} from '../../context/Reducer';
+import {MessageBarStatus} from '../../model/enum/messageBarEnum';
 
 interface BookingFormState {
     // currentPatientProfile: IPatientProfileViewModel

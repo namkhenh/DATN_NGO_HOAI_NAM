@@ -9,25 +9,25 @@ import {
     UserAddressModelProperty,
     UserInfoModelProperty,
     UserSexView
-} from '../../../model/apimodel/userInfo';
+} from '../../../../model/apimodel/userInfo';
 import {initializeIcons} from '@fluentui/font-icons-mdl2';
-import {TextField} from '../../../common/textField/TextField';
-import {Dropdown} from '../../../common/dropdown/DropDown';
-import {DatePicker} from '../../../common/datePicker/DatePicker';
+import {TextField} from '../../../../common/textField/TextField';
+import {Dropdown} from '../../../../common/dropdown/DropDown';
+import {DatePicker} from '../../../../common/datePicker/DatePicker';
 import {IDropdownOption} from '@fluentui/react/lib/Dropdown';
 import Skeleton from '@mui/material/Skeleton';
-import SubmitButton from '../../../common/button/SubmitButton';
-import {ButtonVariantType, LoadingPosition} from '../../../model/enum/buttonEnum';
+import SubmitButton from '../../../../common/button/SubmitButton';
+import {ButtonVariantType, LoadingPosition} from '../../../../model/enum/buttonEnum';
 
-import {MessageBarStatus} from '../../../model/enum/messageBarEnum';
-import {useStateValue} from '../../../context/StateProvider';
-import {actionType} from '../../../context/Reducer';
+import {MessageBarStatus} from '../../../../model/enum/messageBarEnum';
+import {useStateValue} from '../../../../context/StateProvider';
+import {actionType} from '../../../../context/Reducer';
 import {
     isStringEmpty,
     validateNumberField,
     validateRequire,
     validateRequireLimitCharacter
-} from '../../../utils/commonFunction';
+} from '../../../../utils/commonFunction';
 
 initializeIcons();
 

@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Checkbox from '@mui/material/Checkbox';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import './BookingPatientItem.scss'
 import Button from '@mui/material/Button';
-import {  ButtonVariantType } from '../../model/enum/buttonEnum';
+import {ButtonVariantType} from '../../model/enum/buttonEnum';
 
 interface IBookingPatientItemProps {
     index: number

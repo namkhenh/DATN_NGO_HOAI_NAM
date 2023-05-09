@@ -1,5 +1,5 @@
-import { UserInfoDefaultView } from "../model/apimodel/userInfo";
-import { AccountPermissionEnum } from "../model/enum/accPermissionEnum";
+import {UserInfoDefaultView} from "../model/apimodel/userInfo";
+import {AccountPermissionEnum} from "../model/enum/accPermissionEnum";
 
 export const initialState = {
   userInfo: UserInfoDefaultView,

@@ -1,9 +1,10 @@
 import React from 'react'
-import { IAppointmenViewModel } from '../../model/apimodel/appointmentInfo'
+import {IAppointmenViewModel} from '../../model/apimodel/appointmentInfo'
 import './AppointmentDetail.scss'
-import { AppointmentStatus, HourBooking } from '../../model/enum/appointmentEnum'
-import { IUserAddress } from '../../model/apimodel/userInfo'
+import {AppointmentStatus, HourBooking} from '../../model/enum/appointmentEnum'
+import {IUserAddress} from '../../model/apimodel/userInfo'
 import Tooltip from '@mui/material/Tooltip'
+
 interface IAppointmentDetailProps {
     appointment: IAppointmenViewModel
 }

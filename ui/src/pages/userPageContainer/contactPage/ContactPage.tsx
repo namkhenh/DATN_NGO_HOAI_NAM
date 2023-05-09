@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './ContactPage.scss'
-import contactbanner from '../../base/image/contact-banner.jpg'
-import BackTopButton from '../../common/backTopButton/BackTopButton';
+import contactbanner from '../../../base/image/contact-banner.jpg'
+import BackTopButton from '../../../common/backTopButton/BackTopButton';
 
 class ContactPage extends Component {
     omponentDidMount(): void {

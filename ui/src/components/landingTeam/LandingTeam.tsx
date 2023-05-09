@@ -1,7 +1,5 @@
-import React, { Component, ReactElement } from 'react';
-import Link from '@mui/material/Link';
+import React from 'react';
 import './LandingTeam.scss'
-import { Button } from '@mui/material';
 
 interface LandingTeamState {
 

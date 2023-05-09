@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { AppointmentStatus, HourBooking } from '../../model/enum/appointmentEnum'
+import React from 'react'
+import {AppointmentStatus, HourBooking} from '../../model/enum/appointmentEnum'
 import Avatar from '@mui/material/Avatar'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import './AppointmentItem.scss'

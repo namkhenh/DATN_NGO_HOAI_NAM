@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './ServicePage.scss'
-import servicebanner from '../../base/image/service-banner.jpg'
-import BackTopButton from '../../common/backTopButton/BackTopButton';
+import servicebanner from '../../../base/image/service-banner.jpg'
+import BackTopButton from '../../../common/backTopButton/BackTopButton';
 
 class ServicePage extends Component {
     componentDidMount(): void {

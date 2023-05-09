@@ -1,13 +1,13 @@
-import { IDropdownProps, TooltipOverflowMode } from "@fluentui/react";
 import {
     Dropdown,
-    Icon,
     IDropdown,
     IDropdownOption,
+    IDropdownProps,
     IDropdownStyleProps,
     IDropdownStyles,
     IDropdownSubComponentStyles,
-    TooltipHost
+    TooltipHost,
+    TooltipOverflowMode
 } from "@fluentui/react";
 import "./DropDown.scss";
 import React from "react";

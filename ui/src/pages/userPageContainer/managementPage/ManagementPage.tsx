@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Sidebar from '../../components/sidebar/Sidebar';
+import Sidebar from '../../../components/sidebar/Sidebar';
 import {Outlet} from 'react-router-dom';
 import './ManagementPage.scss'
 

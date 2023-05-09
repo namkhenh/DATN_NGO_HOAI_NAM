@@ -1,12 +1,11 @@
 import React from "react";
 import {
     DatePicker,
-    IDatePickerProps,
     IDatePicker,
+    IDatePickerProps,
     IDatePickerStrings,
     IDatePickerStyleProps,
     IDatePickerStyles,
-    defaultDatePickerStrings,
 } from "@fluentui/react";
 import "./DatePicker.scss";
 

@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import './AcceptBookingForm.scss'
 import DialogView from '../../common/dialog/Dialog'
-import { IAppointmenViewModel } from '../../model/apimodel/appointmentInfo'
+import {IAppointmenViewModel} from '../../model/apimodel/appointmentInfo'
 import AppointmentDetail from '../appointmentDetail/AppointmentDetail'
-import { useStateValue } from '../../context/StateProvider'
-import { actionType } from '../../context/Reducer'
-import { MessageBarStatus } from '../../model/enum/messageBarEnum'
+import {useStateValue} from '../../context/StateProvider'
+import {actionType} from '../../context/Reducer'
+import {MessageBarStatus} from '../../model/enum/messageBarEnum'
+
 interface BookingFormProps {
     currentBookingAppointment: IAppointmenViewModel
     openAccept: boolean

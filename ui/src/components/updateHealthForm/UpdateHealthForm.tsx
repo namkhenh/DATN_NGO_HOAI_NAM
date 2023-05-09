@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import './UpdateHealthForm.scss'
 import DialogView from '../../common/dialog/Dialog'
-import { useStateValue } from '../../context/StateProvider'
-import { actionType } from '../../context/Reducer'
-import { MessageBarStatus } from '../../model/enum/messageBarEnum'
-import { DatePicker } from '../../common/datePicker/DatePicker'
-import { TextField } from '../../common/textField/TextField'
-import { Dropdown } from '../../common/dropdown/DropDown'
+import {useStateValue} from '../../context/StateProvider'
+import {actionType} from '../../context/Reducer'
+import {MessageBarStatus} from '../../model/enum/messageBarEnum'
+import {DatePicker} from '../../common/datePicker/DatePicker'
+import {TextField} from '../../common/textField/TextField'
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import NordicWalkingIcon from '@mui/icons-material/NordicWalking';
 import SportsGymnasticsIcon from '@mui/icons-material/SportsGymnastics';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import PoolIcon from '@mui/icons-material/Pool';
-import { Label } from '@fluentui/react'
-import { UserHealthActivityIntensity } from '../../model/enum/appointmentEnum'
-import { MyHealthFormType } from '../../model/enum/myHealthEnum'
+import {Label} from '@fluentui/react'
+import {UserHealthActivityIntensity} from '../../model/enum/appointmentEnum'
+import {MyHealthFormType} from '../../model/enum/myHealthEnum'
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Slider from '@mui/material/Slider'
+
 interface UpdateHealthFormProps {
     openForm: boolean
     closeForm: () => void

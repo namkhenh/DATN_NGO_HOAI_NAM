@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import HeaderPage from '../../structure/headerPage/HeaderPage';
+import HeaderPage from '../../../structure/headerPage/HeaderPage';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import './ListAppointment.scss'
 import Button from '@mui/material/Button';
-import {ButtonVariantType} from '../../model/enum/buttonEnum';
+import {ButtonVariantType} from '../../../model/enum/buttonEnum';
 import AddIcon from '@mui/icons-material/Add';
 import {Link} from 'react-router-dom';
 import LinkOffOutlinedIcon from '@mui/icons-material/LinkOffOutlined';
-import AppointmentItem from '../../components/appointmentItem/AppointmentItem';
-import {AppointmentStatus} from '../../model/enum/appointmentEnum';
-import avatar1 from '../../base/image/anh-la-co-viet-nam-dep-1.png'
-import {IAppointmenViewModel} from '../../model/apimodel/appointmentInfo';
-import AppointmentDetail from '../../components/appointmentDetail/AppointmentDetail';
+import AppointmentItem from '../../../components/appointmentItem/AppointmentItem';
+import {AppointmentStatus} from '../../../model/enum/appointmentEnum';
+import avatar1 from '../../../base/image/anh-la-co-viet-nam-dep-1.png'
+import {IAppointmenViewModel} from '../../../model/apimodel/appointmentInfo';
+import AppointmentDetail from '../../../components/appointmentDetail/AppointmentDetail';
 import InfoIcon from '@mui/icons-material/Info';
 
 

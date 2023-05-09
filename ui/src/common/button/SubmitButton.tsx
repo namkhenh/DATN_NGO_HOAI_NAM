@@ -1,6 +1,6 @@
 import LoadingButton from '@mui/lab/LoadingButton';
-import React, { Component } from 'react';
-import { ButtonColorType, ButtonSizeType, ButtonVariantType, LoadingPosition } from '../../model/enum/buttonEnum';
+import React from 'react';
+import {ButtonColorType, ButtonSizeType, ButtonVariantType, LoadingPosition} from '../../model/enum/buttonEnum';
 
 interface ISubmitButtonProps {
     id?: string;

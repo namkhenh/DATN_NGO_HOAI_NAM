@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import logo1 from '../../base/image/Riordan_Clinic_logo1.png'
 import './Footer.scss'
+
 class Footer extends Component {
     render() {
         return (

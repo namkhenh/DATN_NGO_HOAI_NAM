@@ -1,8 +1,4 @@
-import {
-    ITextFieldProps,
-    ITextFieldStyles,
-    TextField,
-} from "@fluentui/react";
+import {ITextFieldProps, ITextFieldStyles, TextField,} from "@fluentui/react";
 import React from "react";
 import "./TextField.scss";
 

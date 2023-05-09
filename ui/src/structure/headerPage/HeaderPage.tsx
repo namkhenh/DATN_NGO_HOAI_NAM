@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './HeaderPage.scss'
+
 interface HeaderPageProps {
     icon: JSX.Element
     text: string

@@ -4,24 +4,24 @@ import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import {Button} from '@mui/material';
 import './LandingPage.scss'
-import icon1 from '../../base/image/i-1.png'
-import icon2 from '../../base/image/i-2.png'
-import icon3 from '../../base/image/i-3.png'
-import icon4 from '../../base/image/i-4.png'
-import field1 from '../../base/image/landingFields/Asset 2.png'
-import field2 from '../../base/image/landingFields/Asset 3.png'
-import field3 from '../../base/image/landingFields/Asset 4.png'
-import field4 from '../../base/image/landingFields/Asset 5.png'
-import field5 from '../../base/image/landingFields/Asset 6.png'
-import field6 from '../../base/image/landingFields/Asset 7.png'
-import field7 from '../../base/image/landingFields/Asset 8.png'
-import field8 from '../../base/image/landingFields/Asset 9.png'
-import team1 from '../../base/image/lading-team.jpg'
-import LandingField from '../../components/landingField/LandingField'
-import LandingTeam from '../../components/landingTeam/LandingTeam'
-import LandingFeedback from '../../components/landingFeedback/LandingFeedback';
-import BackTopButton from '../../common/backTopButton/BackTopButton'
-import {ButtonVariantType} from '../../model/enum/buttonEnum';
+import icon1 from '../../../base/image/i-1.png'
+import icon2 from '../../../base/image/i-2.png'
+import icon3 from '../../../base/image/i-3.png'
+import icon4 from '../../../base/image/i-4.png'
+import field1 from '../../../base/image/landingFields/Asset 2.png'
+import field2 from '../../../base/image/landingFields/Asset 3.png'
+import field3 from '../../../base/image/landingFields/Asset 4.png'
+import field4 from '../../../base/image/landingFields/Asset 5.png'
+import field5 from '../../../base/image/landingFields/Asset 6.png'
+import field6 from '../../../base/image/landingFields/Asset 7.png'
+import field7 from '../../../base/image/landingFields/Asset 8.png'
+import field8 from '../../../base/image/landingFields/Asset 9.png'
+import team1 from '../../../base/image/lading-team.jpg'
+import LandingField from '../../../components/landingField/LandingField'
+import LandingTeam from '../../../components/landingTeam/LandingTeam'
+import LandingFeedback from '../../../components/landingFeedback/LandingFeedback';
+import BackTopButton from '../../../common/backTopButton/BackTopButton'
+import {ButtonVariantType} from '../../../model/enum/buttonEnum';
 
 interface FieldItem {
     icon: string;

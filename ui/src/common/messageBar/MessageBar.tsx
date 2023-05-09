@@ -1,11 +1,10 @@
-import React, { Ref, forwardRef, useEffect, useImperativeHandle } from 'react';
+import React, {useEffect} from 'react';
 import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import { MessageBarStatus } from '../../model/enum/messageBarEnum';
+import MuiAlert, {AlertProps} from '@mui/material/Alert';
 import './MessageBar.scss'
-import Slide, { SlideProps } from '@mui/material/Slide';
-import { useStateValue } from '../../context/StateProvider';
-import { actionType } from '../../context/Reducer';
+import Slide, {SlideProps} from '@mui/material/Slide';
+import {useStateValue} from '../../context/StateProvider';
+import {actionType} from '../../context/Reducer';
 
 type TransitionProps = Omit<SlideProps, 'direction'>;
 

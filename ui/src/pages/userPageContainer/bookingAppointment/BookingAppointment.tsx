@@ -1,32 +1,32 @@
 import React, {useEffect, useState} from 'react';
-import HeaderPage from '../../structure/headerPage/HeaderPage';
+import HeaderPage from '../../../structure/headerPage/HeaderPage';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import './BookingAppointment.scss'
 import Button from '@mui/material/Button';
-import {ButtonColorType, ButtonVariantType} from '../../model/enum/buttonEnum';
+import {ButtonColorType, ButtonVariantType} from '../../../model/enum/buttonEnum';
 import EventAvailableOutlinedIcon from '@mui/icons-material/EventAvailableOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import BookingPatientItem from '../../components/bookingPatientItem/BookingPatientItem';
+import BookingPatientItem from '../../../components/bookingPatientItem/BookingPatientItem';
 import {
     AppointmentInfoModelProperty,
     IAppointmentInfo,
     IPatientProfileViewModel,
     PatientProfileDefaultView
-} from '../../model/apimodel/appointmentInfo';
+} from '../../../model/apimodel/appointmentInfo';
 import AddIcon from '@mui/icons-material/Add';
-import {DatePicker} from '../../common/datePicker/DatePicker';
-import {Dropdown} from '../../common/dropdown/DropDown';
-import {TextField} from '../../common/textField/TextField';
-import {HourBooking, ProfileAction} from '../../model/enum/appointmentEnum';
+import {DatePicker} from '../../../common/datePicker/DatePicker';
+import {Dropdown} from '../../../common/dropdown/DropDown';
+import {TextField} from '../../../common/textField/TextField';
+import {HourBooking, ProfileAction} from '../../../model/enum/appointmentEnum';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import DialogView from '../../common/dialog/Dialog';
+import DialogView from '../../../common/dialog/Dialog';
 import {IDropdownOption} from '@fluentui/react/lib/Dropdown';
-import BookingForm from '../../components/bookingForm/BookingForm';
-import {MessageBarStatus} from '../../model/enum/messageBarEnum';
-import {useStateValue} from '../../context/StateProvider';
-import {actionType} from '../../context/Reducer';
-import {isStringEmpty, validateRequire} from '../../utils/commonFunction';
-import AcceptBookingForm from '../../components/acceptBookingForm/AcceptBookingForm';
+import BookingForm from '../../../components/bookingForm/BookingForm';
+import {MessageBarStatus} from '../../../model/enum/messageBarEnum';
+import {useStateValue} from '../../../context/StateProvider';
+import {actionType} from '../../../context/Reducer';
+import {isStringEmpty, validateRequire} from '../../../utils/commonFunction';
+import AcceptBookingForm from '../../../components/acceptBookingForm/AcceptBookingForm';
 
 interface BookingAppointmentState {
     patientProfile: IPatientProfileViewModel[]

@@ -4,13 +4,12 @@ import doctor from '../../base/image/doctor.png'
 import user from '../../base/image/user.png'
 import login from '../../base/image/login-form.png'
 import logo from '../../base/image/Riordan_Clinic_logo.png'
-import { TextField } from '../../common/textField/TextField'
+import {TextField} from '../../common/textField/TextField'
 import SubmitButton from '../../common/button/SubmitButton'
-import { ButtonColorType, ButtonVariantType } from '../../model/enum/buttonEnum'
-import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import { Button } from '@mui/material'
-import { useNavigate } from 'react-router'
-import { AccountPermissionEnum } from '../../model/enum/accPermissionEnum'
+import {ButtonVariantType} from '../../model/enum/buttonEnum'
+import {useNavigate} from 'react-router'
+import {AccountPermissionEnum} from '../../model/enum/accPermissionEnum'
+
 function Login() {
     const navigate = useNavigate()
     const handleUpdateInfo = () => {

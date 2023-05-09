@@ -1,22 +1,22 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
-import LandingPage from './pages/landingPage/LandingPage';
-import ManagementPage from "./pages/managementPage/ManagementPage";
-import UserInfo from './pages/userInfo/UserInfo';
-import ListAppointment from "./pages/listAppointment/ListAppointment";
-import BookingAppointment from "./pages/bookingAppointment/BookingAppointment"
-import AboutUsPage from './pages/aboutUsPage/AboutUsPage';
-import ServicePage from './pages/servicePage/ServicePage';
-import DoctorPage from './pages/doctorPage/DoctorPage';
-import ContactPage from './pages/contactPage/ContactPage';
+import {Navigate, Route, Routes} from 'react-router-dom'
+import LandingPage from './pages/userPageContainer/landingPage/LandingPage';
+import ManagementPage from "./pages/userPageContainer/managementPage/ManagementPage";
+import UserInfo from './pages/userPageContainer/userInfo/UserInfo';
+import ListAppointment from "./pages/userPageContainer/listAppointment/ListAppointment";
+import BookingAppointment from "./pages/userPageContainer/bookingAppointment/BookingAppointment"
+import AboutUsPage from './pages/userPageContainer/aboutUsPage/AboutUsPage';
+import ServicePage from './pages/userPageContainer/servicePage/ServicePage';
+import DoctorPage from './pages/userPageContainer/doctorPage/DoctorPage';
+import ContactPage from './pages/userPageContainer/contactPage/ContactPage';
 import Login from './structure/login/Login';
-import MyHealthPage from './pages/myHealthPage/MyHealthPage';
-import ChangePassword from './pages/changePassword/ChangePassword';
-import DisableAccountPage from './pages/disableAccountPage/DisableAccountPage';
-import HelperPage from './pages/helperPage/HelperPage';
-import { Layout } from './structure/layout/Layout';
+import MyHealthPage from './pages/userPageContainer/myHealthPage/MyHealthPage';
+import ChangePassword from './pages/userPageContainer/changePassword/ChangePassword';
+import DisableAccountPage from './pages/userPageContainer/disableAccountPage/DisableAccountPage';
+import HelperPage from './pages/userPageContainer/helperPage/HelperPage';
+import {Layout} from './structure/layout/Layout';
 import ProtectedRoutes from './components/protectedRoutes/ProtectedRoutes';
 import AdminLayout from './structure/layout/AdminLayout';
-import { AccountPermissionEnum } from './model/enum/accPermissionEnum';
+import {AccountPermissionEnum} from './model/enum/accPermissionEnum';
 
 function App() {
   return (

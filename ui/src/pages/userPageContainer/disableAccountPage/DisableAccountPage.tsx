@@ -1,17 +1,17 @@
 import React, {useEffect, useState} from 'react'
 import './DisableAccountPage.scss'
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import HeaderPage from '../../structure/headerPage/HeaderPage'
+import HeaderPage from '../../../structure/headerPage/HeaderPage'
 import PersonOffIcon from '@mui/icons-material/PersonOff';
-import {Dropdown} from '../../common/dropdown/DropDown';
-import {UserDisableAcount} from '../../model/apimodel/userInfo';
-import {TextField} from '../../common/textField/TextField';
-import SubmitButton from '../../common/button/SubmitButton';
-import {ButtonVariantType, LoadingPosition} from '../../model/enum/buttonEnum';
-import {useStateValue} from '../../context/StateProvider';
-import {actionType} from '../../context/Reducer';
-import {MessageBarStatus} from '../../model/enum/messageBarEnum';
-import {isStringEmpty} from '../../utils/commonFunction';
+import {Dropdown} from '../../../common/dropdown/DropDown';
+import {UserDisableAcount} from '../../../model/apimodel/userInfo';
+import {TextField} from '../../../common/textField/TextField';
+import SubmitButton from '../../../common/button/SubmitButton';
+import {ButtonVariantType, LoadingPosition} from '../../../model/enum/buttonEnum';
+import {useStateValue} from '../../../context/StateProvider';
+import {actionType} from '../../../context/Reducer';
+import {MessageBarStatus} from '../../../model/enum/messageBarEnum';
+import {isStringEmpty} from '../../../utils/commonFunction';
 
 function DisableAccountPage() {
     const [loadingButton, setLoading] = useState<boolean>(false)

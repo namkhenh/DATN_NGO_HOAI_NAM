@@ -1,19 +1,19 @@
 import React, {useEffect, useState} from 'react';
 // import {TextField} from '../../../common/textField/TextField';
 import './UserOtherInfo.scss'
-import {IUserInfoViewModel, UserInfoModelProperty} from '../../../model/apimodel/userInfo';
+import {IUserInfoViewModel, UserInfoModelProperty} from '../../../../model/apimodel/userInfo';
 import {initializeIcons} from '@fluentui/font-icons-mdl2';
-import {TextField} from '../../../common/textField/TextField';
-import {Dropdown} from '../../../common/dropdown/DropDown';
-import {DatePicker} from '../../../common/datePicker/DatePicker';
+import {TextField} from '../../../../common/textField/TextField';
+import {Dropdown} from '../../../../common/dropdown/DropDown';
+import {DatePicker} from '../../../../common/datePicker/DatePicker';
 import {IDropdownOption} from '@fluentui/react/lib/Dropdown';
 import Skeleton from '@mui/material/Skeleton';
-import SubmitButton from '../../../common/button/SubmitButton';
-import {ButtonVariantType, LoadingPosition} from '../../../model/enum/buttonEnum';
-import {MessageBarStatus} from '../../../model/enum/messageBarEnum';
-import {isStringEmpty, validateNumberField, validateRequireLimitCharacter} from '../../../utils/commonFunction';
-import {useStateValue} from '../../../context/StateProvider';
-import {actionType} from '../../../context/Reducer';
+import SubmitButton from '../../../../common/button/SubmitButton';
+import {ButtonVariantType, LoadingPosition} from '../../../../model/enum/buttonEnum';
+import {MessageBarStatus} from '../../../../model/enum/messageBarEnum';
+import {isStringEmpty, validateNumberField, validateRequireLimitCharacter} from '../../../../utils/commonFunction';
+import {useStateValue} from '../../../../context/StateProvider';
+import {actionType} from '../../../../context/Reducer';
 
 initializeIcons();
 

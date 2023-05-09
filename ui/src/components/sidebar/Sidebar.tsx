@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import React from 'react';
+import {NavLink} from 'react-router-dom';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import FavoriteSharpIcon from '@mui/icons-material/FavoriteSharp';

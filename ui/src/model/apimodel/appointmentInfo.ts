@@ -1,5 +1,5 @@
-import { AppointmentStatus } from "../enum/appointmentEnum";
-import { ICountry, IUserAddress } from "./userInfo";
+import {AppointmentStatus} from "../enum/appointmentEnum";
+import {IUserAddress} from "./userInfo";
 
 export interface IAppointmenViewModel {
     patientId?: string;

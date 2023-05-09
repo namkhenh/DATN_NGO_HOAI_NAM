@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './AboutUsPage.scss'
-import aboutUsbanner from '../../base/image/about-us-banner.jpg'
-import BackTopButton from "../../common/backTopButton/BackTopButton";
+import aboutUsbanner from '../../../base/image/about-us-banner.jpg'
+import BackTopButton from "../../../common/backTopButton/BackTopButton";
 
 class AboutUsPage extends Component {
     componentDidMount(): void {
