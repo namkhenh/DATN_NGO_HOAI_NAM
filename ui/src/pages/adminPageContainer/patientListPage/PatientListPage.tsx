@@ -8,6 +8,8 @@ import { Label } from '@fluentui/react';
 import { DatePicker } from '../../../common/datePicker/DatePicker';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import TablePager from '../../../common/tablePager/TablePager';
+import PatientListCommandBar from './PatientListCommandBar';
+import { TableType } from '../../../model/enum/tableTypeEnum';
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -113,6 +115,11 @@ function PatientListPage() {
       </div>
       <div className='line' style={{ width: '100%', height: '1px', backgroundColor: '#cccccc' }}></div>
       {/* <DataTable/> */}
+      <PatientListCommandBar
+        key={'patient-list-commandbar'}
+        // {...props}
+        tableType={TableType.PatientListTable}
+      />
       <TablePager/>
     </div>
   )
