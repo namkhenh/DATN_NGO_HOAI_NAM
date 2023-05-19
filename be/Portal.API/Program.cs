@@ -42,6 +42,7 @@ try
   builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
+  builder.Services.AddSingleton<ICurrentContext,CurrentContext>();
   builder.Services.AddSwaggerGen(c =>
   {
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -97,7 +98,6 @@ try
                 IssuerSigningKey = new SymmetricSecurityKey(signingKeyBytes)
               };
             });
-  builder.Services.ConfigRabbitMQ();
   builder.Services.ConfigureServices();
   builder.Services.ConfigAutoMapper();
   builder.Services.ConfigCORS();

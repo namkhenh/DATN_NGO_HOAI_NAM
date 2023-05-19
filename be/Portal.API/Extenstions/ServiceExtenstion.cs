@@ -20,7 +20,7 @@ using Portal.Application.Repositories.Interfaces.Menu;
 using Portal.Application.Repositories.Interfaces.Page;
 using Portal.Application.Repositories.Interfaces.Permission;
 using Portal.Application.Repositories.Interfaces.PermissionAction;
-
+using Portal.Application.Repositories.Interfaces.RefeshToken;
 using Portal.Infrastructure.Implements.Action;
 using Portal.Infrastructure.Implements.ActionPage;
 using Portal.Infrastructure.Implements.Menu;
@@ -37,6 +37,7 @@ using Portal.Infrastructure.Repositories.Implements.Menu;
 using Portal.Infrastructure.Repositories.Implements.Page;
 using Portal.Infrastructure.Repositories.Implements.Permission;
 using Portal.Infrastructure.Repositories.Implements.PermissionAction;
+using Portal.Infrastructure.Repositories.Implements.RefeshToken;
 using RabbitMQ.Client;
 
 namespace Portal.API.Extenstions
@@ -47,13 +48,13 @@ namespace Portal.API.Extenstions
     {
       services.AddScoped(typeof(IRepositoryBaseAsync<,,>), typeof(RepositoryBaseAsync<,,>))
              .AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>))
-             
              .AddScoped(typeof(IActionRepository), typeof(ActionRepository))
              .AddScoped(typeof(IActionPageRepository), typeof(ActionPageRepository))
               .AddScoped(typeof(IMenuRepository), typeof(MenuRepository))
               .AddScoped(typeof(IPageRepository), typeof(PageRepository))
               .AddScoped(typeof(IPermissionRepository), typeof(PermissionRepository))
-              .AddScoped(typeof(IPermissionActionRepository), typeof(PermissionActionRepository));
+              .AddScoped(typeof(IPermissionActionRepository), typeof(PermissionActionRepository))
+              .AddScoped(typeof(IRefeshTokenRepository), typeof(RefeshTokenRepository));
 
       services.AddScoped<IActionService, ActionService>();
       services.AddScoped<IActionPageService, ActionPageService>();

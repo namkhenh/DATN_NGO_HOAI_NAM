@@ -463,7 +463,6 @@ function UserMainInfo(props: IUserMainInfoProps) {
                             options={district}
                             selectedKey={userAddress.district?.key}
                             required
-                            defaultValue={"aaaaaaa"}
                             onChange={(_, selected) => {
                                 onChangeAddress(UserAddressModelProperty.district, selected)
                             }}

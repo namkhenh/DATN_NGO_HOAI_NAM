@@ -9,17 +9,18 @@ using System.Threading.Tasks;
 
 namespace Portal.Infrastructure.Configurations
 {
-    public class MenuConfiguration : IEntityTypeConfiguration<Menu>
+  public class MenuConfiguration : IEntityTypeConfiguration<Menu>
+  {
+    public void Configure(EntityTypeBuilder<Menu> builder)
     {
-        public void Configure(EntityTypeBuilder<Menu> builder)
-        {
-            builder.ToTable("Menus");
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Name).HasMaxLength(128).IsRequired();
-            builder.Property(x => x.Path).HasMaxLength(128).IsRequired();
-            builder.Property(x => x.CreatedDate).IsRequired();
-            builder.Property(x => x.LastModifiedDate);
-            builder.Property(x => x.DeleteAt);
-        }
+      builder.ToTable("Menus");
+      builder.HasKey(x => x.Id);
+      builder.Property(x => x.Code).IsRequired();
+      builder.Property(x => x.Name).HasMaxLength(128).IsRequired();
+      builder.Property(x => x.Path).HasMaxLength(128).IsRequired();
+      builder.Property(x => x.CreatedDate).IsRequired();
+      builder.Property(x => x.LastModifiedDate);
+      builder.Property(x => x.DeleteAt);
     }
+  }
 }

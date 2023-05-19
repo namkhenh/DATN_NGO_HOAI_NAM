@@ -12,9 +12,9 @@
 }
 
 .ms-TextField-fieldGroup {
-    border-radius: 4px;
-    border: 1px solid #cccccc;
     height: 44px;
+    border-radius: 4px;
+    border: 2px solid #cccccc;
 
     &:hover {
         border-color: rgba(25, 118, 210, 0.5);
@@ -49,7 +49,7 @@
 
         i {
             padding: 0 8px;
-            line-height: 42px;
+            line-height: 40px;
         }
     }
 }

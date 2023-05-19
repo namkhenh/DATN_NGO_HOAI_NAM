@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace Portal.Application.Interfaces.ActionPage
 {
-    public interface IActionPageService
-    {
-        
-    }
+  public interface IActionPageService
+  {
+    Task<ActionResponse<List<ActionPageDto>>> CreateListActionPage(Dictionary<string, List<string>> request, string menuCode);
+
+  }
 }

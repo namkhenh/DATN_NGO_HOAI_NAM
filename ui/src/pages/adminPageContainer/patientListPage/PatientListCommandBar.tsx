@@ -5,6 +5,9 @@ import { CommandBarView } from '../../../common/commandBar/CommandBar'
 
 interface IPatientListCommandBar {
     tableType: TableType
+    showPreAccept?: () => void
+    showPreRefuse?: () => void
+    showPreCancel?: () => void
 }
 
 // const initActionBar: () => ICommandBarItemProps[] = () => {
@@ -27,20 +30,42 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
             {
                 key: 'patient-list-accept',
                 text: 'Đồng ý',
-                iconProps: { iconName: 'Add' },
+                iconProps: { iconName: 'EventAccepted', style: { color: '#00794E' } },
+                onClick: () => {
+                    props.showPreAccept!()
+                }
+            },
+            {
+                key: 'patient-list-decline',
+                text: 'Từ chối',
+                iconProps: { iconName: 'EventDeclined', style: { color: '#AC0000'} },
+                onClick: () => {
+                    props.showPreRefuse!()
+                }
+            },
+            {
+                key: 'patient-list-decline',
+                text: 'Hủy lịch',
+                iconProps: { iconName: 'Cancel', style: { color: '#AC0000' } },
+                onClick: () => {
+                    props.showPreCancel!()
+                }
+            },
+            {
+                key: 'patient-list-decline',
+                text: 'Xuất file',
+                iconProps: { iconName: 'Download', style: { color: '#1976d2'} },
                 onClick: () => {
                     console.log("ok");
                 }
             },
             {
                 key: 'patient-list-decline',
-                text: 'Từ chối',
-                iconProps: { iconName: 'Cancel', style: {color: 'red'} },
+                text: 'Chỉnh sửa',
+                iconProps: { iconName: 'Edit', style: { color: '#707070' } },
                 onClick: () => {
                     console.log("ok");
                 }
-                
-                
             })
 
         return commandBarItems

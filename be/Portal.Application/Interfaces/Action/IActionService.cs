@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 
 namespace Portal.Application.Interfaces.Action
 {
-    public interface IActionService
-    {
-      
-    }
+  public interface IActionService
+  {
+    Task<ActionResponse<List<ActionDto>>> CreateListAction(List<CreateUpdateAction> actions);
+  }
 }

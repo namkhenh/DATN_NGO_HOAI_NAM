@@ -10,6 +10,7 @@ namespace Portal.Domain.Entities
 {
   public class ActionPage : EntityAuditBase<Guid>, IEntityBase<Guid>
   {
+    public string Code { get; set; }
     public Guid ActionId { get; set; }
     public Guid PathId { get; set; }
   }

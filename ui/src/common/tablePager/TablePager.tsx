@@ -1,4 +1,5 @@
 import * as React from 'react';
+import './TablePager.scss'
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -9,58 +10,16 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import ContentPasteOffOutlinedIcon from '@mui/icons-material/ContentPasteOffOutlined';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-
-interface Data {
-    calories: number;
-    carbs: number;
-    fat: number;
-    name: string;
-    protein: number;
-}
-
-function createData(
-    name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number,
-): Data {
-    return {
-        name,
-        calories,
-        fat,
-        carbs,
-        protein,
-    };
-}
-
-const rows = [
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Donut', 452, 25.0, 51, 4.9),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-    createData('Honeycomb', 408, 3.2, 87, 6.5),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Jelly Bean', 375, 0.0, 94, 0.0),
-    createData('KitKat', 518, 26.0, 65, 7.0),
-    createData('Lollipop', 392, 0.2, 98, 0.0),
-    createData('Marshmallow', 318, 0, 81, 2.0),
-    createData('Nougat', 360, 19.0, 9, 37.0),
-    createData('Oreo', 437, 18.0, 63, 4.0),
-];
-
+import {  TableType } from '../../model/enum/tableTypeEnum';
+import { getColumnWithType } from './TableColumn';
+import { NavLink } from 'react-router-dom';
+import CancelPresentationOutlinedIcon from '@mui/icons-material/CancelPresentationOutlined';
+import Button from '@mui/material/Button';
+import { ButtonColorType } from '../../model/enum/buttonEnum';
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -101,79 +60,49 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
     return stabilizedThis.map((el) => el[0]);
 }
 
-interface HeadCell {
+export interface HeadCell {
     disablePadding: boolean;
-    id: keyof Data;
+    id: string;
     label: string;
     numeric: boolean;
 }
 
-const headCells: readonly HeadCell[] = [
-    {
-        id: 'name',
-        numeric: false,
-        disablePadding: true,
-        label: 'Dessert (100g serving)',
-    },
-    {
-        id: 'calories',
-        numeric: true,
-        disablePadding: false,
-        label: 'Calories',
-    },
-    {
-        id: 'fat',
-        numeric: true,
-        disablePadding: false,
-        label: 'Fat (g)',
-    },
-    {
-        id: 'carbs',
-        numeric: true,
-        disablePadding: false,
-        label: 'Carbs (g)',
-    },
-    {
-        id: 'protein',
-        numeric: true,
-        disablePadding: false,
-        label: 'Protein (g)',
-    },
-];
-
 interface EnhancedTableProps {
     numSelected: number;
-    onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+    onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
     onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
     order: Order;
     orderBy: string;
     rowCount: number;
+    tableType: TableType
+    hasCheckBox?: boolean
 }
 
 function EnhancedTableHead(props: EnhancedTableProps) {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, tableType, hasCheckBox } =
         props;
     const createSortHandler =
-        (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+        (property: string) => (event: React.MouseEvent<unknown>) => {
             onRequestSort(event, property);
         };
-
+    const manageColumnOptions = getColumnWithType(tableType)
     return (
-        <TableHead>
+        <TableHead sx={{ backgroundColor: '#e6e6e6' }}>
             <TableRow>
-                <TableCell padding="checkbox">
+                {hasCheckBox && <TableCell padding="checkbox" sx={{ backgroundColor: '#e6e6e6' }}>
                     <Checkbox
                         color="primary"
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
+                        // indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
                         inputProps={{
                             'aria-label': 'select all desserts',
                         }}
                     />
-                </TableCell>
-                {headCells.map((headCell) => (
+                </TableCell>}
+                {manageColumnOptions.map((headCell) => (
                     <TableCell
+                        sx={{ backgroundColor: '#e6e6e6' }}
                         key={headCell.id}
                         align={headCell.numeric ? 'right' : 'left'}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
@@ -251,18 +180,24 @@ interface EnhancedTableToolbarProps {
 //         </Toolbar>
 //     );
 // }
+interface TablePagerProps<T> {
+    batchActionElements?: JSX.Element[]
+    tableType: TableType
+    rowData: T[]
+    hasCheckBox?: boolean
+}
 
-export default function TablePager() {
+export default function TablePager<T>(props: TablePagerProps<T>) {
     const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof Data>('calories');
-    const [selected, setSelected] = React.useState<readonly string[]>([]);
+    const [orderBy, setOrderBy] = React.useState<string>('appointmentId');
+    const [selected, setSelected] = React.useState<readonly T[]>([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
-        property: keyof Data,
+        property: string,
     ) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -270,23 +205,22 @@ export default function TablePager() {
     };
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.checked);
-        console.log(selected);
-        
-        if (event.target.checked && selected.length === 0) {
-            const newSelected = rows.map((n) => n.name);
+        if (event.target.checked) {
+            const newSelected = props.rowData.map((n) => {
+                return n
+            });
             setSelected(newSelected);
             return;
         }
         setSelected([]);
     };
 
-    const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-        const selectedIndex = selected.indexOf(name);
-        let newSelected: readonly string[] = [];
+    const handleClick = (event: React.MouseEvent<unknown>, rowChild: T) => {
+        const selectedIndex = selected.indexOf(rowChild);
+        let newSelected: readonly T[] = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
+            newSelected = newSelected.concat(selected, rowChild);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -297,8 +231,6 @@ export default function TablePager() {
                 selected.slice(selectedIndex + 1),
             );
         }
-        console.log(newSelected);
-        
         setSelected(newSelected);
     };
 
@@ -315,101 +247,125 @@ export default function TablePager() {
         setDense(event.target.checked);
     };
 
-    const isSelected = (name: string) => selected.indexOf(name) !== -1;
+    const isSelected = (rowChild: T) => selected.indexOf(rowChild) !== -1;
 
-    // Avoid a layout jump when reaching the last page with empty rows.
+    // Avoid a layout jump when reaching the last page with empty props.rowData.
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.rowData.length) : 0;
 
-    const visibleRows = React.useMemo(
-        () =>
-            stableSort(rows, getComparator(order, orderBy)).slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage,
-            ),
-        [order, orderBy, page, rowsPerPage],
-    );
+    // const visibleRows = React.useMemo(
+    //     () =>
+    //         stableSort(props.rowData, getComparator(order, orderBy)).slice(
+    //             page * rowsPerPage,
+    //             page * rowsPerPage + rowsPerPage,
+    //         ),
+    //     [order, orderBy, page, rowsPerPage],
+    // );
+
+    const onRenderCell = (row: any) => {
+        return <>{
+            Array.from({ length: Object.keys(row).length }).map((a, i) => {
+                return i === 0 ? <TableCell
+                    component="th"
+                    id={`enhanced-table-checkbox`}
+                    align="right"
+                    scope="row"
+                    sx={{ cursor: 'pointer', fontWeight: '500' }}
+                >
+                    <NavLink to={"/admin/danh-sach-dat-kham/chi-tiet-dat-kham"} style={{ color: 'rgba(0, 0, 0, 0.87)'}}>
+                        {row[Object.keys(row)[i]]}
+                    </NavLink>
+                </TableCell> : <TableCell align="right">{row[Object.keys(row)[i]]}</TableCell>
+            })
+        }</>
+    }
 
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-                <TableContainer>
-                    <Table
-                        sx={{ minWidth: 750 }}
-                        aria-labelledby="tableTitle"
-                        size={dense ? 'small' : 'medium'}
-                    >
-                        <EnhancedTableHead
-                            numSelected={selected.length}
-                            order={order}
-                            orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
-                            onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
-                        />
-                        <TableBody>
-                            {visibleRows.map((row, index) => {
-                                const isItemSelected = isSelected(row.name);
-                                const labelId = `enhanced-table-checkbox-${index}`;
-
-                                return (
-                                    <TableRow
-                                        hover
-                                        onClick={(event) => handleClick(event, row.name)}
-                                        role="checkbox"
-                                        aria-checked={isItemSelected}
-                                        tabIndex={-1}
-                                        key={row.name}
-                                        selected={isItemSelected}
-                                        sx={{ cursor: 'pointer' }}
-                                    >
-                                        <TableCell padding="checkbox">
-                                            <Checkbox
-                                                color="primary"
-                                                checked={isItemSelected}
-                                                inputProps={{
-                                                    'aria-labelledby': labelId,
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell
-                                            component="th"
-                                            id={labelId}
-                                            scope="row"
-                                            padding="none"
-                                            onClick={() => {console.log(row.name)}}
+                <div className="commandbar-container">
+                    {props.batchActionElements ? props.batchActionElements : null}
+                    {selected.length !== 0 && <div className="selected-items">
+                        {`${selected.length} đã chọn`}
+                        <Button color={ButtonColorType.Inherit} onClick={() => { setSelected([]); }}>
+                            X
+                        </Button>
+                    </div>}
+                </div>
+                {props.rowData.length !== 0 ?
+                    <div className="table-pager">
+                        <TableContainer >
+                            <Table
+                                sx={{ minWidth: 750 }}
+                                aria-labelledby="tableTitle"
+                                size={dense ? 'small' : 'medium'}
+                                stickyHeader
+                                aria-label="sticky table"
+                            >
+                                <EnhancedTableHead
+                                    numSelected={selected.length}
+                                    order={order}
+                                    orderBy={orderBy}
+                                    onSelectAllClick={handleSelectAllClick}
+                                    onRequestSort={handleRequestSort}
+                                    rowCount={props.rowData.length}
+                                    tableType={props.tableType}
+                                    hasCheckBox={props.hasCheckBox}
+                                />
+                                <TableBody>
+                                    {props.rowData.map((row, index) => {
+                                        const isItemSelected = isSelected(row);
+                                        const labelId = `enhanced-table-checkbox-${index}`;
+                                        return (
+                                            <TableRow
+                                                // hover
+                                                onClick={(event) => handleClick(event, row)}
+                                                role="checkbox"
+                                                aria-checked={isItemSelected}
+                                                tabIndex={-1}
+                                                key={index}
+                                                selected={isItemSelected}
+                                            >
+                                                {props.hasCheckBox && <TableCell padding="checkbox">
+                                                    <Checkbox
+                                                        color="primary"
+                                                        checked={isItemSelected}
+                                                        inputProps={{
+                                                            'aria-labelledby': labelId,
+                                                        }}
+                                                    />
+                                                </TableCell>}
+                                                {onRenderCell(row)}
+                                            </TableRow>
+                                        );
+                                    })}
+                                    {emptyRows > 0 && (
+                                        <TableRow
+                                            style={{
+                                                height: (dense ? 33 : 53) * emptyRows,
+                                            }}
                                         >
-                                            {row.name}
-                                        </TableCell>
-                                        <TableCell align="right">{row.calories}</TableCell>
-                                        <TableCell align="right">{row.fat}</TableCell>
-                                        <TableCell align="right">{row.carbs}</TableCell>
-                                        <TableCell align="right">{row.protein}</TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                            {emptyRows > 0 && (
-                                <TableRow
-                                    style={{
-                                        height: (dense ? 33 : 53) * emptyRows,
-                                    }}
-                                >
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+                                            <TableCell colSpan={6} />
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25]}
+                            component="div"
+                            count={props.rowData.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                    </div> :
+                    <div className="table-pager-nodata">
+                        <ContentPasteOffOutlinedIcon />
+                        Không có dữ liệu để hiển thị
+                    </div>
+                }
             </Paper>
             {/* <FormControlLabel
                 control={<Switch checked={dense} onChange={handleChangeDense} />}

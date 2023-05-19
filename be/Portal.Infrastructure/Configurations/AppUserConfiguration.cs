@@ -10,19 +10,18 @@ using System.Threading.Tasks;
 namespace Portal.Infrastructure.Configurations
 {
   public class AppUserConfiguration : IEntityTypeConfiguration<Portal.Domain.Entities.AppUser>
+  {
+    public void Configure(EntityTypeBuilder<Portal.Domain.Entities.AppUser> builder)
     {
-        public void Configure(EntityTypeBuilder<Portal.Domain.Entities.AppUser> builder)
-        {
-            builder.ToTable("AppUsers");
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.FirstName).HasMaxLength(128).IsRequired();
-            builder.Property(x => x.LastName).HasMaxLength(128).IsRequired();
-            builder.Property(x => x.Description).HasMaxLength(500).IsRequired();
-            builder.Property(x => x.CreatedDate).IsRequired();
-            builder.Property(x => x.TenantId);
-            builder.Property(x => x.LastModifiedDate);
-            builder.Property(x => x.DeleteAt);
-            builder.Property(x => x.SiteId);
-        }
+      builder.ToTable("AppUsers");
+      builder.HasKey(x => x.Id);
+      builder.Property(x => x.Code).IsRequired();
+      builder.Property(x => x.FirstName).HasMaxLength(128).IsRequired();
+      builder.Property(x => x.LastName).HasMaxLength(128).IsRequired();
+      builder.Property(x => x.Description).HasMaxLength(500).IsRequired();
+      builder.Property(x => x.CreatedDate);
+      builder.Property(x => x.LastModifiedDate);
+      builder.Property(x => x.DeleteAt);
     }
+  }
 }

@@ -8,7 +8,7 @@ import {TextField} from '../../common/textField/TextField'
 import SubmitButton from '../../common/button/SubmitButton'
 import {ButtonVariantType} from '../../model/enum/buttonEnum'
 import {useNavigate} from 'react-router'
-import {AccountPermissionEnum} from '../../model/enum/accPermissionEnum'
+import {AccountRoleEnum} from '../../model/enum/accPermissionEnum'
 
 function Login() {
     const navigate = useNavigate()
@@ -18,7 +18,7 @@ function Login() {
             }
             const result = new Promise((resolve) => {
                 setTimeout(() => {
-                    localStorage.setItem('user', JSON.stringify({ role: AccountPermissionEnum.Admin }))
+                    localStorage.setItem('user', JSON.stringify({ role: AccountRoleEnum.Admin }))
                     navigate('/trang-chu')
                     resolve('success')
                 }, 4000);

@@ -3,10 +3,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Portal.API.Rpc.menu
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class MenuController : RpcController
+  [Route("api/[controller]")]
+  [ApiController]
+  public class MenuController : RpcController
+  {
+    [Route(MenuRoot.Get), HttpPost]
+    public IActionResult Demo()
     {
-        
+      return Ok();
     }
+  }
 }

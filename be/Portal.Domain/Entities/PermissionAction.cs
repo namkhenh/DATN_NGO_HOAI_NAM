@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace Portal.Domain.Entities
 {
-    public class PermissionAction : EntityAuditBase<Guid>, IEntityBase<Guid>
-    {
-        public Guid ActionId { get; set; }
-        public Guid PermissionId { get; set; }
-    }
+  public class PermissionAction : EntityAuditBase<Guid>, IEntityBase<Guid>
+  {
+    public string Code { get; set; }
+    public Guid ActionId { get; set; }
+    public Guid PermissionId { get; set; }
+  }
 }

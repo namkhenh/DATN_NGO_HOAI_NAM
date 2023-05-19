@@ -28,14 +28,16 @@ code {
 
 /* Works on Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 *::-webkit-scrollbar-track {
-  background: rgba(117, 117, 117, 0.404);
+  background-color: #ebebeb;
+  border-radius: 20px;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #b6b6b6;
+  background: rgba(117, 117, 117, 0.5);
   border-radius: 20px;
 }

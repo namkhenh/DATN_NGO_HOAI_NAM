@@ -1,8 +1,10 @@
 ﻿using Common.Common.ActionResponse;
+using Common.Dtos.Outh2;
 using Common.Dtos.User;
 using Common.Share.SeedWorks;
 using Hangfire.Mongo.Dto;
 using Microsoft.AspNetCore.Identity;
+using Portal.Domain.Entities;
 using Portal.Domain.ViewModel.Outh2;
 using System;
 using System.Collections.Generic;
@@ -14,8 +16,10 @@ namespace Portal.Application.Interfaces.User
 {
   public interface IUserService
   {
+    Task<ActionResponse<TokenResponse>> Authentication(Common.Dtos.Outh2.AuthenticationRequest request);
+    Task<ActionResponse<TokenResponse>> RefeshToken(string refeshToken, string accessToken);
     Task<ActionResponse<UserDto>> UpdateUser(CreateUpdateUser request);
-    Task<ActionResponse<UserDto>> Register(CreateUpdateUser request);
+    Task<ActionResponse<UserDto>> Register(RegisterRequest request);
     Task<bool> ExistsUserAsync(string userId);
 
     Task<ActionResponse<UserDto>> GetUsersAsync(string search, int pageIndex = 1, int pageSize = 10);

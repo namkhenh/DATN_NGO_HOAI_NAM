@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Portal.Application.Interfaces.Permission
 {
-    public interface IPermissionService
-    {
-    }
+  public interface IPermissionService
+  {
+    Task<bool> CheckPermissionByUserIdAndUrl(string userId, string url);
+  }
 }

@@ -1,4 +1,4 @@
-export enum AccountPermissionEnum {
+export enum AccountRoleEnum {
     User,
     Care,
     Doctor,

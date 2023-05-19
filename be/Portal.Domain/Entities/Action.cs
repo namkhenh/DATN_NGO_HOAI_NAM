@@ -11,9 +11,9 @@ namespace Portal.Domain.Entities
 {
   public class Action : EntityAuditBase<Guid>, IEntityBase<Guid>
   {
-    public string Id { get; set; }
     public Guid MenuId { get; set; }
+    public string Code { get; set; }
+    public string Name { get; set; }
     public string Path { get; set; }
-
   }
 }

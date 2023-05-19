@@ -42,8 +42,6 @@ function BreadCrumbView(props: BreadcrumbsProps) {
                     </div>
                 </NavLink>
                 {props.breadcrumbItem?.map((item) => {
-                    console.log(props.breadcrumbItem?.indexOf(item));
-                    console.log(props.breadcrumbItem?.length);
                     return props.breadcrumbItem?.indexOf(item) < props.breadcrumbItem?.length - 1 ?
                         <NavLink key={item.key} color="inherit" to={item.href}>
                             <div className="child">

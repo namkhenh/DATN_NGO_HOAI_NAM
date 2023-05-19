@@ -1,6 +1,6 @@
 import React from 'react'
 import {Navigate, Outlet} from 'react-router'
-import {AccountPermissionEnum} from '../../model/enum/accPermissionEnum'
+import {AccountRoleEnum} from '../../model/enum/accPermissionEnum'
 
 const useAuth = () => {
     let user: any
@@ -24,7 +24,7 @@ const useAuth = () => {
 }
 
 interface ProtectedRoutesProps {
-    roleRequired?: AccountPermissionEnum
+    roleRequired?: AccountRoleEnum
 }
 
 function ProtectedRoutes(props: ProtectedRoutesProps) {

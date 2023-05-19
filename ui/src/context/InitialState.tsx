@@ -1,8 +1,8 @@
 import {UserInfoDefaultView} from "../model/apimodel/userInfo";
-import {AccountPermissionEnum} from "../model/enum/accPermissionEnum";
+import {AccountRoleEnum} from "../model/enum/accPermissionEnum";
 
 export const initialState = {
   userInfo: UserInfoDefaultView,
-  accountPermission: AccountPermissionEnum,
+  accountPermission: AccountRoleEnum,
   messageBar: {text: "", isOpen: false, status: undefined},
 };
