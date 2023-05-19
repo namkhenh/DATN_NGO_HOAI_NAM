@@ -26,6 +26,7 @@ function AccountManagerPage() {
     const [showDialog, setShowDialog] = useState<boolean>(false)
     const [loadingButton, setLoading] = useState<boolean>(false)
     const [accountAction, setAcountAction] = useState<AccountAction>()
+    const [currentPage, setCurrentPage] = useState<number>(0);
     const onRenderActionButtons = (): JSX.Element[] => {
         return ([
             <PatientListCommandBar
@@ -167,15 +168,13 @@ function AccountManagerPage() {
     }
 
     return (
-        <div className='accountmanager-page'>
-            <BreadCrumb
-                breadcrumbItem={[
-                    { key: 1, text: 'Quản lý tài khoản', href: '/quan-ly-tai-khoan' },
-                ]}
-            />
-            <div className="accountmanager-page-title">
-                Danh sách tài khoản
-            </div>
+      <div className="accountmanager-page">
+        <BreadCrumb
+          breadcrumbItem={[
+            { key: 1, text: "Quản lý tài khoản", href: "/quan-ly-tai-khoan" },
+          ]}
+        />
+        <div className="accountmanager-page-title">Danh sách tài khoản</div>
             <div className="accountmanager-page-search">
                 <SearchBoxView
                     placeholder='User Name/ Họ và tên/ CMND'
@@ -183,14 +182,17 @@ function AccountManagerPage() {
                 />
             </div>
             <div className='line' style={{ width: '100%', height: '1px', backgroundColor: '#cccccc' }}></div>
-            <div className="patient-list-table">
-                <TablePager<AccountManagerTableColumns>
-                    tableType={TableType.AccountManagerTable}
-                    batchActionElements={onRenderActionButtons()}
-                    rowData={rows}
-                    hasCheckBox
-                />
-            </div>
+        <div className="patient-list-table">
+          <TablePager<AccountManagerTableColumns>
+            tableType={TableType.AccountManagerTable}
+            batchActionElements={onRenderActionButtons()}
+            rowData={rows}
+            hasCheckBox
+            page={currentPage}
+            handleChangePage={(page) => {setCurrentPage(page)} }
+            total={10}
+          />
+        </div>
             <DialogView
                 title={'Tạo tài khoản'}
                 hidden={!showDialog}
@@ -203,8 +205,8 @@ function AccountManagerPage() {
                 close={() => {setShowDialog(false)}}
                 loading={loadingButton}
             />
-        </div>
-    )
+      </div>
+    );
 }
 
 export default AccountManagerPage

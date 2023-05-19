@@ -185,6 +185,9 @@ interface TablePagerProps<T> {
     tableType: TableType
     rowData: T[]
     hasCheckBox?: boolean
+    page: number
+    handleChangePage: (page: number) => void
+    total: number
 }
 
 export default function TablePager<T>(props: TablePagerProps<T>) {
@@ -272,9 +275,9 @@ export default function TablePager<T>(props: TablePagerProps<T>) {
                     scope="row"
                     sx={{ cursor: 'pointer', fontWeight: '500' }}
                 >
-                    <NavLink to={"/admin/danh-sach-dat-kham/chi-tiet-dat-kham"} style={{ color: 'rgba(0, 0, 0, 0.87)'}}>
+                    {/* <NavLink to={"/admin/danh-sach-dat-kham/chi-tiet-dat-kham"} style={{ color: 'rgba(0, 0, 0, 0.87)'}}> */}
                         {row[Object.keys(row)[i]]}
-                    </NavLink>
+                    {/* </NavLink> */}
                 </TableCell> : <TableCell align="right">{row[Object.keys(row)[i]]}</TableCell>
             })
         }</>
@@ -352,13 +355,12 @@ export default function TablePager<T>(props: TablePagerProps<T>) {
                             </Table>
                         </TableContainer>
                         <TablePagination
-                            rowsPerPageOptions={[5, 10, 25]}
+                            rowsPerPageOptions={[10]}
                             component="div"
-                            count={props.rowData.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
+                            count={props.total}
+                            rowsPerPage={10}
+                            page={props.page}
+                            onPageChange={(e,page)=> {props.handleChangePage(page)}}
                         />
                     </div> :
                     <div className="table-pager-nodata">
