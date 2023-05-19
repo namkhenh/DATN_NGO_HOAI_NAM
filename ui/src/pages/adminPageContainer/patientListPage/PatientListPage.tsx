@@ -20,9 +20,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 
 function PatientListPage() {
-  const [showAccept, setShowAccept] = useState<boolean>(false)
-  const [showRefuse, setShowRefuse] = useState<boolean>(false)
-  const [showCancel, setShowCancel] = useState<boolean>(false)
+  const [showDialog, setShowDialog] = useState<boolean>(false)
   const [loadingButton, setLoading] = useState<boolean>(false)
   const [showMessage, setShowMessage] = useState<boolean>(false)
   const [patientAction, setPatientAction] = useState<PatientListAction>()
@@ -37,9 +35,9 @@ function PatientListPage() {
         key={'patient-list-commandbar'}
         // {...props}
         tableType={TableType.PatientListTable}
-        showPreAccept={() => { setShowAccept(true); setPatientAction(PatientListAction.Accept) }}
-        showPreRefuse={() => { setShowRefuse(true); setPatientAction(PatientListAction.Refuse) }}
-        showPreCancel={() => { setShowCancel(true); setPatientAction(PatientListAction.Cancel) }}
+        showPatientAccept={() => { setShowDialog(true); setPatientAction(PatientListAction.Accept) }}
+        showPatientRefuse={() => { setShowDialog(true); setPatientAction(PatientListAction.Refuse) }}
+        showPatientCancel={() => { setShowDialog(true); setPatientAction(PatientListAction.Cancel) }}
       />
     ])
   }
@@ -58,7 +56,7 @@ function PatientListPage() {
         setTimeout(() => {
           setLoading(false)
           setShowMessage(true)
-          setShowAccept(false)
+          setShowDialog(false)
           showMessageBar("Cập nhật thông tin thành công", true, MessageBarStatus.Success)
           resolve('success')
         }, 4000);
@@ -198,12 +196,12 @@ function PatientListPage() {
       </div>
       <DialogView
         title={patientAction === PatientListAction.Accept ? 'Xác nhận duyệt đặt khám' : (patientAction === PatientListAction.Refuse ? 'Xác nhận từ chối đặt khám' : 'Xác nhận hủy đặt khám')}
-        hidden={patientAction === PatientListAction.Accept ? !showAccept : (patientAction === PatientListAction.Refuse ? !showRefuse : !showCancel)}
+        hidden={!showDialog}
         customContent={renderBodyForm()}
         confirmButtonText={'Đồng ý'}
         confirmWithPromise={onSave}
         closeButtonText='Hủy bỏ'
-        close={() => { patientAction === PatientListAction.Accept ? setShowAccept(false) : (patientAction === PatientListAction.Refuse ? setShowRefuse(false) : setShowCancel(false)) }}
+        close={() => { setShowDialog(false) }}
         loading={loadingButton}
       />
     </div>

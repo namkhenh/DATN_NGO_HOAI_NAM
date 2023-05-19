@@ -5,9 +5,12 @@ import { CommandBarView } from '../../../common/commandBar/CommandBar'
 
 interface IPatientListCommandBar {
     tableType: TableType
-    showPreAccept?: () => void
-    showPreRefuse?: () => void
-    showPreCancel?: () => void
+    showPatientAccept?: () => void
+    showPatientRefuse?: () => void
+    showPatientCancel?: () => void
+    showAccountEdit?: () => void
+    showAccountCreate?: () => void
+    showAccountDelete?: () => void
 }
 
 // const initActionBar: () => ICommandBarItemProps[] = () => {
@@ -19,6 +22,8 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
         switch (props.tableType) {
             case TableType.PatientListTable:
                 return patientListActions()
+            case TableType.AccountManagerTable:
+                return accountManagerActions()
             default:
                 return [];
         }
@@ -32,7 +37,7 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
                 text: 'Đồng ý',
                 iconProps: { iconName: 'EventAccepted', style: { color: '#00794E' } },
                 onClick: () => {
-                    props.showPreAccept!()
+                    props.showPatientAccept!()
                 }
             },
             {
@@ -40,7 +45,7 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
                 text: 'Từ chối',
                 iconProps: { iconName: 'EventDeclined', style: { color: '#AC0000'} },
                 onClick: () => {
-                    props.showPreRefuse!()
+                    props.showPatientRefuse!()
                 }
             },
             {
@@ -48,7 +53,7 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
                 text: 'Hủy lịch',
                 iconProps: { iconName: 'Cancel', style: { color: '#AC0000' } },
                 onClick: () => {
-                    props.showPreCancel!()
+                    props.showPatientCancel!()
                 }
             },
             {
@@ -67,6 +72,38 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
                     console.log("ok");
                 }
             })
+
+        return commandBarItems
+    }
+
+    const accountManagerActions = (): ICommandBarItemProps[] => {
+        let commandBarItems: ICommandBarItemProps[] = []
+        commandBarItems.push(
+            {
+                key: 'account-create',
+                text: 'Tạo tài khoản',
+                iconProps: { iconName: 'AddFriend', style: { color: '#00794E' } },
+                onClick: () => {
+                    props.showAccountCreate!()
+                }
+            },
+            {
+                key: 'account-edit',
+                text: 'Chỉnh sửa',
+                iconProps: { iconName: 'edit', style: { color: '#707070' } },
+                onClick: () => {
+                    props.showAccountEdit!()
+                }
+            },
+            {
+                key: 'account-delete',
+                text: 'Xóa tài khoản',
+                iconProps: { iconName: 'trash', style: { color: '#AC0000' } },
+                onClick: () => {
+                    props.showAccountDelete!()
+                }
+            }
+        )
 
         return commandBarItems
     }

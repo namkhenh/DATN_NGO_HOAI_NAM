@@ -414,15 +414,15 @@ const BookingAppointment = (props: any) => {
             <AcceptBookingForm
                 closeAccept={closeAccept}
                 currentBookingAppointment={{
-                    appointmentDate: appointmentInfo.appointmentDate,
-                    appointmentTime: appointmentInfo.appointmentTime,
-                    appointmentReason: appointmentInfo.appointmentReason,
-                    patientName: allProfile[currentSelection].patientName,
-                    patientBirth: allProfile[currentSelection].patientDateBirth,
-                    patientSex: allProfile[currentSelection].patientSex,
-                    patientPhone: allProfile[currentSelection].patientPhoneNumber!,
-                    patientAddress: allProfile[currentSelection].patientAddress,
-                    patientId: allProfile[currentSelection].patientId
+                appointmentDate: appointmentInfo.appointmentDate,
+                appointmentTime: appointmentInfo.appointmentTime,
+                appointmentReason: appointmentInfo.appointmentReason,
+                patientName: allProfile[currentSelection].patientName,
+                patientBirth: allProfile[currentSelection].patientDateBirth,
+                patientSex: allProfile[currentSelection].patientSex,
+                patientPhone: allProfile[currentSelection].patientPhoneNumber!,
+                patientAddress: allProfile[currentSelection].patientAddress,
+                patientId: allProfile[currentSelection].patientId
                 }}
                 openAccept={openAccept}
             />
