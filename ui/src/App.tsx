@@ -20,6 +20,7 @@ import { AccountRoleEnum } from "./model/enum/accPermissionEnum";
 import PatientListPage from "./pages/adminPageContainer/patientListPage/PatientListPage";
 import AppartmentDetailPage from "./pages/adminPageContainer/appartmentDetailPage/AppartmentDetailPage";
 import AccountManagerPage from "./pages/adminPageContainer/accountManagerPage/AccountManagerPage";
+import RoleManagerPage from "./pages/adminPageContainer/roleManagerPage/RoleManagerPage";
 
 function App() {
   return (
@@ -92,6 +93,7 @@ function App() {
           <Route path="/admin" element={<AdminLayout></AdminLayout>}>
             <Route path="/admin/dashboard" element={<div>Dash</div>}></Route>
             <Route path="/admin/quan-ly-tai-khoan" element={<AccountManagerPage />}></Route>
+            <Route path="/admin/quan-ly-chuc-nang" element={<RoleManagerPage />}></Route>
             <Route path="/admin/danh-sach-dat-kham" element={<PatientListPage />}></Route>
             <Route path="/admin/danh-sach-dat-kham/chi-tiet-dat-kham" element={<AppartmentDetailPage actionType="edit"/>}></Route>
             <Route path="/admin/them-moi-hen-kham" element={<AppartmentDetailPage actionType="add"/>}></Route>

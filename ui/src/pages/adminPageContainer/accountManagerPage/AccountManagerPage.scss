@@ -23,7 +23,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 4px;
+    gap: 8px;
     .role-element-admin,
     .role-element-doctor,
     .role-element-care,
@@ -35,15 +35,27 @@
         font-size: 14px;
     }
     .role-element-admin{
-        background-color: #ff4646b4;
+        border: 1px solid #ff4646b4;
+        background-color: #ff46463a;
     }
     .role-element-doctor {
-        background-color: #51c8ff;
+        border: 1px solid #51c8ff;
+        background-color: #51c8ff57;
     }
     .role-element-care {
-        background-color: #ffeb77c2;
+        border: 1px solid #c4ad2afa ;
+        background-color: #ffeb7781;
     }
     .role-element-user {
-        background-color: #2da55b86;
+        border: 1px solid #2da55b86;
+        background-color: #2da55b3a;
+    }
+}
+
+.account-create-form {
+    label {
+        font-family: 'Roboto', sans-serif !important;
+        font-size: 16px;
+        font-weight: 500;
     }
 }

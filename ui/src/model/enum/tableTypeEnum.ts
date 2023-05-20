@@ -4,6 +4,7 @@ import { AppointmentStatus } from "./appointmentEnum"
 export enum TableType {
     PatientListTable,
     AccountManagerTable,
+    RoleManagerTable
 }
 
 export interface PatientListTableColumns {
@@ -33,4 +34,12 @@ export enum PatientListAction {
     Refuse,
     Cancel,
     Export
+}
+
+export interface AccountManagerTableColumns {
+    userName: string
+    role: JSX.Element
+    fullName: string
+    phoneNumber: string
+    insuranceNumber: string
 }

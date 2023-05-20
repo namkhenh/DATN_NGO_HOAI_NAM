@@ -103,6 +103,39 @@ const accountManagerStaticColumn: () => HeadCell[] = () => [
     }
 ]
 
+const roleManagerStaticColumn: () => HeadCell[] = () => [
+    {
+        id: 'userName',
+        numeric: true,
+        disablePadding: false,
+        label: 'User Name',
+    },
+    {
+        id: 'role',
+        numeric: true,
+        disablePadding: false,
+        label: 'Role',
+    },
+    {
+        id: 'fullName',
+        numeric: true,
+        disablePadding: false,
+        label: 'Họ và tên',
+    },
+    {
+        id: 'phoneNumber',
+        numeric: true,
+        disablePadding: false,
+        label: 'Số điện thoại',
+    },
+    {
+        id: 'insuranceNumber',
+        numeric: true,
+        disablePadding: false,
+        label: 'CMND',
+    }
+]
+
 export const getColumnWithType: (tableType: TableType) => HeadCell[] = (tableType) => {
     let basicColumns: HeadCell[];
     switch (tableType) {
@@ -112,6 +145,10 @@ export const getColumnWithType: (tableType: TableType) => HeadCell[] = (tableTyp
         }
         case TableType.AccountManagerTable: {
             basicColumns = accountManagerStaticColumn()
+            break;
+        }
+        case TableType.RoleManagerTable: {
+            basicColumns = roleManagerStaticColumn()
             break;
         }
         default: {

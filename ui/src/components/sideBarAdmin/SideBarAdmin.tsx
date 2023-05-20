@@ -10,6 +10,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import EngineeringIcon from '@mui/icons-material/Engineering';
 function SideBarAdmin() {
     const [isCollapse, setOpen] = React.useState(true);
 
@@ -34,6 +35,12 @@ function SideBarAdmin() {
                         <div className="nav-item">
                             <ManageAccountsIcon />
                             <div className="nav-item-text">Quản lý tài khoản</div>
+                        </div>
+                    </NavLink>
+                    <NavLink to={'/admin/quan-ly-chuc-nang'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
+                        <div className="nav-item">
+                            <EngineeringIcon />
+                            <div className="nav-item-text">Quản lý chức năng</div>
                         </div>
                     </NavLink>
                     <NavLink to={'/admin/danh-sach-dat-kham'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>

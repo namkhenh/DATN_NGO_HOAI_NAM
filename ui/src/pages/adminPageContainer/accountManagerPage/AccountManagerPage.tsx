@@ -14,7 +14,12 @@ import { actionType } from '../../../context/Reducer'
 import { DatePicker } from '../../../common/datePicker/DatePicker'
 import { Dropdown } from '../../../common/dropdown/DropDown'
 import { UserSexView } from '../../../model/apimodel/userInfo'
-
+import { Label } from '@fluentui/react/lib/Label'
+import RadioGroup from '@mui/material/RadioGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Radio from '@mui/material/Radio'
+import FormGroup from '@mui/material/FormGroup';
+import Checkbox from '@mui/material/Checkbox';
 
 enum AccountAction {
     Create,
@@ -127,17 +132,22 @@ function AccountManagerPage() {
                     />
                 </div>
                 <div className="account-create-field">
-                    <Dropdown
-                        placeholder="Chọn một giá trị"
-                        label="Giới tính"
-                        options={UserSexView}
-                        selectedKey={1}
-                        required
-                        onChange={(_, selected) => {
-                            // onChangeOneFieldForm(PatientProfileModelProperty.patientSex, Number(selected?.key))
-                        }}
-                        // errorMessage={errorMessageFormString.patientSex}
-                    />
+                    <Label required>Giới tính</Label>
+                    <RadioGroup
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="row-radio-buttons-group"
+                    >
+                        <FormControlLabel value="male" control={<Radio />} label="Nam" />
+                        <FormControlLabel value="female" control={<Radio />} label="Nữ" />
+                    </RadioGroup>
+                </div>
+                <div className="account-create-field">
+                    <Label required>Phân quyền</Label>
+                    <FormGroup row>
+                        <FormControlLabel value={'admin'} control={<Checkbox />} label="Admin" />
+                        <FormControlLabel value={'doctor'} control={<Checkbox />} label="Bác sĩ" /><FormControlLabel value={'care'} control={<Checkbox />} label="CSKH" /><FormControlLabel value={'user'} control={<Checkbox />} label="Bệnh nhân" />
+                    </FormGroup>
                 </div>
             </div>
         )
