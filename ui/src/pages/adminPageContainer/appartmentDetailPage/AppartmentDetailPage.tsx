@@ -24,7 +24,6 @@ interface IAppartmentDetailPageProps {
 
 function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
     const appointmentId = useParams().id;
-    console.log(appointmentId);
     const [isOpenAccpet, setOpen] = useState<boolean>(false)
     const [isOpenDialog, setOpenDialog] = useState<boolean>(false);
     const [loadingButton, setLoading] = useState<boolean>(false)

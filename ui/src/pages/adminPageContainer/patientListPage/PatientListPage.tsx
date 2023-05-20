@@ -1,12 +1,9 @@
 import React, { useState } from 'react'
 import './PatientListPage.scss'
-import LogoutIcon from '@mui/icons-material/Logout';
-import AdminHeaderPage from '../../../structure/headerPage/AdminHeaderPage';
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb';
 import { SearchBoxView } from '../../../common/searchBox/SearchBox';
 import { Label } from '@fluentui/react';
 import { DatePicker } from '../../../common/datePicker/DatePicker';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import TablePager from '../../../common/tablePager/TablePager';
 import PatientListCommandBar from './PatientListCommandBar';
 import { PatientListAction, PatientListTableColumns, TableType } from '../../../model/enum/tableTypeEnum';
@@ -23,7 +20,6 @@ import { NavLink } from 'react-router-dom';
 function PatientListPage() {
   const [showDialog, setShowDialog] = useState<boolean>(false)
   const [loadingButton, setLoading] = useState<boolean>(false)
-  const [showMessage, setShowMessage] = useState<boolean>(false)
   const [currentPage,setCurrentPage]= useState<number>(0)
   const [patientAction, setPatientAction] = useState<PatientListAction>()
   const onSearch = (newValue: string) => {
@@ -57,7 +53,6 @@ function PatientListPage() {
         setLoading(true)
         setTimeout(() => {
           setLoading(false)
-          setShowMessage(true)
           setShowDialog(false)
           showMessageBar("Cập nhật thông tin thành công", true, MessageBarStatus.Success)
           resolve('success')
@@ -70,7 +65,7 @@ function PatientListPage() {
   }
 
   function createData(
-    appointmentIdI: string,
+    appointmentId: string,
     appointmentStatusI: AppointmentStatus,
     dateAppointment: string,
     timeAppointment: string,
@@ -83,13 +78,14 @@ function PatientListPage() {
     // patientAddress: string,
 
   ): PatientListTableColumns {
-    let appointmentId: JSX.Element = (
-      <NavLink
-        to={`/admin/danh-sach-dat-kham/chi-tiet-dat-kham/${appointmentIdI}`}
-      >
-        { appointmentIdI }
-      </NavLink>
-    );
+    // let appointmentId: JSX.Element = (
+    //   <NavLink
+    //     style={{ color: 'rgba(0, 0, 0, 0.87)'}}
+    //     to={`/admin/danh-sach-dat-kham/chi-tiet-dat-kham/${appointmentIdI}`}
+    //   >
+    //     { appointmentIdI }
+    //   </NavLink>
+    // );
     let patientSex: string = patientSexI === 0 ? "Nam" : "Nữ" 
     let appointmentStatus: string = appointmentStatusI === AppointmentStatus.Success ? "Đã duyệt" : (appointmentStatusI === AppointmentStatus.Cancel ? "Đã hủy" : "Chờ duyệt")
     return {
@@ -120,7 +116,7 @@ function PatientListPage() {
       0
     ),
     createData(
-      "DL20230006",
+      "DL20230002",
       AppointmentStatus.Success,
       "11/02/2023",
       "09:00",
@@ -128,19 +124,19 @@ function PatientListPage() {
       "Ngô Hoài Nam",
       "19/05/2001",
       0
+    ),
+    createData(
+      "DL20230003",
+      AppointmentStatus.Waiting,
+      "11/02/2023",
+      "09:00",
+      "BN20230001",
+      "Ngô Hoài Nam",
+      "19/05/2001",
+      1
     ),
     createData(
       "DL20230004",
-      AppointmentStatus.Waiting,
-      "11/02/2023",
-      "09:00",
-      "BN20230001",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      1
-    ),
-    createData(
-      "DL20230001",
       AppointmentStatus.Cancel,
       "11/02/2023",
       "09:00",
@@ -150,7 +146,7 @@ function PatientListPage() {
       0
     ),
     createData(
-      "DL20230001",
+      "DL20230005",
       AppointmentStatus.Success,
       "11/02/2023",
       "09:00",
@@ -160,7 +156,7 @@ function PatientListPage() {
       0
     ),
     createData(
-      "DL20230001",
+      "DL20230006",
       AppointmentStatus.Waiting,
       "11/02/2023",
       "09:00",
@@ -170,7 +166,7 @@ function PatientListPage() {
       1
     ),
     createData(
-      "DL20230001",
+      "DL20230007",
       AppointmentStatus.Cancel,
       "11/02/2023",
       "09:00",
@@ -180,7 +176,7 @@ function PatientListPage() {
       0
     ),
     createData(
-      "DL20230001",
+      "DL20230008",
       AppointmentStatus.Success,
       "11/02/2023",
       "09:00",
@@ -190,7 +186,7 @@ function PatientListPage() {
       0
     ),
     createData(
-      "DL20230001",
+      "DL20230009",
       AppointmentStatus.Waiting,
       "11/02/2023",
       "09:00",
@@ -200,7 +196,7 @@ function PatientListPage() {
       1
     ),
     createData(
-      "DL20230001",
+      "DL20230010",
       AppointmentStatus.Cancel,
       "11/02/2023",
       "09:00",
@@ -210,7 +206,7 @@ function PatientListPage() {
       0
     ),
     createData(
-      "DL20230001",
+      "DL20230011",
       AppointmentStatus.Success,
       "11/02/2023",
       "09:00",
@@ -220,7 +216,7 @@ function PatientListPage() {
       0
     ),
     createData(
-      "DL20230001",
+      "DL20230012",
       AppointmentStatus.Waiting,
       "11/02/2023",
       "09:00",
@@ -230,7 +226,7 @@ function PatientListPage() {
       1
     )],[
     createData(
-      "DL20230001",
+      "DL20230013",
       AppointmentStatus.Cancel,
       "11/02/2023",
       "09:00",
@@ -240,7 +236,7 @@ function PatientListPage() {
       0
     ),
     createData(
-      "DL20230001",
+      "DL20230014",
       AppointmentStatus.Success,
       "11/02/2023",
       "09:00",
@@ -250,7 +246,7 @@ function PatientListPage() {
       0
     ),
     createData(
-      "DL20230001",
+      "DL20230015",
       AppointmentStatus.Waiting,
       "11/02/2023",
       "09:00",
@@ -353,6 +349,8 @@ function PatientListPage() {
           page={currentPage}
           handleChangePage={ (page) => { setCurrentPage(page) } }
           total={15}
+          hasNavigate
+          navigateLink={"/admin/danh-sach-dat-kham/chi-tiet-dat-kham/"}
         />
       </div>
       <DialogView

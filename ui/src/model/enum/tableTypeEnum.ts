@@ -8,7 +8,7 @@ export enum TableType {
 }
 
 export interface PatientListTableColumns {
-  appointmentId: JSX.Element;
+  appointmentId: string;
   appointmentStatus: string;
   dateAppointment: string;
   timeAppointment: string;
@@ -42,4 +42,11 @@ export interface AccountManagerTableColumns {
     fullName: string
     phoneNumber: string
     insuranceNumber: string
+}
+
+export interface RoleManagerTableColumns {
+    userName: string
+    add: JSX.Element
+    edit: JSX.Element
+    remove: JSX.Element
 }

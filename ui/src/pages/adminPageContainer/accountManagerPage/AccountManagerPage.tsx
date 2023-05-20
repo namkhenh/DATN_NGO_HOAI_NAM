@@ -81,9 +81,9 @@ function AccountManagerPage() {
     }
 
     const rows: AccountManagerTableColumns[] = [
-        createData('ngo_hoai_nam', [AccountRoleEnum.Admin, AccountRoleEnum.Doctor], 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createData('ngo_hoai_nam', [AccountRoleEnum.Care, AccountRoleEnum.User], 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createData('ngo_hoai_nam', [AccountRoleEnum.Doctor], 'Ngô Hoài Nam', '0123456788', '012345678'),
+        createData('ngo_hoai_nam1', [AccountRoleEnum.Admin, AccountRoleEnum.Doctor], 'Ngô Hoài Nam', '0123456788', '012345678'),
+        createData('ngo_hoai_nam2', [AccountRoleEnum.Care, AccountRoleEnum.User], 'Ngô Hoài Nam', '0123456788', '012345678'),
+        createData('ngo_hoai_nam3', [AccountRoleEnum.Doctor], 'Ngô Hoài Nam', '0123456788', '012345678'),
     ];
 
     const renderBodyForm = () => {

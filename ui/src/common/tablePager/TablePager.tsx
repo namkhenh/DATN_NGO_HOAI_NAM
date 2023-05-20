@@ -66,10 +66,8 @@ function stableSort<T>(
 }
 
 export interface HeadCell {
-  disablePadding: boolean;
   id: string;
   label: string;
-  numeric: boolean;
 }
 
 interface EnhancedTableProps {
@@ -119,8 +117,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
           <TableCell
             sx={{ backgroundColor: "#e6e6e6" }}
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
+            align={"left"}
+            padding={"normal"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
@@ -203,12 +201,15 @@ interface TablePagerProps<T> {
   page: number;
   handleChangePage: (page: number) => void;
   total: number;
+  hasNavigate?: boolean
+  navigateLink?: string
 }
 
 export default function TablePager<T>(props: TablePagerProps<T>) {
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<string>("appointmentId");
-  const [selected, setSelected] = React.useState<readonly T[]>([]);
+  const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const [selectedC, setSelectedC] = React.useState<readonly T[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -224,15 +225,21 @@ export default function TablePager<T>(props: TablePagerProps<T>) {
   };
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let newSelected: string[] = []
     if (event.target.checked) {
-      const newSelected = props.rowData;
+      // props.rowData.forEach((row: any, i) => { return props.hasNavigate ? newSelected.push(row[Object.keys(row)[0]]?.props.children) : newSelected.push(row[Object.keys(row)[0]]) });
+      props.rowData.forEach((row: any, i) => { return newSelected.push(row[Object.keys(row)[0]]) });
       setSelected(newSelected);
+      
+      const newSelectedC = props.rowData
+      setSelectedC(newSelectedC)
+
       dispatch({
         type: actionType.SET_SELECTION,
         selection: {
           ...selection,
-          selectedItems: newSelected,
-          selectedCount: newSelected.length,
+          selectedItems: newSelectedC,
+          selectedCount: newSelectedC.length,
         },
       });
       return;
@@ -248,25 +255,34 @@ export default function TablePager<T>(props: TablePagerProps<T>) {
     });
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, rowChild: T) => {
-    const selectedIndex = selected.indexOf(rowChild);
-    let newSelected: readonly T[] = [];
+  const handleClick = (event: React.MouseEvent<unknown>, rowChild: any) => {
+    let rowChildText: string = rowChild[Object.keys(rowChild)[0]]
+    const selectedIndex = selected.indexOf(rowChildText);
+    let newSelected: readonly string[] = [];
 
+    let newSelectedC: readonly T[] = []
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, rowChild);
+      newSelected = newSelected.concat(selected, rowChildText);
+      newSelectedC = newSelectedC.concat(selectedC, rowChild);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
+      newSelectedC = newSelectedC.concat(selectedC.slice(1));
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
+      newSelectedC = newSelectedC.concat(selectedC.slice(0, -1));
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1)
       );
+      newSelectedC = newSelectedC.concat(
+        selectedC.slice(0, selectedIndex),
+        selectedC.slice(selectedIndex + 1)
+      );
     }
     setSelected(newSelected);
-    console.log(newSelected);
-    dispatch({type: actionType.SET_SELECTION, selection: {...selection, selectedItems: newSelected, selectedCount: newSelected.length}});
+    setSelectedC(newSelectedC)
+    dispatch({type: actionType.SET_SELECTION, selection: {...selection, selectedItems: newSelectedC, selectedCount: newSelectedC.length}});
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -284,10 +300,9 @@ export default function TablePager<T>(props: TablePagerProps<T>) {
     setDense(event.target.checked);
   };
 
-  const isSelected = (rowChild: T) => {
-    // console.log(selected);
-    // console.log(selected.indexOf(rowChild));
-    return selected.indexOf(rowChild) !== -1;
+  const isSelected = (rowChild: any) => {
+    let rowChildText: string = rowChild[Object.keys(rowChild)[0]]
+    return selected.indexOf(rowChildText) !== -1;
   };
 
   // Avoid a layout jump when reaching the last page with empty props.rowData.
@@ -307,20 +322,20 @@ export default function TablePager<T>(props: TablePagerProps<T>) {
     return (
       <>
         {Array.from({ length: Object.keys(row).length }).map((a, i) => {
-          return i === 0 ? (
+          return props.hasNavigate && i === 0 ? (
             <TableCell
               component="th"
               id={`enhanced-table-checkbox`}
-              align="right"
+              align="left"
               scope="row"
               sx={{ cursor: "pointer", fontWeight: "500" }}
             >
-              {/* <NavLink to={"/admin/danh-sach-dat-kham/chi-tiet-dat-kham"} style={{ color: 'rgba(0, 0, 0, 0.87)'}}> */}
+              <NavLink to={`${props.navigateLink}${row[Object.keys(row)[0]]}`} style={{ color: 'rgba(0, 0, 0, 0.87)'}}>
               {row[Object.keys(row)[i]]}
-              {/* </NavLink> */}
+              </NavLink>
             </TableCell>
           ) : (
-            <TableCell align="right">{row[Object.keys(row)[i]]}</TableCell>
+            <TableCell align="left">{row[Object.keys(row)[i]]}</TableCell>
           );
         })}
       </>
@@ -339,6 +354,7 @@ export default function TablePager<T>(props: TablePagerProps<T>) {
                 color={ButtonColorType.Inherit}
                 onClick={() => {
                   setSelected([]);
+                  setSelectedC([]);
                   dispatch({
                     type: actionType.SET_SELECTION,
                     selection: {
@@ -377,12 +393,11 @@ export default function TablePager<T>(props: TablePagerProps<T>) {
                 <TableBody>
                   {props.rowData.map((row, index) => {
                     const isItemSelected = isSelected(row);
-                    // console.log(isItemSelected);
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (
                       <TableRow
                         // hover
-                        onClick={(event) => handleClick(event, row)}
+                        // onClick={(event) => handleClick(event, row)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
@@ -397,6 +412,7 @@ export default function TablePager<T>(props: TablePagerProps<T>) {
                               inputProps={{
                                 "aria-labelledby": labelId,
                               }}
+                              onClick={(event) => handleClick(event, row)}
                             />
                           </TableCell>
                         )}

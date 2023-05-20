@@ -4,68 +4,46 @@ import { HeadCell } from "./TablePager";
 const patientListStaticColumn: () => HeadCell[] = () => [
     {
         id: 'appointmentId',
-        numeric: true,
-        disablePadding: false,
         label: 'Mã đặt lịch',
     },
     {
         id: 'appointmentStatus',
-        numeric: true,
-        disablePadding: false,
         label: 'Trạng thái',
     },
     {
         id: 'dateAppointment',
-        numeric: true,
-        disablePadding: false,
         label: 'Ngày đặt khám',
     },
     {
         id: 'timeAppointment',
-        numeric: true,
-        disablePadding: false,
         label: 'Khung giờ đặt khám',
     },
     {
         id: 'patientId',
-        numeric: true,
-        disablePadding: false,
         label: 'Mã bệnh nhân',
     },
     {
         id: 'patientName',
-        numeric: true,
-        disablePadding: false,
         label: 'Tên bệnh nhân',
     },
     {
         id: 'patientDateOfBirth',
-        numeric: true,
-        disablePadding: false,
         label: 'Ngày sinh',
     },
     {
         id: 'patientSex',
-        numeric: true,
-        disablePadding: false,
         label: 'Giới tính',
     },
     // {
     //     id: 'patientPhoneNumber',
-    //     numeric: true,
-    //     disablePadding: false,
     //     label: 'Số điện thoại',
     // },
     // {
     //     id: 'patientIdentityNumber',
-    //     numeric: true,
-    //     disablePadding: false,
     //     label: 'CCCD/ CMND',
     // },
     // {
     //     id: 'patientAddress',
-    //     numeric: true,
-    //     disablePadding: false,
     //     label: 'Địa chỉ',
     // },
 ]
@@ -73,32 +51,22 @@ const patientListStaticColumn: () => HeadCell[] = () => [
 const accountManagerStaticColumn: () => HeadCell[] = () => [
     {
         id: 'userName',
-        numeric: true,
-        disablePadding: false,
         label: 'User Name',
     },
     {
         id: 'role',
-        numeric: true,
-        disablePadding: false,
         label: 'Role',
     },
     {
         id: 'fullName',
-        numeric: true,
-        disablePadding: false,
         label: 'Họ và tên',
     },
     {
         id: 'phoneNumber',
-        numeric: true,
-        disablePadding: false,
         label: 'Số điện thoại',
     },
     {
         id: 'insuranceNumber',
-        numeric: true,
-        disablePadding: false,
         label: 'CMND',
     }
 ]
@@ -106,33 +74,19 @@ const accountManagerStaticColumn: () => HeadCell[] = () => [
 const roleManagerStaticColumn: () => HeadCell[] = () => [
     {
         id: 'userName',
-        numeric: true,
-        disablePadding: false,
         label: 'User Name',
     },
     {
-        id: 'role',
-        numeric: true,
-        disablePadding: false,
-        label: 'Role',
+        id: 'add',
+        label: 'Thêm',
     },
     {
-        id: 'fullName',
-        numeric: true,
-        disablePadding: false,
-        label: 'Họ và tên',
+        id: 'edit',
+        label: 'Chỉnh sửa',
     },
     {
-        id: 'phoneNumber',
-        numeric: true,
-        disablePadding: false,
-        label: 'Số điện thoại',
-    },
-    {
-        id: 'insuranceNumber',
-        numeric: true,
-        disablePadding: false,
-        label: 'CMND',
+        id: 'remove',
+        label: 'Xóa',
     }
 ]
 
