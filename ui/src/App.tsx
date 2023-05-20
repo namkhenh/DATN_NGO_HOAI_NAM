@@ -95,7 +95,7 @@ function App() {
             <Route path="/admin/quan-ly-tai-khoan" element={<AccountManagerPage />}></Route>
             <Route path="/admin/quan-ly-chuc-nang" element={<RoleManagerPage />}></Route>
             <Route path="/admin/danh-sach-dat-kham" element={<PatientListPage />}></Route>
-            <Route path="/admin/danh-sach-dat-kham/chi-tiet-dat-kham" element={<AppartmentDetailPage actionType="edit"/>}></Route>
+            <Route path="/admin/danh-sach-dat-kham/chi-tiet-dat-kham/:id" element={<AppartmentDetailPage actionType="edit"/>}></Route>
             <Route path="/admin/them-moi-hen-kham" element={<AppartmentDetailPage actionType="add"/>}></Route>
           </Route>
         </Route>
