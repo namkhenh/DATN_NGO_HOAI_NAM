@@ -7,17 +7,17 @@ export enum TableType {
 }
 
 export interface PatientListTableColumns {
-    appointmentId: string
-    appointmentStatus: string
-    dateAppointment: string
-    timeAppointment: string
-    patientId: string
-    patientName: string
-    patientDateOfBirth: string
-    patientSex: string
-    // patientPhoneNumber: string
-    // patientIdentityNumber: string
-    // patientAddress: string
+  appointmentId: JSX.Element;
+  appointmentStatus: string;
+  dateAppointment: string;
+  timeAppointment: string;
+  patientId: string;
+  patientName: string;
+  patientDateOfBirth: string;
+  patientSex: string;
+  // patientPhoneNumber: string
+  // patientIdentityNumber: string
+  // patientAddress: string
 }
 
 export interface AccountManagerTableColumns {

@@ -16,12 +16,15 @@ import { Label } from '@fluentui/react'
 import Button from '@mui/material/Button'
 import { ButtonColorType, ButtonVariantType } from '../../../model/enum/buttonEnum'
 import DialogView from '../../../common/dialog/Dialog'
+import { useParams } from 'react-router-dom'
 
 interface IAppartmentDetailPageProps {
     actionType: string
 }
 
 function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
+    const appointmentId = useParams().id;
+    console.log(appointmentId);
     const [isOpenAccpet, setOpen] = useState<boolean>(false)
     const [isOpenDialog, setOpenDialog] = useState<boolean>(false);
     const [loadingButton, setLoading] = useState<boolean>(false)

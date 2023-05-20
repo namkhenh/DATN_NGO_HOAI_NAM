@@ -2,6 +2,7 @@ export const actionType = {
     SET_USER_INFO: "SET_USER_INFO",
     SET_ACCOUNT_PERMISSION: "SET_ACCOUNT_PERMISSION",
     SET_MESSAGE_BAR: "SET_MESSAGE_BAR",
+    SET_SELECTION: "SET_SELECTION"
 }
 
 const reducer = (state: any, action: any) => {
@@ -11,7 +12,9 @@ const reducer = (state: any, action: any) => {
         case actionType.SET_ACCOUNT_PERMISSION:
             return { ...state, accountPermission: action.accountPermission }
         case actionType.SET_MESSAGE_BAR:
-            return { ...state, messageBar: action.messageBar}
+            return { ...state, messageBar: action.messageBar }
+        case actionType.SET_SELECTION:
+            return { ...state, selection: action.selection}
         default:
             return state;
     }
