@@ -1,3 +1,4 @@
+import { AccountStatus } from "../../pages/adminPageContainer/accountManagerPage/AccountManagerPage";
 import { AccountRoleEnum } from "./accPermissionEnum"
 import { AppointmentStatus } from "./appointmentEnum"
 
@@ -8,17 +9,33 @@ export enum TableType {
 }
 
 export interface PatientListTableColumns {
-  appointmentId: string;
-  appointmentStatus: string;
-  dateAppointment: string;
-  timeAppointment: string;
-  patientId: string;
-  patientName: string;
-  patientDateOfBirth: string;
-  patientSex: string;
-  // patientPhoneNumber: string
-  // patientIdentityNumber: string
-  // patientAddress: string
+    appointmentId: string;
+    appointmentStatus: JSX.Element;
+    appointmentDate: string;
+    appointmentTime: string;
+    patientId: string;
+    patientName: string;
+    patientDateOfBirth: string;
+    patientSex: string;
+    // patientPhoneNumber: string
+    // patientIdentityNumber: string
+    // patientAddress: string
+}
+
+export interface PatientListTableDatas {
+    appointmentId: string;
+    appointmentStatus: AppointmentStatus;
+    appointmentDate: string;
+    appointmentTime: string;
+    appointmentReason: string;
+    patientId: string;
+    patientName: string;
+    patientAvatar: string;
+    patientDateOfBirth: string;
+    patientSex: number;
+    patientPhoneNumber: string
+    patientIdentityNumber: string
+    patientAddress: string
 }
 
 export interface AccountManagerTableColumns {
@@ -42,11 +59,21 @@ export interface AccountManagerTableColumns {
     fullName: string
     phoneNumber: string
     insuranceNumber: string
+    gender: string
+    status: JSX.Element
 }
 
-export interface RoleManagerTableColumns {
+export interface AccountManagerTableDatas {
     userName: string
-    add: JSX.Element
-    edit: JSX.Element
-    remove: JSX.Element
+    role: AccountRoleEnum[]
+    fullName: string
+    phoneNumber: string
+    insuranceNumber: string
+    gender: number
+    status: AccountStatus
+}
+
+export interface RoleManagerTableDatas {
+    roleId: string
+    roleName: string
 }

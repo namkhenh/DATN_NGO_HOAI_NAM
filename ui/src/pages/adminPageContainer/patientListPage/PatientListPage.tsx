@@ -6,7 +6,7 @@ import { Label } from '@fluentui/react';
 import { DatePicker } from '../../../common/datePicker/DatePicker';
 import TablePager from '../../../common/tablePager/TablePager';
 import PatientListCommandBar from './PatientListCommandBar';
-import { PatientListAction, PatientListTableColumns, TableType } from '../../../model/enum/tableTypeEnum';
+import { PatientListAction, PatientListTableColumns, PatientListTableDatas, TableType } from '../../../model/enum/tableTypeEnum';
 import { AppointmentStatus } from '../../../model/enum/appointmentEnum';
 import DialogView from '../../../common/dialog/Dialog';
 import { useStateValue } from '../../../context/StateProvider';
@@ -67,8 +67,8 @@ function PatientListPage() {
   function createData(
     appointmentId: string,
     appointmentStatusI: AppointmentStatus,
-    dateAppointment: string,
-    timeAppointment: string,
+    appointmentDate: string,
+    appointmentTime: string,
     patientId: string,
     patientName: string,
     patientDateOfBirth: string,
@@ -87,12 +87,12 @@ function PatientListPage() {
     //   </NavLink>
     // );
     let patientSex: string = patientSexI === 0 ? "Nam" : "Nữ" 
-    let appointmentStatus: string = appointmentStatusI === AppointmentStatus.Success ? "Đã duyệt" : (appointmentStatusI === AppointmentStatus.Cancel ? "Đã hủy" : "Chờ duyệt")
+    let appointmentStatus: JSX.Element = appointmentStatusI === AppointmentStatus.Success ? <div className='appointment-success'>Đã duyệt</div> : (appointmentStatusI === AppointmentStatus.Cancel ? <div className='appointment-cancel'>Đã hủy</div> : <div className='appointment-waiting'>Chờ duyệt</div>)
     return {
       appointmentId,
       appointmentStatus,
-      dateAppointment,
-      timeAppointment,
+      appointmentDate,
+      appointmentTime,
       patientId,
       patientName,
       patientDateOfBirth,
@@ -113,14 +113,14 @@ function PatientListPage() {
       "BN20230001",
       "Ngô Hoài Nam",
       "19/05/2001",
-      0
+      1
     ),
     createData(
       "DL20230002",
       AppointmentStatus.Success,
       "11/02/2023",
       "09:00",
-      "BN20230001",
+      "BN20230002",
       "Ngô Hoài Nam",
       "19/05/2001",
       0
@@ -130,142 +130,89 @@ function PatientListPage() {
       AppointmentStatus.Waiting,
       "11/02/2023",
       "09:00",
-      "BN20230001",
+      "BN20230003",
       "Ngô Hoài Nam",
       "19/05/2001",
-      1
-    ),
+      0
+    )],[
     createData(
       "DL20230004",
       AppointmentStatus.Cancel,
       "11/02/2023",
       "09:00",
-      "BN20230001",
+      "BN20230004",
       "Ngô Hoài Nam",
       "19/05/2001",
       0
-    ),
-    createData(
-      "DL20230005",
-      AppointmentStatus.Success,
-      "11/02/2023",
-      "09:00",
-      "BN20230001",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      0
-    ),
-    createData(
-      "DL20230006",
-      AppointmentStatus.Waiting,
-      "11/02/2023",
-      "09:00",
-      "BN20230001",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      1
-    ),
-    createData(
-      "DL20230007",
-      AppointmentStatus.Cancel,
-      "11/02/2023",
-      "09:00",
-      "BN20230001",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      0
-    ),
-    createData(
-      "DL20230008",
-      AppointmentStatus.Success,
-      "11/02/2023",
-      "09:00",
-      "BN20230001",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      0
-    ),
-    createData(
-      "DL20230009",
-      AppointmentStatus.Waiting,
-      "11/02/2023",
-      "09:00",
-      "BN20230001",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      1
-    ),
-    createData(
-      "DL20230010",
-      AppointmentStatus.Cancel,
-      "11/02/2023",
-      "09:00",
-      "BN20230001",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      0
-    ),
-    createData(
-      "DL20230011",
-      AppointmentStatus.Success,
-      "11/02/2023",
-      "09:00",
-      "BN20230001",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      0
-    ),
-    createData(
-      "DL20230012",
-      AppointmentStatus.Waiting,
-      "11/02/2023",
-      "09:00",
-      "BN20230001",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      1
-    )],[
-    createData(
-      "DL20230013",
-      AppointmentStatus.Cancel,
-      "11/02/2023",
-      "09:00",
-      "BN20230001",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      0
-    ),
-    createData(
-      "DL20230014",
-      AppointmentStatus.Success,
-      "11/02/2023",
-      "09:00",
-      "BN20230001",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      0
-    ),
-    createData(
-      "DL20230015",
-      AppointmentStatus.Waiting,
-      "11/02/2023",
-      "09:00",
-      "BN20230001",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      1
-      ),
+    )
     ]
+  ];
 
-    // createData('DL20230001', AppointmentStatus.Success, '11/02/2023', 'BN20230001', 'Ngô Hoài Nam', '19/05/2001', 0, '0123456789', '0123456789010', 'Ngõ 118, Tân Triều, Thanh Trì, Hà Nội'),
-    // createData('DL20230001', AppointmentStatus.Cancel, '11/02/2023', 'BN20230001', 'Ngô Hoài Nam', '19/05/2001', 0, '0123456789', '0123456789010', 'Tân Triều'),
-    // createData('DL20230001', AppointmentStatus.Success, '11/02/2023', 'BN20230001', 'Ngô Hoài Nam', '19/05/2001', 0, '0123456789', '0123456789010', 'Tân Triều'),
-    // createData('DL20230001', AppointmentStatus.Waiting, '11/02/2023', 'BN20230001', 'Ngô Hoài Nam', '19/05/2001', 1, '0123456789', '0123456789010', 'Tân Triều'),
-    // createData('DL20230001', AppointmentStatus.Success, '11/02/2023', 'BN20230001', 'Ngô Hoài Nam', '19/05/2001', 0, '0123456789', '0123456789010', 'Ngõ 118, Tân Triều, Thanh Trì, Hà Nội'),
-    // createData('DL20230001', AppointmentStatus.Cancel, '11/02/2023', 'BN20230001', 'Ngô Hoài Nam', '19/05/2001', 0, '0123456789', '0123456789010', 'Tân Triều'),
-    // createData('DL20230001', AppointmentStatus.Success, '11/02/2023', 'BN20230001', 'Ngô Hoài Nam', '19/05/2001', 0, '0123456789', '0123456789010', 'Tân Triều'),
-    // createData('DL20230001', AppointmentStatus.Waiting, '11/02/2023', 'BN20230001', 'Ngô Hoài Nam', '19/05/2001', 1, '0123456789', '0123456789010', 'Tân Triều'),
-    // createData('DL20230001', AppointmentStatus.Success, '11/02/2023', 'BN20230001', 'Ngô Hoài Nam', '19/05/2001', 0, '0123456789', '0123456789010', 'Ngõ 118, Tân Triều, Thanh Trì, Hà Nội'),
+  const datas: PatientListTableDatas[][] = [
+    [
+      {
+        appointmentId: "DL20230001",
+        appointmentStatus: AppointmentStatus.Cancel,
+        appointmentDate: "11/02/2023",
+        appointmentTime: "09:00",
+        appointmentReason: "aaaa",
+        patientId: "BN20230001",
+        patientName: "Ngô Hoài Nam",
+        patientAvatar: "",
+        patientDateOfBirth: "10/05/2001",
+        patientSex: 1,
+        patientPhoneNumber: "0123456789",
+        patientIdentityNumber: "012345678",
+        patientAddress: "aaaaaaaa",
+      },
+      {
+        appointmentId: "DL20230002",
+        appointmentStatus: AppointmentStatus.Success,
+        appointmentDate: "11/02/2023",
+        appointmentTime: "09:00",
+        appointmentReason: "aaaa",
+        patientId: "BN20230002",
+        patientName: "Ngô Hoài Nam",
+        patientAvatar: "",
+        patientDateOfBirth: "10/05/2001",
+        patientSex: 0,
+        patientPhoneNumber: "0123456789",
+        patientIdentityNumber: "012345678",
+        patientAddress: "aaaaaaaa",
+      },
+      {
+        appointmentId: "DL20230003",
+        appointmentStatus: AppointmentStatus.Waiting,
+        appointmentDate: "11/02/2023",
+        appointmentTime: "09:00",
+        appointmentReason: "aaaa",
+        patientId: "BN20230003",
+        patientName: "Ngô Hoài Nam",
+        patientAvatar: "",
+        patientDateOfBirth: "10/05/2001",
+        patientSex: 0,
+        patientPhoneNumber: "0123456789",
+        patientIdentityNumber: "012345678",
+        patientAddress: "aaaaaaaa",
+      }
+    ],
+    [
+      {
+        appointmentId: "DL20230004",
+        appointmentStatus: AppointmentStatus.Cancel,
+        appointmentDate: "11/02/2023",
+        appointmentTime: "09:00",
+        appointmentReason: "aaaa",
+        patientId: "BN20230004",
+        patientName: "Ngô Hoài Nam",
+        patientAvatar: "",
+        patientDateOfBirth: "10/05/2001",
+        patientSex: 0,
+        patientPhoneNumber: "0123456789",
+        patientIdentityNumber: "012345678",
+        patientAddress: "aaaaaaaa",
+      }
+    ]
   ];
 
   const renderBodyForm = () => {
@@ -341,10 +288,11 @@ function PatientListPage() {
       {/* <DataTable/> */}
       
       <div className="patient-list-table">
-        <TablePager<PatientListTableColumns>
+        <TablePager<PatientListTableColumns, PatientListTableDatas>
           tableType={TableType.PatientListTable}
           batchActionElements={onRenderActionButtons()}
           rowData={rows[currentPage]}
+          dataTotal={datas[currentPage]}
           hasCheckBox
           page={currentPage}
           handleChangePage={ (page) => { setCurrentPage(page) } }

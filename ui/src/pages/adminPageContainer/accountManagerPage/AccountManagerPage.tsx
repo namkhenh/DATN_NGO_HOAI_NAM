@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './AccountManagerPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
 import TablePager from '../../../common/tablePager/TablePager'
-import { AccountManagerTableColumns, TableType } from '../../../model/enum/tableTypeEnum'
+import { AccountManagerTableColumns, AccountManagerTableDatas, TableType } from '../../../model/enum/tableTypeEnum'
 import PatientListCommandBar from '../patientListPage/PatientListCommandBar'
 import { AccountRoleEnum } from '../../../model/enum/accPermissionEnum'
 import { SearchBoxView } from '../../../common/searchBox/SearchBox'
@@ -20,11 +20,24 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import NotInterestedOutlinedIcon from '@mui/icons-material/NotInterestedOutlined';
+import AddRoleForm from '../../../components/assignRoleForm/AssignRoleForm'
+import AssignRoleForm from '../../../components/assignRoleForm/AssignRoleForm'
 
-enum AccountAction {
+export enum AccountAction {
     Create,
     Edit,
-    Delete
+    Delete,
+    ChangePass,
+    Enable,
+    Able,
+    Assign
+}
+
+export enum AccountStatus {
+    Able,
+    Enable
 }
 
 function AccountManagerPage() {
@@ -41,6 +54,10 @@ function AccountManagerPage() {
                 showAccountCreate={() => { setShowDialog(true); setAcountAction(AccountAction.Create) }}
                 showAccountEdit={() => { setShowDialog(true); setAcountAction(AccountAction.Edit) }}
                 showAccountDelete={() => { setShowDialog(true); setAcountAction(AccountAction.Delete) }}
+                showAccountChangePass={() => { setShowDialog(true); setAcountAction(AccountAction.ChangePass) }}
+                showAccountEnable={() => { setShowDialog(true); setAcountAction(AccountAction.Enable) }}
+                showAccountAble={() => { setShowDialog(true); setAcountAction(AccountAction.Able) }}
+                showAccountAssign={() => { setShowDialog(true); setAcountAction(AccountAction.Assign) }}
             />
         ])
     }
@@ -51,6 +68,8 @@ function AccountManagerPage() {
         fullName: string,
         phoneNumber: string,
         insuranceNumber: string,
+        genderI: number,
+        statusI: number
     ): AccountManagerTableColumns {
         // let role: JSX.Element[] = [<></>]
         // if (roleI.includes(AccountRoleEnum.Admin)) {
@@ -66,29 +85,102 @@ function AccountManagerPage() {
         //     role.push(<div className='role-element-user'>Người bệnh</div>)
         // }
         let role: JSX.Element = <div className='role-element'>
-            {roleI.includes(AccountRoleEnum.Admin)  && <div className='role-element-admin'>Admin</div>}
-            {roleI.includes(AccountRoleEnum.Doctor)  && <div className='role-element-doctor'>Bác sĩ</div>}
+            {roleI.includes(AccountRoleEnum.Admin) && <div className='role-element-admin'>Admin</div>}
+            {roleI.includes(AccountRoleEnum.Doctor) && <div className='role-element-doctor'>Bác sĩ</div>}
             {roleI.includes(AccountRoleEnum.Care) && <div className='role-element-care'>CSKH</div>}
             {roleI.includes(AccountRoleEnum.User) && <div className='role-element-user'>Người bệnh</div>}
         </div>
+        let gender: string = genderI === 0 ? 'Nam' : 'Nữ'
+        let status: JSX.Element = statusI === 0 ? <div className='status-element'><CheckCircleOutlineOutlinedIcon sx={{ color: '#2da55b86' }} />Hoạt động</div> : <div className='status-element'><NotInterestedOutlinedIcon sx={{ color: '#ff4646b4' }}/>Vô hiệu hóa</div> 
         return {
             userName,
             role,
             fullName,
             phoneNumber,
             insuranceNumber,
+            gender,
+            status
         };
     }
 
     const rows: AccountManagerTableColumns[] = [
-        createData('ngo_hoai_nam1', [AccountRoleEnum.Admin, AccountRoleEnum.Doctor], 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createData('ngo_hoai_nam2', [AccountRoleEnum.Care, AccountRoleEnum.User], 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createData('ngo_hoai_nam3', [AccountRoleEnum.Doctor], 'Ngô Hoài Nam', '0123456788', '012345678'),
+        createData('ngo_hoai_nam1', [AccountRoleEnum.Admin, AccountRoleEnum.Doctor], 'Ngô Hoài Nam', '0123456788', '012345678', 0, AccountStatus.Able),
+        createData('ngo_hoai_nam2', [AccountRoleEnum.Care, AccountRoleEnum.User], 'Ngô Hoài Nam', '0123456788', '012345678', 1, AccountStatus.Enable),
     ];
 
+    const datas: AccountManagerTableDatas[] = [
+        {
+            userName: 'ngo_hoai_nam1',
+            role: [AccountRoleEnum.Admin, AccountRoleEnum.Doctor],
+            fullName: 'Ngô Hoài Nam',
+            phoneNumber: '0123456788',
+            insuranceNumber: '012345678',
+            gender: 0,
+            status: AccountStatus.Able
+        },
+        {
+            userName: 'ngo_hoai_nam2',
+            role: [AccountRoleEnum.Admin, AccountRoleEnum.Doctor],
+            fullName: 'Ngô Hoài Nam',
+            phoneNumber: '0123456788',
+            insuranceNumber: '012345678',
+            gender: 1,
+            status: AccountStatus.Enable
+        },
+    ];
+
+    const renderTitleForm = () => {
+        switch (accountAction) {
+            case AccountAction.Create:
+                return 'Tạo tài khoản'
+            case AccountAction.Edit:
+                return 'Chỉnh sửa tài khoản'
+            case AccountAction.ChangePass:
+                return 'Đổi mật khẩu'
+            case AccountAction.Delete:
+                return 'Xóa tài khoản'
+            case AccountAction.Enable:
+                return 'Khóa tài khoản'
+            case AccountAction.Able:
+                return 'Mở khóa tài khoản'
+            case AccountAction.Assign:
+                return 'Thêm quyền cho tài khoản'
+            default:
+                return ''
+        }
+    }
+
     const renderBodyForm = () => {
+        switch (accountAction) {
+            case AccountAction.Create:
+            case AccountAction.Edit:
+                return renderBodyCreateForm()
+            case AccountAction.ChangePass:
+                return renderBodyChangePassForm()
+            case AccountAction.Delete:
+            case AccountAction.Enable:
+            case AccountAction.Able:
+                return renderBodyDeleteForm()
+            case AccountAction.Assign:
+                return <AssignRoleForm/>
+            default:
+                break;
+        }
+    }
+
+    const renderBodyCreateForm = () => {
         return (
             <div className="account-create-form">
+                <div className="account-create-field">
+                    <TextField
+                        label='Tên đăng nhập'
+                        placeholder='--'
+                        required={true}
+                    // value={currentPatientProfile.patientName}
+                    // onChange={(_, value) => { onChangeOneFieldForm(PatientProfileModelProperty.patientName, value) }}
+                    // errorMessage={errorMessageFormString.patientName}
+                    />
+                </div>
                 <div className="account-create-field">
                     <TextField
                         label='Họ và tên'
@@ -143,13 +235,55 @@ function AccountManagerPage() {
                         <FormControlLabel value="female" control={<Radio />} label="Nữ" />
                     </RadioGroup>
                 </div>
-                <div className="account-create-field">
+                {/* <div className="account-create-field">
                     <Label required>Phân quyền</Label>
                     <FormGroup row>
                         <FormControlLabel value={'admin'} control={<Checkbox />} label="Admin" />
-                        <FormControlLabel value={'doctor'} control={<Checkbox />} label="Bác sĩ" /><FormControlLabel value={'care'} control={<Checkbox />} label="CSKH" /><FormControlLabel value={'user'} control={<Checkbox />} label="Bệnh nhân" />
+                        <FormControlLabel value={'doctor'} control={<Checkbox />} label="Bác sĩ" /><FormControlLabel value={'care'} control={<Checkbox />} label="CSKH" /><FormControlLabel value={'user'} control={<Checkbox />} label="Người bệnh" />
                     </FormGroup>
+                </div> */}
+            </div>
+        )
+    }
+
+    const renderBodyChangePassForm = () => {
+        return (
+            <div className="account-create-form">
+                <div className="account-create-field">
+                    <TextField
+                        label='Mật khẩu mới'
+                        placeholder='--'
+                        required={true}
+                        type="password"
+                        canRevealPassword
+                        revealPasswordAriaLabel="Show password"
+
+                    // value={currentPatientProfile.patientName}
+                    // onChange={(_, value) => { onChangeOneFieldForm(PatientProfileModelProperty.patientName, value) }}
+                    // errorMessage={errorMessageFormString.patientName}
+                    />
                 </div>
+                <div className="account-create-field">
+                    <TextField
+                        label='Nhập lại mật khẩu'
+                        placeholder='--'
+                        required={true}
+                        type="password"
+                        canRevealPassword
+                        revealPasswordAriaLabel="Show password"
+                    // value={currentPatientProfile.patientName}
+                    // onChange={(_, value) => { onChangeOneFieldForm(PatientProfileModelProperty.patientName, value) }}
+                    // errorMessage={errorMessageFormString.patientName}
+                    />
+                </div>
+            </div>
+        )
+    }
+
+    const renderBodyDeleteForm = () => {
+        return (
+            <div className="account-create-form">
+                {accountAction === AccountAction.Enable ? <div className=''>Bạn có chắc chắn muốn khóa tài khoản <strong>ngo_hoai_nam1</strong></div> : (accountAction === AccountAction.Able ? <div className=''>Bạn có chắc chắn muốn mở khóa tài khoản <strong>ngo_hoai_nam1</strong></div> : <div className=''>Bạn có chắc chắn muốn xóa tài khoản <strong>ngo_hoai_nam1</strong><br />Thao tác này không thể khôi phục!</div>)}
             </div>
         )
     }
@@ -193,10 +327,11 @@ function AccountManagerPage() {
             </div>
             <div className='line' style={{ width: '100%', height: '1px', backgroundColor: '#cccccc' }}></div>
         <div className="patient-list-table">
-          <TablePager<AccountManagerTableColumns>
+          <TablePager<AccountManagerTableColumns, AccountManagerTableDatas>
             tableType={TableType.AccountManagerTable}
             batchActionElements={onRenderActionButtons()}
             rowData={rows}
+            dataTotal={datas}
             hasCheckBox
             page={currentPage}
             handleChangePage={(page) => {setCurrentPage(page)} }
@@ -204,7 +339,7 @@ function AccountManagerPage() {
           />
         </div>
             <DialogView
-                title={'Tạo tài khoản'}
+                title={renderTitleForm()}
                 hidden={!showDialog}
                 customContent={renderBodyForm()}
                 // closeWithPromise={this.onLogoutAction.bind(this)}

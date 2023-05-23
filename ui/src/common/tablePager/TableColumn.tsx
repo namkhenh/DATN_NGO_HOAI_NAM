@@ -51,7 +51,7 @@ const patientListStaticColumn: () => HeadCell[] = () => [
 const accountManagerStaticColumn: () => HeadCell[] = () => [
     {
         id: 'userName',
-        label: 'User Name',
+        label: 'Tên đăng nhập',
     },
     {
         id: 'role',
@@ -68,6 +68,14 @@ const accountManagerStaticColumn: () => HeadCell[] = () => [
     {
         id: 'insuranceNumber',
         label: 'CMND',
+    },
+    {
+        id: 'gender',
+        label: 'Giới tính',
+    },
+    {
+        id: 'status',
+        label: 'Trạng thái',
     }
 ]
 

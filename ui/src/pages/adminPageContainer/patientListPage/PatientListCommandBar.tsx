@@ -4,15 +4,21 @@ import { IButtonProps, ICommandBarItemProps, ICommandBarStyles, styled } from '@
 import { CommandBarView } from '../../../common/commandBar/CommandBar'
 import { useStateValue } from '../../../context/StateProvider'
 import { AppointmentStatus } from '../../../model/enum/appointmentEnum'
+import { AccountStatus } from '../accountManagerPage/AccountManagerPage'
 
 interface IPatientListCommandBar {
   tableType: TableType
   showPatientAccept?: () => void
   showPatientRefuse?: () => void
   showPatientCancel?: () => void
-  showAccountEdit?: () => void
   showAccountCreate?: () => void
+  showAccountEdit?: () => void
+  showAccountAssign?: () => void
+  showAccountChangePass?: () => void
+  showAccountEnable?: () => void
+  showAccountAble?: () => void
   showAccountDelete?: () => void
+
 }
 
 function PatientListCommandBar(props: IPatientListCommandBar) {
@@ -31,9 +37,9 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
   // useEffect(()=>{}, [selection])
   const patientListActions = (): ICommandBarItemProps[] => {
     let commandBarItems: ICommandBarItemProps[] = []
-    
+    console.log(selection)
     // if (selected.selectedCount === 1 && selected.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
-    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === 'Chờ duyệt') {
+    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
       commandBarItems.push({
         key: "patient-list-accept",
         text: "Đồng ý",
@@ -46,7 +52,7 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
         },
       });
     }
-    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === 'Chờ duyệt') {
+    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
       commandBarItems.push({
         key: "patient-list-decline",
         text: "Từ chối",
@@ -59,7 +65,7 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
         },
       });
     }
-    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === 'Đã duyệt') {
+    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === AppointmentStatus.Success) {
       commandBarItems.push({
         key: "patient-list-cancel",
         text: "Hủy lịch",
@@ -114,6 +120,54 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
             props.showAccountEdit!()
           }
         },
+      )
+      commandBarItems.push(
+        {
+          key: 'account-assign',
+          text: 'Gán quyền',
+          iconProps: { iconName: 'Permissions', style: { color: '#707070' } },
+          onClick: () => {
+            props.showAccountAssign!()
+          }
+        },
+      )
+      commandBarItems.push(
+        {
+          key: 'account-changepassword',
+          text: 'Đổi mật khẩu',
+          iconProps: { iconName: 'TextBox', style: { color: '#707070' } },
+          onClick: () => {
+            props.showAccountChangePass!()
+          }
+        },
+      )
+    }
+    if (selection.selectedCount === 1 && selection.selectedItems[0]?.status === AccountStatus.Able) {
+      commandBarItems.push(
+        {
+          key: 'account-enable',
+          text: 'Khóa tài khoản',
+          iconProps: { iconName: 'Lock', style: { color: '#AC0000' } },
+          onClick: () => {
+            props.showAccountEnable!()
+          }
+        }
+      )
+    }
+    if (selection.selectedCount === 1 && selection.selectedItems[0]?.status === AccountStatus.Enable) {
+      commandBarItems.push(
+        {
+          key: 'account-able',
+          text: 'Mở khóa tài khoản',
+          iconProps: { iconName: 'UnLock', style: { color: '#AC0000' } },
+          onClick: () => {
+            props.showAccountAble!()
+          }
+        }
+      )
+    }
+    if (selection.selectedCount !== 0) {
+      commandBarItems.push(
         {
           key: 'account-delete',
           text: 'Xóa tài khoản',

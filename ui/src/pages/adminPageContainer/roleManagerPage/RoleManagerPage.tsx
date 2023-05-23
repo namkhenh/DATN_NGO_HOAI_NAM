@@ -3,10 +3,11 @@ import './RoleManagerPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
 import { SearchBoxView } from '../../../common/searchBox/SearchBox';
 import TablePager from '../../../common/tablePager/TablePager';
-import { AccountManagerTableColumns, RoleManagerTableColumns, TableType } from '../../../model/enum/tableTypeEnum';
+import { AccountManagerTableColumns, TableType } from '../../../model/enum/tableTypeEnum';
 import PatientListCommandBar from '../patientListPage/PatientListCommandBar';
 import { AppointmentStatus } from '../../../model/enum/appointmentEnum';
 import Checkbox from '@mui/material/Checkbox';
+import TablePagerCheckBox from '../../../common/tablePager/TablePagerCheckBox';
 function RoleManagerPage() {
     const [currentPage, setCurrentPage] = useState<number>(0)
     // const [checkAdd, setCheckAdd] = useState<number>()
@@ -27,35 +28,35 @@ function RoleManagerPage() {
         ])
     }
 
-    function createData(
-        userName: string,
-        addI: number,
-        editI: number,
-        removeI: number,
-    ): RoleManagerTableColumns {
-        let add: JSX.Element = <Checkbox checked={addI === 1} onClick={() => {console.log(addI);
-        }}/>
-        let edit: JSX.Element = <Checkbox checked={editI === 1} />
-        let remove: JSX.Element = <Checkbox checked={removeI === 1} />
-        return {
-            userName,
-            add,
-            edit,
-            remove
-        };
-    }
+    // function createData(
+    //     userName: string,
+    //     add: number,
+    //     edit: number,
+    //     remove: number,
+    // ): RoleManagerTableColumns {
+    //     // let add: JSX.Element = <Checkbox checked={addI === 1} onClick={() => {console.log(addI);
+    //     // }}/>
+    //     // let edit: JSX.Element = <Checkbox checked={editI === 1} />
+    //     // let remove: JSX.Element = <Checkbox checked={removeI === 1} />
+    //     return {
+    //         userName,
+    //         add,
+    //         edit,
+    //         remove
+    //     };
+    // }
 
 
-    const rows: RoleManagerTableColumns[][] = [
-        [
-            createData("nam-nh-19", 0, 1, 0),
-            createData("nam-nh-19", 0, 1, 1),
-            createData("nam-nh-19", 1, 0, 1),
-        ],
-        [
-            createData("nam-nh-19", 0, 1, 0),
-        ]
-    ];
+    // const rows: RoleManagerTableColumns[][] = [
+    //     [
+    //         createData("nam-nh-19", 0, 1, 0),
+    //         createData("nam-nh-19", 0, 1, 1),
+    //         createData("nam-nh-19", 1, 0, 1),
+    //     ],
+    //     [
+    //         createData("nam-nh-19", 0, 1, 0),
+    //     ]
+    // ];
 
 
     return (
@@ -78,7 +79,7 @@ function RoleManagerPage() {
             </div>
             <div className='line' style={{ width: '100%', height: '1px', backgroundColor: '#cccccc' }}></div>
             <div className="patient-list-table">
-                <TablePager<RoleManagerTableColumns>
+                {/* <TablePager<RoleManagerTableColumns>
                     tableType={TableType.RoleManagerTable}
                     batchActionElements={onRenderActionButtons()}
                     rowData={rows[currentPage]}
@@ -87,7 +88,17 @@ function RoleManagerPage() {
                     handleChangePage={(page) => { setCurrentPage(page) }}
                     total={15}
                     hasNavigate={false}
-                />
+                /> */}
+                {/* <TablePagerCheckBox<RoleManagerTableColumns>
+                    tableType={TableType.RoleManagerTable}
+                    batchActionElements={onRenderActionButtons()}
+                    rowData={rows[currentPage]}
+                    hasCheckBox={false}
+                    page={currentPage}
+                    handleChangePage={(page) => { setCurrentPage(page) }}
+                    total={15}
+                    hasNavigate={false}
+                /> */}
             </div>
         </div>
     )

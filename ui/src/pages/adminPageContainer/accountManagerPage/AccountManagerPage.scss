@@ -52,6 +52,15 @@
     }
 }
 
+.status-element {
+    display: flex;
+    align-items: center;
+    svg {
+        font-size: 20px;
+        margin-right: 4px;
+    }
+}
+
 .account-create-form {
     label {
         font-family: 'Roboto', sans-serif !important;
