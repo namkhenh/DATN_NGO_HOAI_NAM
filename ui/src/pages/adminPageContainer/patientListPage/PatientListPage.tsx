@@ -298,7 +298,7 @@ function PatientListPage() {
           handleChangePage={ (page) => { setCurrentPage(page) } }
           total={15}
           hasNavigate
-          navigateLink={"/admin/danh-sach-dat-kham/chi-tiet-dat-kham/"}
+          navigateLink={"/admin/quan-ly-dat-kham/chi-tiet-dat-kham/"}
         />
       </div>
       <DialogView

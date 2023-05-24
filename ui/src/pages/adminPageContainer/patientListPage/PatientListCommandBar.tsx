@@ -18,7 +18,13 @@ interface IPatientListCommandBar {
   showAccountEnable?: () => void
   showAccountAble?: () => void
   showAccountDelete?: () => void
-
+  showRoleCreate?: () => void
+  showRoleEdit?: () => void
+  showRoleAssign?: () => void
+  showRoleDelete?: () => void
+  showPermissionCreate?: () => void
+  showPermissionEdit?: () => void
+  showPermissionDelete?: () => void
 }
 
 function PatientListCommandBar(props: IPatientListCommandBar) {
@@ -29,6 +35,10 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
         return patientListActions()
       case TableType.AccountManagerTable:
         return accountManagerActions()
+      case TableType.RoleManagerTable:
+        return roleManagerActions()
+      case TableType.PermissionTable:
+        return permissionManagerActions()
       default:
         return [];
     }
@@ -174,6 +184,95 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
           iconProps: { iconName: 'trash', style: { color: '#AC0000' } },
           onClick: () => {
             props.showAccountDelete!()
+          }
+        }
+      )
+    }
+    return commandBarItems
+  }
+  
+  const roleManagerActions = (): ICommandBarItemProps[] => {
+    let commandBarItems: ICommandBarItemProps[] = []
+    commandBarItems.push(
+      {
+        key: 'role-create',
+        text: 'Tạo vai trò',
+        href: '/admin/quan-ly-vai-tro/them-moi-vai-tro',
+        iconProps: { iconName: 'WorkforceManagement', style: { color: '#00794E' } },
+        // onClick: () => {
+        //   props.showRoleCreate!()
+        // }
+      }
+    )
+    if (selection.selectedCount === 1) {
+      commandBarItems.push(
+        {
+          key: 'role-edit',
+          text: 'Chỉnh sửa',
+          iconProps: { iconName: 'edit', style: { color: '#707070' } },
+          onClick: () => {
+            props.showRoleEdit!()
+          }
+        },
+      )
+      commandBarItems.push(
+        {
+          key: 'role-assign',
+          text: 'Gán người dùng',
+          iconProps: { iconName: 'Permissions', style: { color: '#707070' } },
+          onClick: () => {
+            props.showRoleAssign!()
+          }
+        },
+      )
+    }
+    if (selection.selectedCount !== 0) {
+      commandBarItems.push(
+        {
+          key: 'role-delete',
+          text: 'Xóa vai trò',
+          iconProps: { iconName: 'trash', style: { color: '#AC0000' } },
+          onClick: () => {
+            props.showRoleDelete!()
+          }
+        }
+      )
+    }
+    return commandBarItems
+  }
+
+  const permissionManagerActions = (): ICommandBarItemProps[] => {
+    let commandBarItems: ICommandBarItemProps[] = []
+    commandBarItems.push(
+      {
+        key: 'permission-create',
+        text: 'Tạo quyền',
+        iconProps: { iconName: 'add', style: { color: '#00794E' } },
+        onClick: () => {
+          props.showPermissionCreate!()
+        }
+      }
+    )
+    if (selection.selectedCount === 1) {
+      commandBarItems.push(
+        {
+          key: 'permission-edit',
+          text: 'Chỉnh sửa',
+          iconProps: { iconName: 'edit', style: { color: '#707070' } },
+          onClick: () => {
+            props.showPermissionEdit!()
+          }
+        },
+      )
+    }
+    if (selection.selectedCount !== 0) {
+      commandBarItems.push(
+        {
+          key: 'permission-delete',
+          text: 'Xóa quyền',
+          iconProps: { iconName: 'trash', style: { color: '#AC0000' } },
+          onClick: () => {
+            props.showPermissionDelete!()
           }
         }
       )

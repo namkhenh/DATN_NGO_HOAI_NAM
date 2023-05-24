@@ -37,13 +37,13 @@ function SideBarAdmin() {
                             <div className="nav-item-text">Quản lý tài khoản</div>
                         </div>
                     </NavLink>
-                    <NavLink to={'/admin/quan-ly-chuc-nang'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
+                    <NavLink to={'/admin/quan-ly-vai-tro'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
                         <div className="nav-item">
                             <EngineeringIcon />
-                            <div className="nav-item-text">Quản lý chức năng</div>
+                            <div className="nav-item-text">Quản lý vai trò</div>
                         </div>
                     </NavLink>
-                    <NavLink to={'/admin/danh-sach-dat-kham'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
+                    <NavLink to={'/admin/quan-ly-dat-kham'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
                         <div className="nav-item">
                             <EventNoteIcon />
                             <div className="nav-item-text">Quản lý lịch đặt</div>

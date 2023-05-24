@@ -55,7 +55,7 @@ const accountManagerStaticColumn: () => HeadCell[] = () => [
     },
     {
         id: 'role',
-        label: 'Role',
+        label: 'Vai trò',
     },
     {
         id: 'fullName',
@@ -81,21 +81,36 @@ const accountManagerStaticColumn: () => HeadCell[] = () => [
 
 const roleManagerStaticColumn: () => HeadCell[] = () => [
     {
-        id: 'userName',
-        label: 'User Name',
+        id: 'roleId',
+        label: 'Mã vai trò',
     },
     {
-        id: 'add',
-        label: 'Thêm',
+        id: 'roleName',
+        label: 'Tên vai trò',
     },
     {
-        id: 'edit',
-        label: 'Chỉnh sửa',
+        id: 'roleStatus',
+        label: 'Trạng thái',
+    },
+]
+
+const permissionManagerStaticColumn: () => HeadCell[] = () => [
+    {
+        id: 'permissionId',
+        label: 'Mã quyền',
     },
     {
-        id: 'remove',
-        label: 'Xóa',
-    }
+        id: 'permissionName',
+        label: 'Tên quyền',
+    },
+    {
+        id: 'menuName',
+        label: 'Menu' 
+    },
+    {
+        id: 'permissionStatus',
+        label: 'Trạng thái',
+    },
 ]
 
 export const getColumnWithType: (tableType: TableType) => HeadCell[] = (tableType) => {
@@ -111,6 +126,10 @@ export const getColumnWithType: (tableType: TableType) => HeadCell[] = (tableTyp
         }
         case TableType.RoleManagerTable: {
             basicColumns = roleManagerStaticColumn()
+            break;
+        }
+        case TableType.PermissionTable: {
+            basicColumns = permissionManagerStaticColumn()
             break;
         }
         default: {

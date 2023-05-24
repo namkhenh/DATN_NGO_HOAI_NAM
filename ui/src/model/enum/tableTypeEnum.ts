@@ -1,11 +1,14 @@
 import { AccountStatus } from "../../pages/adminPageContainer/accountManagerPage/AccountManagerPage";
+import { PermissionStatus } from "../../pages/adminPageContainer/addRolePage/AddRolePage";
+import { RoleStatus } from "../../pages/adminPageContainer/roleManagerPage/RoleManagerPage";
 import { AccountRoleEnum } from "./accPermissionEnum"
 import { AppointmentStatus } from "./appointmentEnum"
 
 export enum TableType {
     PatientListTable,
     AccountManagerTable,
-    RoleManagerTable
+    RoleManagerTable,
+    PermissionTable
 }
 
 export interface PatientListTableColumns {
@@ -73,7 +76,34 @@ export interface AccountManagerTableDatas {
     status: AccountStatus
 }
 
+export interface RoleManagerTableColumns {
+    roleId: string
+    roleName: string
+    roleStatus: JSX.Element
+}
 export interface RoleManagerTableDatas {
     roleId: string
     roleName: string
+    roleStatus: RoleStatus
+}
+
+export interface PermissionManagerTableColumns {
+    permissionId: string
+    permissionName: string
+    permissionMenu: string
+    permissionStatus: JSX.Element
+}
+export interface PermissionManagerTableDatas {
+    permissionId: string
+    permissionName: string
+    permissionStatus: PermissionStatus
+}
+
+export interface ActionManagerTableColumns {
+    actionName: string
+}
+export interface ActionManagerTableDatas {
+    actionId: string
+    menuId: string
+    actionName: string
 }

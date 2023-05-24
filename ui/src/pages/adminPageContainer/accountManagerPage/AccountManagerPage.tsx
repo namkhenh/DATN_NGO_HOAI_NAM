@@ -24,6 +24,7 @@ import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutli
 import NotInterestedOutlinedIcon from '@mui/icons-material/NotInterestedOutlined';
 import AddRoleForm from '../../../components/assignRoleForm/AssignRoleForm'
 import AssignRoleForm from '../../../components/assignRoleForm/AssignRoleForm'
+import Switch from '@mui/material/Switch'
 
 export enum AccountAction {
     Create,
@@ -91,7 +92,7 @@ function AccountManagerPage() {
             {roleI.includes(AccountRoleEnum.User) && <div className='role-element-user'>Người bệnh</div>}
         </div>
         let gender: string = genderI === 0 ? 'Nam' : 'Nữ'
-        let status: JSX.Element = statusI === 0 ? <div className='status-element'><CheckCircleOutlineOutlinedIcon sx={{ color: '#2da55b86' }} />Hoạt động</div> : <div className='status-element'><NotInterestedOutlinedIcon sx={{ color: '#ff4646b4' }}/>Vô hiệu hóa</div> 
+        let status: JSX.Element = statusI === AccountStatus.Able ? <div className='status-element'><CheckCircleOutlineOutlinedIcon sx={{ color: '#2da55b86' }} />Hoạt động</div> : <div className='status-element'><NotInterestedOutlinedIcon sx={{ color: '#ff4646b4' }} />Vô hiệu hóa</div>
         return {
             userName,
             role,
@@ -186,9 +187,9 @@ function AccountManagerPage() {
                         label='Họ và tên'
                         placeholder='--'
                         required={true}
-                        // value={currentPatientProfile.patientName}
-                        // onChange={(_, value) => { onChangeOneFieldForm(PatientProfileModelProperty.patientName, value) }}
-                        // errorMessage={errorMessageFormString.patientName}
+                    // value={currentPatientProfile.patientName}
+                    // onChange={(_, value) => { onChangeOneFieldForm(PatientProfileModelProperty.patientName, value) }}
+                    // errorMessage={errorMessageFormString.patientName}
                     />
                 </div>
                 <div className="account-create-field">
@@ -218,7 +219,7 @@ function AccountManagerPage() {
                         label='Ngày sinh'
                         isRequired={true}
                         // strings={defaultDatePickerStrings}
-                        onSelectDate={(date) => {  }}
+                        onSelectDate={(date) => { }}
                         value={new Date()}
                         // parseDateFromString={()}'
                         maxDate={new Date()}
@@ -234,6 +235,13 @@ function AccountManagerPage() {
                         <FormControlLabel value="male" control={<Radio />} label="Nam" />
                         <FormControlLabel value="female" control={<Radio />} label="Nữ" />
                     </RadioGroup>
+                </div>
+                <div className="account-create-field display-flex">
+                    <Label required>Trạng thái</Label>
+                    <Switch
+                        checked
+                        onChange={() => {}}
+                    />
                 </div>
                 {/* <div className="account-create-field">
                     <Label required>Phân quyền</Label>
@@ -294,50 +302,50 @@ function AccountManagerPage() {
     }
 
     const onSave = () => {
-            let requestBody = {
+        let requestBody = {
 
-            }
-            const result = new Promise((resolve) => {
-                setLoading(true)
-                setTimeout(() => {
-                    setLoading(false)
-                    showMessageBar("Cập nhật thông tin thành công", true, MessageBarStatus.Success)
-                    resolve('success')
-                }, 4000);
-            }).then(() => {/*  */
+        }
+        const result = new Promise((resolve) => {
+            setLoading(true)
+            setTimeout(() => {
+                setLoading(false)
+                showMessageBar("Cập nhật thông tin thành công", true, MessageBarStatus.Success)
+                resolve('success')
+            }, 4000);
+        }).then(() => {/*  */
 
-            })
+        })
 
-            return result
+        return result
     }
 
     return (
-      <div className="accountmanager-page">
-        <BreadCrumb
-          breadcrumbItem={[
-            { key: 1, text: "Quản lý tài khoản", href: "/quan-ly-tai-khoan" },
-          ]}
-        />
-        <div className="accountmanager-page-title">Danh sách tài khoản</div>
+        <div className="accountmanager-page">
+            <BreadCrumb
+                breadcrumbItem={[
+                    { key: 1, text: "Quản lý tài khoản", href: "/quan-ly-tai-khoan" },
+                ]}
+            />
+            <div className="accountmanager-page-title">Danh sách tài khoản</div>
             <div className="accountmanager-page-search">
                 <SearchBoxView
                     placeholder='User Name/ Họ và tên/ CMND'
-                    onSearch={()=> {}}
+                    onSearch={() => { }}
                 />
             </div>
             <div className='line' style={{ width: '100%', height: '1px', backgroundColor: '#cccccc' }}></div>
-        <div className="patient-list-table">
-          <TablePager<AccountManagerTableColumns, AccountManagerTableDatas>
-            tableType={TableType.AccountManagerTable}
-            batchActionElements={onRenderActionButtons()}
-            rowData={rows}
-            dataTotal={datas}
-            hasCheckBox
-            page={currentPage}
-            handleChangePage={(page) => {setCurrentPage(page)} }
-            total={10}
-          />
-        </div>
+            <div className="patient-list-table">
+                <TablePager<AccountManagerTableColumns, AccountManagerTableDatas>
+                    tableType={TableType.AccountManagerTable}
+                    batchActionElements={onRenderActionButtons()}
+                    rowData={rows}
+                    dataTotal={datas}
+                    hasCheckBox
+                    page={currentPage}
+                    handleChangePage={(page) => { setCurrentPage(page) }}
+                    total={10}
+                />
+            </div>
             <DialogView
                 title={renderTitleForm()}
                 hidden={!showDialog}
@@ -347,10 +355,10 @@ function AccountManagerPage() {
                 confirmButtonText={'Lưu'}
                 confirmWithPromise={onSave}
                 closeButtonText='Hủy bỏ'
-                close={() => {setShowDialog(false)}}
+                close={() => { setShowDialog(false) }}
                 loading={loadingButton}
             />
-      </div>
+        </div>
     );
 }
 

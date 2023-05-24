@@ -3,16 +3,29 @@ import './RoleManagerPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
 import { SearchBoxView } from '../../../common/searchBox/SearchBox';
 import TablePager from '../../../common/tablePager/TablePager';
-import { AccountManagerTableColumns, TableType } from '../../../model/enum/tableTypeEnum';
+import { AccountManagerTableColumns, RoleManagerTableColumns, RoleManagerTableDatas, TableType } from '../../../model/enum/tableTypeEnum';
 import PatientListCommandBar from '../patientListPage/PatientListCommandBar';
 import { AppointmentStatus } from '../../../model/enum/appointmentEnum';
 import Checkbox from '@mui/material/Checkbox';
 import TablePagerCheckBox from '../../../common/tablePager/TablePagerCheckBox';
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import NotInterestedOutlinedIcon from '@mui/icons-material/NotInterestedOutlined';
+
+export enum RoleStatus {
+    Able,
+    Enable
+}
+
+export enum RoleAction {
+    Create,
+    Edit,
+    Assign,
+    Delete
+}
+
 function RoleManagerPage() {
     const [currentPage, setCurrentPage] = useState<number>(0)
-    // const [checkAdd, setCheckAdd] = useState<number>()
-    // const [checkEdit, setCheckEdit] = useState<number>()
-    // const [checkRemove, setCheckRemove] = useState<number>()
+    const [roleAction, setRoleAction] = useState<RoleAction>()
     const onSearch = (newValue: string) => {
         console.log(newValue);
 
@@ -22,84 +35,149 @@ function RoleManagerPage() {
             <PatientListCommandBar
                 key={'patient-list-commandbar'}
                 // {...props}
-                tableType={TableType.AccountManagerTable}
-                
+                tableType={TableType.RoleManagerTable}
+                // showRoleCreate={() => { setShowDialog(true); setRoleAction(RoleAction.Create) }}
+                // showRoleEdit={() => { setShowDialog(true); setRoleAction(RoleAction.Edit) }}
+                // showRoleAssign={() => { setShowDialog(true); setRoleAction(RoleAction.Assign) }}
+                // showRoleDelete={() => { setShowDialog(true); setRoleAction(RoleAction.Delete) }}
             />
         ])
     }
 
-    // function createData(
-    //     userName: string,
-    //     add: number,
-    //     edit: number,
-    //     remove: number,
-    // ): RoleManagerTableColumns {
-    //     // let add: JSX.Element = <Checkbox checked={addI === 1} onClick={() => {console.log(addI);
-    //     // }}/>
-    //     // let edit: JSX.Element = <Checkbox checked={editI === 1} />
-    //     // let remove: JSX.Element = <Checkbox checked={removeI === 1} />
-    //     return {
-    //         userName,
-    //         add,
-    //         edit,
-    //         remove
-    //     };
+    function createData(
+        roleId: string,
+        roleName: string,
+        roleStatusI: RoleStatus
+    ): RoleManagerTableColumns {
+        // let add: JSX.Element = <Checkbox checked={addI === 1} onClick={() => {console.log(addI);
+        // }}/>
+        // let edit: JSX.Element = <Checkbox checked={editI === 1} />
+        // let remove: JSX.Element = <Checkbox checked={removeI === 1} />
+        let roleStatus: JSX.Element = roleStatusI === RoleStatus.Able ? <div className='status-element'><CheckCircleOutlineOutlinedIcon sx={{ color: '#2da55b86' }} />Hoạt động</div> : <div className='status-element'><NotInterestedOutlinedIcon sx={{ color: '#ff4646b4' }} />Vô hiệu hóa</div> 
+        return {
+            roleId,
+            roleName,
+            roleStatus
+        };
+    }
+
+
+    const rows: RoleManagerTableColumns[][] = [
+        [
+            createData("admin-01", "Admin", RoleStatus.Able),
+            createData("doctor-01", "Bác sĩ", RoleStatus.Able),
+            createData("doctor-02", "Bác sĩ A", RoleStatus.Enable),
+        ],
+        [
+            createData("care-01", "CSKH", RoleStatus.Able),
+        ]
+    ];
+
+    const datas: RoleManagerTableDatas[][] = [
+        [
+            {
+                roleId: 'admin-01',
+                roleName: 'Admin',
+                roleStatus: RoleStatus.Able
+            },
+            {
+                roleId: 'doctor-01',
+                roleName: 'Bác sĩ',
+                roleStatus: RoleStatus.Able
+            },
+            {
+                roleId: 'doctor-02',
+                roleName: 'Bác sĩ A',
+                roleStatus: RoleStatus.Enable
+            }
+        ],
+        [
+            {
+                roleId: 'care-01',
+                roleName: 'CSKH',
+                roleStatus: RoleStatus.Able
+            }
+        ]
+    ];
+
+    const renderTitleForm = () => {
+        switch (roleAction) {
+            case RoleAction.Create:
+                return 'Tạo vai trò'
+            case RoleAction.Edit:
+                return 'Chỉnh sửa vai trò'
+            case RoleAction.Delete:
+                return 'Xóa vai trò'
+            case RoleAction.Assign:
+                return 'Gán người dùng cho vai trò'
+            default:
+                return ''
+        }
+    }
+
+    // const renderBodyForm = () => {
+    //     switch (roleAction) {
+    //         case RoleAction.Create:
+    //         case AccountAction.Edit:
+    //             return renderBodyCreateForm()
+    //         case AccountAction.ChangePass:
+    //             return renderBodyChangePassForm()
+    //         case AccountAction.Delete:
+    //         case AccountAction.Enable:
+    //         case AccountAction.Able:
+    //             return renderBodyDeleteForm()
+    //         case AccountAction.Assign:
+    //             return <AssignRoleForm />
+    //         default:
+    //             break;
+    //     }
     // }
-
-
-    // const rows: RoleManagerTableColumns[][] = [
-    //     [
-    //         createData("nam-nh-19", 0, 1, 0),
-    //         createData("nam-nh-19", 0, 1, 1),
-    //         createData("nam-nh-19", 1, 0, 1),
-    //     ],
-    //     [
-    //         createData("nam-nh-19", 0, 1, 0),
-    //     ]
-    // ];
 
 
     return (
         <div className='rolemanager-page'>
             <BreadCrumb
                 breadcrumbItem={[
-                    { key: 1, text: 'Quản lý chức năng', href: '/quan-ly-chuc-nang' },
+                    { key: 1, text: 'Quản lý vai trò', href: '/quan-ly-vai-tro' },
                 ]}
             />
             <div className="rolemanager-page-title">
-                Danh sách chức năng
+                Danh sách vai trò
             </div>
             <div className="rolemanager-page-search">
                 <div className="search-id">
                     <SearchBoxView
-                        placeholder='User Name'
+                        placeholder='Mã vai trò'
                         onSearch={onSearch}
                     />
                 </div>
             </div>
             <div className='line' style={{ width: '100%', height: '1px', backgroundColor: '#cccccc' }}></div>
             <div className="patient-list-table">
-                {/* <TablePager<RoleManagerTableColumns>
+                <TablePager<RoleManagerTableColumns, RoleManagerTableDatas>
                     tableType={TableType.RoleManagerTable}
                     batchActionElements={onRenderActionButtons()}
                     rowData={rows[currentPage]}
-                    hasCheckBox={false}
+                    dataTotal={datas[currentPage]}
+                    hasCheckBox
                     page={currentPage}
                     handleChangePage={(page) => { setCurrentPage(page) }}
                     total={15}
                     hasNavigate={false}
-                /> */}
-                {/* <TablePagerCheckBox<RoleManagerTableColumns>
-                    tableType={TableType.RoleManagerTable}
-                    batchActionElements={onRenderActionButtons()}
-                    rowData={rows[currentPage]}
-                    hasCheckBox={false}
-                    page={currentPage}
-                    handleChangePage={(page) => { setCurrentPage(page) }}
-                    total={15}
-                    hasNavigate={false}
-                /> */}
+                />
             </div>
+            {/* <DialogView
+                title={renderTitleForm()}
+                hidden={!showDialog}
+                customContent={renderBodyForm()}
+                // closeWithPromise={this.onLogoutAction.bind(this)}
+                // confirm={this.handlecClosePopup.bind(this)}
+                confirmButtonText={'Lưu'}
+                confirmWithPromise={onSave}
+                closeButtonText='Hủy bỏ'
+                close={() => { setShowDialog(false) }}
+                loading={loadingButton}
+            /> */}
         </div>
     )
 }

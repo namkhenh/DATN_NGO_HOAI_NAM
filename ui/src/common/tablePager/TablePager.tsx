@@ -204,6 +204,7 @@ interface TablePagerProps<T, D> {
   total: number;
   hasNavigate?: boolean
   navigateLink?: string
+  className?: string
 }
 
 export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
@@ -214,8 +215,7 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [{ selection }, dispatch] = useStateValue();
-    console.log(selected);
+  const [{ selection }, dispatch] = useStateValue();
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: string
@@ -373,7 +373,7 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
         </div>
         {props.rowData.length !== 0 ? (
           <div className="table-pager">
-            <TableContainer>
+            <TableContainer className={props.className}>
               <Table
                 sx={{ minWidth: 750 }}
                 aria-labelledby="tableTitle"

@@ -24,6 +24,8 @@ interface IAppartmentDetailPageProps {
 
 function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
     const appointmentId = useParams().id;
+    console.log(appointmentId);
+    
     const [isOpenAccpet, setOpen] = useState<boolean>(false)
     const [isOpenDialog, setOpenDialog] = useState<boolean>(false);
     const [loadingButton, setLoading] = useState<boolean>(false)
@@ -51,8 +53,8 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                 {props.actionType === "edit" ?
                     <BreadCrumb
                         breadcrumbItem={[
-                            { key: 1, text: 'Danh sách bệnh nhân đặt khám', href: '/admin/danh-sach-dat-kham' },
-                            { key: 2, text: 'Chi tiết hồ sơ đặt khám', href: '/admin/danh-sach-dat-kham/chi-tiet-dat-kham' },
+                            { key: 1, text: 'Danh sách bệnh nhân đặt khám', href: '/admin/quan-ly-dat-kham' },
+                            { key: 2, text: 'Chi tiết hồ sơ đặt khám', href: '/admin/quan-ly-dat-kham/chi-tiet-dat-kham' },
                         ]}
                     /> :
                     <BreadCrumb

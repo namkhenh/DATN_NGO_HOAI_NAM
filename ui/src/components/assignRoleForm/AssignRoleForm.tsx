@@ -15,6 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ContentPasteOffOutlinedIcon from "@mui/icons-material/ContentPasteOffOutlined";
 import { RoleManagerTableDatas } from '../../model/enum/tableTypeEnum'
+import { RoleStatus } from '../../pages/adminPageContainer/roleManagerPage/RoleManagerPage'
 interface RoleTableColumns {
   roleId: string
   roleName: string
@@ -31,8 +32,6 @@ function AssignRoleForm() {
   
   useEffect(() => {
     if (!!selected) {
-      console.log(roleList);
-      
       setRow(roleList.map((e: RoleManagerTableDatas) => {
         return {
           roleId: e.roleId, roleName: e.roleName, roleTask: <IconButton aria-label="delete" size="small" onClick={() => { removeRole(e.roleId) }}>
@@ -54,11 +53,11 @@ function AssignRoleForm() {
           <Autocomplete
             disablePortal
             id="assignrole-box-select"
-            options={[{ roleName: "Bác sĩ", roleId: "aa11" }, { roleName: "Admin", roleId: "aa22" }, { roleName: "Bác ", roleId: "aa33" }]}
+            options={[{ roleName: "Bác sĩ", roleId: "aa11", roleStatus: RoleStatus.Enable }, { roleName: "Admin", roleId: "aa22", roleStatus: RoleStatus.Enable }, { roleName: "Bác ", roleId: "aa33", roleStatus: RoleStatus.Enable }]}
             isOptionEqualToValue={(option, value) => option.roleId === value.roleId}
             getOptionLabel={(option) => option.roleName}
             sx={{ width: 420 }}
-            renderInput={(params) => <TextField {...params} label="" />}
+            renderInput={(params) => <TextField {...params} label="" placeholder='Chọn vai trò'/>}
             onChange={(_, selected) => {
               setSelected(selected!)
             }}
