@@ -213,8 +213,7 @@ export default function TablePagerCheckBox<T>(props: TablePagerProps<T>) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [{ selection }, dispatch] = useStateValue();
-    console.log(selected);
+  const [{ selection }, dispatch] = useStateValue();
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: string
@@ -230,7 +229,7 @@ export default function TablePagerCheckBox<T>(props: TablePagerProps<T>) {
       // props.rowData.forEach((row: any, i) => { return props.hasNavigate ? newSelected.push(row[Object.keys(row)[0]]?.props.children) : newSelected.push(row[Object.keys(row)[0]]) });
       props.rowData.forEach((row: any, i) => { return newSelected.push(row[Object.keys(row)[0]]) });
       setSelected(newSelected);
-      
+
       const newSelectedC = props.rowData
       setSelectedC(newSelectedC)
 
@@ -282,7 +281,7 @@ export default function TablePagerCheckBox<T>(props: TablePagerProps<T>) {
     }
     setSelected(newSelected);
     setSelectedC(newSelectedC)
-    dispatch({type: actionType.SET_SELECTION, selection: {...selection, selectedItems: newSelectedC, selectedCount: newSelectedC.length}});
+    dispatch({ type: actionType.SET_SELECTION, selection: { ...selection, selectedItems: newSelectedC, selectedCount: newSelectedC.length } });
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -318,11 +317,9 @@ export default function TablePagerCheckBox<T>(props: TablePagerProps<T>) {
   //     [order, orderBy, page, rowsPerPage],
   // );
 
-  
+
 
   const onRenderCell = (row: any) => {
-    console.log(row);
-    
     return (
       <>
         {Array.from({ length: Object.keys(row).length }).map((a, i) => {
@@ -344,7 +341,7 @@ export default function TablePagerCheckBox<T>(props: TablePagerProps<T>) {
                 }}
               />
             </TableCell>
-          ) 
+          )
         })}
       </>
     );

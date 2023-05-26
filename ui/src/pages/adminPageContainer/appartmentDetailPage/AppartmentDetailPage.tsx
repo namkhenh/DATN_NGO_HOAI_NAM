@@ -18,13 +18,17 @@ import { ButtonColorType, ButtonVariantType } from '../../../model/enum/buttonEn
 import DialogView from '../../../common/dialog/Dialog'
 import { useParams } from 'react-router-dom'
 
+export enum IAppointmentAction {
+    Create,
+    Edit
+}
+
 interface IAppartmentDetailPageProps {
     actionType: string
 }
 
 function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
     const appointmentId = useParams().id;
-    console.log(appointmentId);
     
     const [isOpenAccpet, setOpen] = useState<boolean>(false)
     const [isOpenDialog, setOpenDialog] = useState<boolean>(false);

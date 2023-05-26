@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './AccountManagerPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
 import TablePager from '../../../common/tablePager/TablePager'
-import { AccountManagerTableColumns, AccountManagerTableDatas, TableType } from '../../../model/enum/tableTypeEnum'
+import { AccountManagerTableColumns, AccountManagerTableDatas, TableType, UserGender } from '../../../model/enum/tableTypeEnum'
 import PatientListCommandBar from '../patientListPage/PatientListCommandBar'
 import { AccountRoleEnum } from '../../../model/enum/accPermissionEnum'
 import { SearchBoxView } from '../../../common/searchBox/SearchBox'
@@ -25,6 +25,7 @@ import NotInterestedOutlinedIcon from '@mui/icons-material/NotInterestedOutlined
 import AddRoleForm from '../../../components/assignRoleForm/AssignRoleForm'
 import AssignRoleForm from '../../../components/assignRoleForm/AssignRoleForm'
 import Switch from '@mui/material/Switch'
+import { RoleStatus } from '../roleManagerPage/RoleManagerPage'
 
 export enum AccountAction {
     Create,
@@ -111,22 +112,44 @@ function AccountManagerPage() {
 
     const datas: AccountManagerTableDatas[] = [
         {
+            id: 'alksdjaskjd232sd',
             userName: 'ngo_hoai_nam1',
-            role: [AccountRoleEnum.Admin, AccountRoleEnum.Doctor],
+            appUserRoleMappings: [{
+                appUserId: 'alksdjaskjd232sd',
+                roleId: 'qafafasfasfa2123',
+                role: {
+                    id: 'qafafasfasfa2123',
+                    name: 'Admin',
+                    code: 'Admin',
+                    status: RoleStatus.Able
+                }
+            }],
             fullName: 'Ngô Hoài Nam',
-            phoneNumber: '0123456788',
-            insuranceNumber: '012345678',
-            gender: 0,
-            status: AccountStatus.Able
+            phone: '0123456788',
+            insurance: '012345678',
+            gender: UserGender.Male,
+            status: AccountStatus.Able,
+            used: false
         },
         {
-            userName: 'ngo_hoai_nam2',
-            role: [AccountRoleEnum.Admin, AccountRoleEnum.Doctor],
+            id: 'gdgdsgsd3423hhjj',
+            userName: 'ngo_hoai_nam1',
+            appUserRoleMappings: [{
+                appUserId: 'gdgdsgsd3423hhjj',
+                roleId: 'dgsgsdg342sdfsdf',
+                role: {
+                    id: 'dgsgsdg342sdfsdf',
+                    name: 'Admin',
+                    code: 'Admin',
+                    status: RoleStatus.Able
+                }
+            }],
             fullName: 'Ngô Hoài Nam',
-            phoneNumber: '0123456788',
-            insuranceNumber: '012345678',
-            gender: 1,
-            status: AccountStatus.Enable
+            phone: '0123456788',
+            insurance: '012345678',
+            gender: UserGender.Male,
+            status: AccountStatus.Able,
+            used: false
         },
     ];
 
@@ -145,7 +168,7 @@ function AccountManagerPage() {
             case AccountAction.Able:
                 return 'Mở khóa tài khoản'
             case AccountAction.Assign:
-                return 'Thêm quyền cho tài khoản'
+                return 'Thêm vai trò cho tài khoản'
             default:
                 return ''
         }

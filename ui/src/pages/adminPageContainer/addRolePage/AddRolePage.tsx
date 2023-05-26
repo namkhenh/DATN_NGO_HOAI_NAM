@@ -3,7 +3,7 @@ import './AddRolePage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
 import { TextField } from '../../../common/textField/TextField'
 import { DatePicker } from '../../../common/datePicker/DatePicker'
-import { ActionManagerTableColumns, ActionManagerTableDatas, PermissionManagerTableColumns, PermissionManagerTableDatas, TableType } from '../../../model/enum/tableTypeEnum'
+import { ActionManagerTableColumns, ActionTableDatas, PermissionManagerTableColumns, PermissionManagerTableDatas, TableType } from '../../../model/enum/tableTypeEnum'
 import TablePager from '../../../common/tablePager/TablePager'
 import PatientListCommandBar from '../patientListPage/PatientListCommandBar'
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
@@ -36,13 +36,17 @@ export enum PermissionAction {
     Delete
 }
 
-function AddRolePage() {
+interface AddRolePageProps {
+    actionType: PermissionAction
+}
+
+function AddRolePage(props: AddRolePageProps) {
     const [showDialog, setShowDialog] = useState<boolean>(false)
     const [loadingButton, setLoading] = useState<boolean>(false)
     const [currentPage, setCurrentPage] = useState<number>(0)
     const [permissionAction, setPermissionAction] = useState<PermissionAction>()
     const [selected, setSelected] = React.useState<readonly string[]>([]);
-    const [selectedC, setSelectedC] = React.useState<readonly ActionManagerTableDatas[]>([]);
+    const [selectedC, setSelectedC] = React.useState<readonly ActionTableDatas[]>([]);
     const [, dispatch] = useStateValue();
     const onRenderActionButtons = (): JSX.Element[] => {
         return ([
@@ -58,7 +62,7 @@ function AddRolePage() {
     }
 
     function createData(
-        permissionId: string,
+        permissionCode: string,
         permissionName: string,
         permissionMenu: string,
         permissionStatusI: PermissionStatus
@@ -69,7 +73,7 @@ function AddRolePage() {
         // let remove: JSX.Element = <Checkbox checked={removeI === 1} />
         let permissionStatus: JSX.Element = permissionStatusI === PermissionStatus.Able ? <div className='status-element'><CheckCircleOutlineOutlinedIcon sx={{ color: '#2da55b86' }} />Hoạt động</div> : <div className='status-element'><NotInterestedOutlinedIcon sx={{ color: '#ff4646b4' }} />Vô hiệu hóa</div>
         return {
-            permissionId,
+            permissionCode,
             permissionName,
             permissionMenu,
             permissionStatus
@@ -91,26 +95,62 @@ function AddRolePage() {
     const datas: PermissionManagerTableDatas[][] = [
         [
             {
-                permissionId: 'demo1',
-                permissionName: 'demo1',
-                permissionStatus: PermissionStatus.Able
+                id: 'sdhfdkjh2374jkkjsdjk',
+                code: 'xem',
+                menu: {
+                    id: 'gsdgeww324dsf',
+                    code: 'quan-ly',
+                    name: 'quan-ly',
+                    isDeleted: false,
+                },
+                menuId: 'gsdgeww324dsf',
+                name: 'xem',
+                status: PermissionStatus.Able,
+                roleId: 'ashakshjdkjh2123123'
             },
             {
-                permissionId: 'demo2',
-                permissionName: 'demo2',
-                permissionStatus: PermissionStatus.Enable
+                id: 'asfkasjk333l1l12nml',
+                code: 'xem',
+                menu: {
+                    id: 'gsdgeww324dsf',
+                    code: 'quan-ly',
+                    name: 'quan-ly',
+                    isDeleted: false,
+                },
+                menuId: 'gsdgeww324dsf',
+                name: 'xem',
+                status: PermissionStatus.Able,
+                roleId: 'ashakshjdkjh2123123'
             },
             {
-                permissionId: 'demo3',
-                permissionName: 'demo3',
-                permissionStatus: PermissionStatus.Able
+                id: 'kasdnfjk214bmasf',
+                code: 'xem',
+                menu: {
+                    id: 'gsdgeww324dsf',
+                    code: 'quan-ly',
+                    name: 'quan-ly',
+                    isDeleted: false,
+                },
+                menuId: 'gsdgeww324dsf',
+                name: 'xem',
+                status: PermissionStatus.Able,
+                roleId: 'ashakshjdkjh2123123'
             },
         ],
         [
             {
-                permissionId: 'demo4',
-                permissionName: 'demo4',
-                permissionStatus: PermissionStatus.Able
+                id: 'aaweweqwewesfsadf',
+                code: 'xem',
+                menu: {
+                    id: 'gsdgeww324dsf',
+                    code: 'quan-ly',
+                    name: 'quan-ly',
+                    isDeleted: false,
+                },
+                menuId: 'gsdgeww324dsf',
+                name: 'xem',
+                status: PermissionStatus.Able,
+                roleId: 'ashakshjdkjh2123123'
             }
         ]
     ];
@@ -128,19 +168,19 @@ function AddRolePage() {
     //     createActionData('Sửa'),
     // ];
 
-    console.log(selectedC);
-    
 
-    const actionDatas: ActionManagerTableDatas[] = [
+    const actionDatas: ActionTableDatas[] = [
         {
-            actionId: 'view',
-            actionName: 'Xem',
-            menuId: '1'
+            id: 'weqwesjkl213123',
+            name: 'Xem',
+            menuId: 'gsdgeww324dsf',
+            isDeleted: false
         },
         {
-            actionId: 'edit',
-            actionName: 'Sửa',
-            menuId: '2'
+            id: 'egsfgfaser234',
+            name: 'Xóa',
+            menuId: 'gsdgeww324dsf',
+            isDeleted: false
         },
     ];
 
@@ -173,7 +213,7 @@ function AddRolePage() {
         let newSelected: string[] = []
         if (event.target.checked) {
             // props.rowData.forEach((row: any, i) => { return props.hasNavigate ? newSelected.push(row[Object.keys(row)[0]]?.props.children) : newSelected.push(row[Object.keys(row)[0]]) });
-            actionDatas.forEach((row: ActionManagerTableDatas, i) => { return newSelected.push(row.actionId) });
+            actionDatas.forEach((row: ActionTableDatas, i) => { return newSelected.push(row.id) });
             setSelected(newSelected);
 
             const newSelectedC = actionDatas
@@ -201,11 +241,11 @@ function AddRolePage() {
         // });
     };
 
-    const handleClick = (event: React.MouseEvent<unknown>, rowChild: ActionManagerTableDatas) => {
-        let rowChildText: string = rowChild.actionId
+    const handleClick = (event: React.MouseEvent<unknown>, rowChild: ActionTableDatas) => {
+        let rowChildText: string = rowChild.id
         const selectedIndex = selected.indexOf(rowChildText);
         let newSelected: readonly string[] = [];
-        let newSelectedC: readonly ActionManagerTableDatas[] = []
+        let newSelectedC: readonly ActionTableDatas[] = []
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selected, rowChildText);
             newSelectedC = newSelectedC.concat(selectedC, rowChild);
@@ -241,7 +281,7 @@ function AddRolePage() {
                 <div className="permission-create-wrap">
                     <div className="permission-create-item">
                         <TextField
-                            label='Mã vai trò'
+                            label='Mã quyền'
                             required
                             placeholder='--'
                             value={'appointmentInfo.appointmentReason'}
@@ -252,7 +292,7 @@ function AddRolePage() {
                     </div>
                     <div className="permission-create-item">
                         <TextField
-                            label='Tên vai trò'
+                            label='Tên quyền'
                             required
                             placeholder='--'
                             value={'appointmentInfo.appointmentReason'}
@@ -355,7 +395,7 @@ function AddRolePage() {
                                                     />
                                                 </TableCell>
                                                 <TableCell component="th" scope="row" align='center'>
-                                                    {row.actionName}
+                                                    {row.name}
                                                 </TableCell>
                                             </TableRow>
                                         )
@@ -385,6 +425,8 @@ function AddRolePage() {
     }
     
     const onSave = () => {
+        console.log(selectedC);
+        
         let requestBody = {
 
         }

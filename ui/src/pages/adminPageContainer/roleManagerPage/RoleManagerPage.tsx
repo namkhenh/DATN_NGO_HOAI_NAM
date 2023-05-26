@@ -45,7 +45,7 @@ function RoleManagerPage() {
     }
 
     function createData(
-        roleId: string,
+        roleCode: string,
         roleName: string,
         roleStatusI: RoleStatus
     ): RoleManagerTableColumns {
@@ -55,7 +55,7 @@ function RoleManagerPage() {
         // let remove: JSX.Element = <Checkbox checked={removeI === 1} />
         let roleStatus: JSX.Element = roleStatusI === RoleStatus.Able ? <div className='status-element'><CheckCircleOutlineOutlinedIcon sx={{ color: '#2da55b86' }} />Hoạt động</div> : <div className='status-element'><NotInterestedOutlinedIcon sx={{ color: '#ff4646b4' }} />Vô hiệu hóa</div> 
         return {
-            roleId,
+            roleCode,
             roleName,
             roleStatus
         };
@@ -76,26 +76,30 @@ function RoleManagerPage() {
     const datas: RoleManagerTableDatas[][] = [
         [
             {
-                roleId: 'admin-01',
-                roleName: 'Admin',
-                roleStatus: RoleStatus.Able
+                id: 'qawqwdik2h2j322',
+                code: 'admin-01',
+                name: 'Admin',
+                status: RoleStatus.Able
             },
             {
-                roleId: 'doctor-01',
-                roleName: 'Bác sĩ',
-                roleStatus: RoleStatus.Able
+                id: 'dfioweuw224325235d',
+                code: 'doctor-01',
+                name: 'Bác sĩ',
+                status: RoleStatus.Able
             },
             {
-                roleId: 'doctor-02',
-                roleName: 'Bác sĩ A',
-                roleStatus: RoleStatus.Enable
+                id: 'gfifhsdklkl333nj',
+                code: 'doctor-02',
+                name: 'Bác sĩ A',
+                status: RoleStatus.Enable
             }
         ],
         [
             {
-                roleId: 'care-01',
-                roleName: 'CSKH',
-                roleStatus: RoleStatus.Able
+                id: 'a2kjhjjkh2il4h2',
+                code: 'care-01',
+                name: 'CSKH',
+                status: RoleStatus.Able
             }
         ]
     ];
@@ -163,7 +167,8 @@ function RoleManagerPage() {
                     page={currentPage}
                     handleChangePage={(page) => { setCurrentPage(page) }}
                     total={15}
-                    hasNavigate={false}
+                    hasNavigate
+                    navigateLink='/admin/quan-ly-vai-tro/chi-tiet-vai-tro/'
                 />
             </div>
             {/* <DialogView

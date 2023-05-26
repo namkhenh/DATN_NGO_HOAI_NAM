@@ -113,6 +113,48 @@ const permissionManagerStaticColumn: () => HeadCell[] = () => [
     },
 ]
 
+const userAssignStaticColumn: () => HeadCell[] = () => [
+    {
+        id: 'userName',
+        label: 'Tên đăng nhập',
+    },
+    {
+        id: 'fullName',
+        label: 'Tên hiển thị',
+    },
+    {
+        id: 'phoneNumber',
+        label: 'Số điện thoại' 
+    },
+    {
+        id: 'insuranceNumber',
+        label: 'CMND',
+    },
+    {
+        id: 'task',
+        label: 'Tác vụ'
+    }
+]
+
+const addUserAssignStaticColumn: () => HeadCell[] = () => [
+    {
+        id: 'userName',
+        label: 'Tên đăng nhập',
+    },
+    {
+        id: 'fullName',
+        label: 'Tên hiển thị',
+    },
+    {
+        id: 'phoneNumber',
+        label: 'Số điện thoại' 
+    },
+    {
+        id: 'insuranceNumber',
+        label: 'CMND',
+    },
+]
+
 export const getColumnWithType: (tableType: TableType) => HeadCell[] = (tableType) => {
     let basicColumns: HeadCell[];
     switch (tableType) {
@@ -130,6 +172,14 @@ export const getColumnWithType: (tableType: TableType) => HeadCell[] = (tableTyp
         }
         case TableType.PermissionTable: {
             basicColumns = permissionManagerStaticColumn()
+            break;
+        }
+        case TableType.UserAssignTable: {
+            basicColumns = userAssignStaticColumn()
+            break;
+        }
+        case TableType.AddUserAssignTable: {
+            basicColumns = addUserAssignStaticColumn()
             break;
         }
         default: {

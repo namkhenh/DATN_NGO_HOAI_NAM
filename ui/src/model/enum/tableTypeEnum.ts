@@ -8,11 +8,13 @@ export enum TableType {
     PatientListTable,
     AccountManagerTable,
     RoleManagerTable,
-    PermissionTable
+    PermissionTable,
+    UserAssignTable,
+    AddUserAssignTable,
 }
 
 export interface PatientListTableColumns {
-    appointmentId: string;
+    appointmentCode: string;
     appointmentStatus: JSX.Element;
     appointmentDate: string;
     appointmentTime: string;
@@ -27,6 +29,7 @@ export interface PatientListTableColumns {
 
 export interface PatientListTableDatas {
     appointmentId: string;
+    appointmentCode: string;
     appointmentStatus: AppointmentStatus;
     appointmentDate: string;
     appointmentTime: string;
@@ -39,14 +42,6 @@ export interface PatientListTableDatas {
     patientPhoneNumber: string
     patientIdentityNumber: string
     patientAddress: string
-}
-
-export interface AccountManagerTableColumns {
-    userName: string
-    role: JSX.Element
-    fullName: string
-    phoneNumber: string
-    insuranceNumber: string
 }
 
 export enum PatientListAction {
@@ -66,44 +61,115 @@ export interface AccountManagerTableColumns {
     status: JSX.Element
 }
 
+export interface IUserRole {
+    id: string
+    code: string
+    name: string
+    status: RoleStatus
+}
+
+export enum UserGender {
+    Male,
+    Female
+}
+
+export interface IAppUserRole {
+    appUserId: string
+    role: IUserRole
+    roleId: string
+}
 export interface AccountManagerTableDatas {
+    id: string
     userName: string
-    role: AccountRoleEnum[]
+    startAt?: string
+    endAt?: string
+    appUserRoleMappings: IAppUserRole[]
+    address?: string
+    avatar?: string
+    birthday?: string
     fullName: string
-    phoneNumber: string
-    insuranceNumber: string
-    gender: number
+    phone?: string
+    insurance?: string
+    gender?: UserGender
     status: AccountStatus
+    used: boolean
 }
 
 export interface RoleManagerTableColumns {
-    roleId: string
+    roleCode: string
     roleName: string
     roleStatus: JSX.Element
 }
 export interface RoleManagerTableDatas {
-    roleId: string
-    roleName: string
-    roleStatus: RoleStatus
+    id: string
+    appUserRoleMappings?: IAppUserRole[]
+    code: string
+    name: string
+    startAt?: string
+    endAt?: string
+    permission?: PermissionManagerTableDatas[]
+    status: RoleStatus
+    used?: boolean
+}
+
+export interface MenuTableDatas {
+    id: string
+    code: string
+    name: string
+    isDeleted: boolean
+    actions?: ActionTableDatas[]
+}
+export interface PermissionActionTableDatas {
+    action: ActionTableDatas
+    actionId: string
+    isLocked: boolean
+    permissionId: string
 }
 
 export interface PermissionManagerTableColumns {
-    permissionId: string
+    permissionCode: string
     permissionName: string
     permissionMenu: string
     permissionStatus: JSX.Element
 }
 export interface PermissionManagerTableDatas {
-    permissionId: string
-    permissionName: string
-    permissionStatus: PermissionStatus
+    id: string
+    code: string
+    menu: MenuTableDatas
+    menuId: string
+    name: string
+    status: PermissionStatus
+    permissionActionMapping?: PermissionActionTableDatas[]
+    roleId: string
+    startAt?: string
+    endAt?: string
 }
 
 export interface ActionManagerTableColumns {
     actionName: string
 }
-export interface ActionManagerTableDatas {
-    actionId: string
+export interface ActionTableDatas {
+    id: string
+    name: string
+    isDeleted: boolean
     menuId: string
-    actionName: string
+}
+
+export interface UserAssignTableColumns {
+    userName: string
+    fullName: string
+    phoneNumber: string
+    insuranceNumber: string
+    task?: JSX.Element
+}
+export interface UserAssignTableDatas {
+    id: string
+    userName: string
+    fullName: string
+    phoneNumber: string
+    insuranceNumber: string
+    gender: number
+    status: AccountStatus
+    address?: string
+    birthday?: string
 }

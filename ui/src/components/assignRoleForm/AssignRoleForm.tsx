@@ -17,7 +17,7 @@ import ContentPasteOffOutlinedIcon from "@mui/icons-material/ContentPasteOffOutl
 import { RoleManagerTableDatas } from '../../model/enum/tableTypeEnum'
 import { RoleStatus } from '../../pages/adminPageContainer/roleManagerPage/RoleManagerPage'
 interface RoleTableColumns {
-  roleId: string
+  roleCode: string
   roleName: string
   roleTask: JSX.Element
 }
@@ -34,16 +34,17 @@ function AssignRoleForm() {
     if (!!selected) {
       setRow(roleList.map((e: RoleManagerTableDatas) => {
         return {
-          roleId: e.roleId, roleName: e.roleName, roleTask: <IconButton aria-label="delete" size="small" onClick={() => { removeRole(e.roleId) }}>
+          roleCode: e.code, roleName: e.name, roleTask: <IconButton aria-label="delete" size="small" onClick={() => { removeRole(e.id) }}>
             <DeleteIcon color='error' />
           </IconButton>
         }
       }))
     }
   }, [roleList])
+  console.log(roleList);
   
   const removeRole = (idDel: string) => {
-    setRoleList(roleList.filter((e) => idDel !== e.roleId))
+    setRoleList(roleList.filter((e) => idDel !== e.id))
   }
 
   return (
@@ -53,9 +54,9 @@ function AssignRoleForm() {
           <Autocomplete
             disablePortal
             id="assignrole-box-select"
-            options={[{ roleName: "Bác sĩ", roleId: "aa11", roleStatus: RoleStatus.Enable }, { roleName: "Admin", roleId: "aa22", roleStatus: RoleStatus.Enable }, { roleName: "Bác ", roleId: "aa33", roleStatus: RoleStatus.Enable }]}
-            isOptionEqualToValue={(option, value) => option.roleId === value.roleId}
-            getOptionLabel={(option) => option.roleName}
+            options={[{ name: "Bác sĩ", code: "Bác sĩ", id: "asdasdqw2212as", status: RoleStatus.Enable }, { name: "Admin", code: "Admin", id: "qwe2dgsdg323a", status: RoleStatus.Enable }, { name: "Bác", code: "Bác", id: "aa33", status: RoleStatus.Enable }]}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            getOptionLabel={(option) => option.name}
             sx={{ width: 420 }}
             renderInput={(params) => <TextField {...params} label="" placeholder='Chọn vai trò'/>}
             onChange={(_, selected) => {
@@ -71,12 +72,12 @@ function AssignRoleForm() {
             onClick={() => {
               if (!!selected) {
                 roleList.filter((role) => 
-                  role.roleId === selected.roleId
+                  role.id === selected.id
                 ).length === 0 &&
                 setRoleList(roleList.concat(selected))
               }
             }}
-          >Gán quyền</Button>
+          >Gán vai trò</Button>
         </div>
       </div>
       <div className="role-assign-list">
@@ -93,11 +94,11 @@ function AssignRoleForm() {
               <TableBody>
                 {rows.map((row) => (
                   <TableRow
-                    key={row.roleId}
+                    key={row.roleCode}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.roleId}
+                      {row.roleCode}
                     </TableCell>
                     <TableCell>{row.roleName}</TableCell>
                     <TableCell align='center'>{row.roleTask}</TableCell>

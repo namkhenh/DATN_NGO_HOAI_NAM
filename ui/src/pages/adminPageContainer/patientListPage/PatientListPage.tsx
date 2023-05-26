@@ -65,7 +65,7 @@ function PatientListPage() {
   }
 
   function createData(
-    appointmentId: string,
+    appointmentCode: string,
     appointmentStatusI: AppointmentStatus,
     appointmentDate: string,
     appointmentTime: string,
@@ -89,7 +89,7 @@ function PatientListPage() {
     let patientSex: string = patientSexI === 0 ? "Nam" : "Nữ" 
     let appointmentStatus: JSX.Element = appointmentStatusI === AppointmentStatus.Success ? <div className='appointment-success'>Đã duyệt</div> : (appointmentStatusI === AppointmentStatus.Cancel ? <div className='appointment-cancel'>Đã hủy</div> : <div className='appointment-waiting'>Chờ duyệt</div>)
     return {
-      appointmentId,
+      appointmentCode,
       appointmentStatus,
       appointmentDate,
       appointmentTime,
@@ -151,7 +151,8 @@ function PatientListPage() {
   const datas: PatientListTableDatas[][] = [
     [
       {
-        appointmentId: "DL20230001",
+        appointmentId: "asdaskfhjk23123123",
+        appointmentCode: "DL20230001",
         appointmentStatus: AppointmentStatus.Cancel,
         appointmentDate: "11/02/2023",
         appointmentTime: "09:00",
@@ -166,7 +167,8 @@ function PatientListPage() {
         patientAddress: "aaaaaaaa",
       },
       {
-        appointmentId: "DL20230002",
+        appointmentId: "asdwe2reter3tt",
+        appointmentCode: "DL20230002",
         appointmentStatus: AppointmentStatus.Success,
         appointmentDate: "11/02/2023",
         appointmentTime: "09:00",
@@ -181,7 +183,8 @@ function PatientListPage() {
         patientAddress: "aaaaaaaa",
       },
       {
-        appointmentId: "DL20230003",
+        appointmentId: "24sedfsdf32refs",
+        appointmentCode: "DL20230003",
         appointmentStatus: AppointmentStatus.Waiting,
         appointmentDate: "11/02/2023",
         appointmentTime: "09:00",
@@ -198,7 +201,8 @@ function PatientListPage() {
     ],
     [
       {
-        appointmentId: "DL20230004",
+        appointmentId: "asd3wrefsdf3fsd",
+        appointmentCode: "DL20230004",
         appointmentStatus: AppointmentStatus.Cancel,
         appointmentDate: "11/02/2023",
         appointmentTime: "09:00",

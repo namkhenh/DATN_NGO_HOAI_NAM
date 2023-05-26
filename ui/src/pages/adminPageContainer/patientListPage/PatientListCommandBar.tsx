@@ -25,6 +25,7 @@ interface IPatientListCommandBar {
   showPermissionCreate?: () => void
   showPermissionEdit?: () => void
   showPermissionDelete?: () => void
+  showAddAssignUser?: () => void
 }
 
 function PatientListCommandBar(props: IPatientListCommandBar) {
@@ -39,6 +40,8 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
         return roleManagerActions()
       case TableType.PermissionTable:
         return permissionManagerActions()
+      case TableType.UserAssignTable:
+        return userAssignActions()
       default:
         return [];
     }
@@ -47,7 +50,6 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
   // useEffect(()=>{}, [selection])
   const patientListActions = (): ICommandBarItemProps[] => {
     let commandBarItems: ICommandBarItemProps[] = []
-    console.log(selection)
     // if (selected.selectedCount === 1 && selected.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
     if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
       commandBarItems.push({
@@ -134,7 +136,7 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
       commandBarItems.push(
         {
           key: 'account-assign',
-          text: 'Gán quyền',
+          text: 'Gán vai trò',
           iconProps: { iconName: 'Permissions', style: { color: '#707070' } },
           onClick: () => {
             props.showAccountAssign!()
@@ -205,24 +207,20 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
       }
     )
     if (selection.selectedCount === 1) {
-      commandBarItems.push(
-        {
-          key: 'role-edit',
-          text: 'Chỉnh sửa',
-          iconProps: { iconName: 'edit', style: { color: '#707070' } },
-          onClick: () => {
-            props.showRoleEdit!()
-          }
-        },
-      )
+      // commandBarItems.push(
+      //   {
+      //     key: 'role-edit',
+      //     text: 'Chỉnh sửa',
+      //     iconProps: { iconName: 'edit', style: { color: '#707070' } },
+      //     href: `/admin/quan-ly-vai-tro/chi-tiet-vai-tro/${selection.selectedItems[0]?.roleId}`,
+      //   },
+      // )
       commandBarItems.push(
         {
           key: 'role-assign',
           text: 'Gán người dùng',
           iconProps: { iconName: 'Permissions', style: { color: '#707070' } },
-          onClick: () => {
-            props.showRoleAssign!()
-          }
+          href: `/admin/quan-ly-vai-tro/gan-nguoi-dung/${selection.selectedItems[0]?.id}`,
         },
       )
     }
@@ -277,6 +275,21 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
         }
       )
     }
+    return commandBarItems
+  }
+
+  const userAssignActions = (): ICommandBarItemProps[] => {
+    let commandBarItems: ICommandBarItemProps[] = []
+    commandBarItems.push(
+      {
+        key: 'user-assign',
+        text: 'Thêm người dùng',
+        iconProps: { iconName: 'AddFriend', style: { color: '#00794E' } },
+        onClick: () => {
+          props.showAddAssignUser!()
+        }
+      }
+    )
     return commandBarItems
   }
 

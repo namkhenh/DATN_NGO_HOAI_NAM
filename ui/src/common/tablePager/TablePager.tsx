@@ -229,7 +229,7 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
     let newSelected: string[] = []
     if (event.target.checked) {
       // props.rowData.forEach((row: any, i) => { return props.hasNavigate ? newSelected.push(row[Object.keys(row)[0]]?.props.children) : newSelected.push(row[Object.keys(row)[0]]) });
-      props.dataTotal.forEach((row: any, i) => { return newSelected.push(row[Object.keys(row)[0]]) });
+      props.dataTotal.forEach((data: any, i) => { return newSelected.push(data[Object.keys(data)[0]]) });
       setSelected(newSelected);
       
       const newSelectedC = props.dataTotal
@@ -257,8 +257,8 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
     });
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, rowChild: any, dataChild: any) => {
-    let rowChildText: string = rowChild[Object.keys(rowChild)[0]]
+  const handleClick = (event: React.MouseEvent<unknown>, dataChild: any) => {
+    let rowChildText: string = dataChild[Object.keys(dataChild)[0]]
     const selectedIndex = selected.indexOf(rowChildText);
     let newSelected: readonly string[] = [];
     let newSelectedC: readonly D[] = []
@@ -319,7 +319,7 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
   //     [order, orderBy, page, rowsPerPage],
   // );
 
-  const onRenderCell = (row: any) => {
+  const onRenderCell = (row: any, data: any) => {
     return (
       <>
         {Array.from({ length: Object.keys(row).length }).map((a, i) => {
@@ -331,7 +331,7 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
               scope="row"
               sx={{ cursor: "pointer", fontWeight: "500" }}
             >
-              <NavLink to={`${props.navigateLink}${row[Object.keys(row)[0]]}`} style={{ color: 'rgba(0, 0, 0, 0.87)'}}>
+              <NavLink to={`${props.navigateLink}${data[Object.keys(data)[0]]}`} style={{ color: 'rgba(0, 0, 0, 0.87)'}}>
               {row[Object.keys(row)[i]]}
               </NavLink>
             </TableCell>
@@ -393,7 +393,7 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
                 />
                 <TableBody>
                   {props.rowData.map((row, index) => {
-                    const isItemSelected = isSelected(row);
+                    const isItemSelected = isSelected(props.dataTotal[index]);
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return (
                       <TableRow
@@ -413,11 +413,11 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
                               inputProps={{
                                 "aria-labelledby": labelId,
                               }}
-                              onClick={(event) => handleClick(event, row, props.dataTotal[index])}
+                              onClick={(event) => handleClick(event, props.dataTotal[index])}
                             />
                           </TableCell>
                         )}
-                        {onRenderCell(row)}
+                        {onRenderCell(row, props.dataTotal[index])}
                       </TableRow>
                     );
                   })}
