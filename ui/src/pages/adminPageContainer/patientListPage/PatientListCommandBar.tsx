@@ -26,14 +26,16 @@ interface IPatientListCommandBar {
   showPermissionEdit?: () => void
   showPermissionDelete?: () => void
   showAddAssignUser?: () => void
+  showAddService?: () => void
+  showPayService?: () => void
 }
 
 function PatientListCommandBar(props: IPatientListCommandBar) {
   const [{ selection }] = useStateValue();
   const initActionBar = (): ICommandBarItemProps[] => {
     switch (props.tableType) {
-      case TableType.PatientListTable:
-        return patientListActions()
+      case TableType.PatientReceptionListTable:
+        return patientReceptionListActions()
       case TableType.AccountManagerTable:
         return accountManagerActions()
       case TableType.RoleManagerTable:
@@ -42,61 +44,35 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
         return permissionManagerActions()
       case TableType.UserAssignTable:
         return userAssignActions()
+      case TableType.ServiceManagerTable:
+        return serviceManagerActions()
+      case TableType.PaidContentTable:
+        return paidContentActions()
+      case TableType.PaidManagerTable:
+        return paidManagerActions()
+      case TableType.HealthCareTable:
+        return healthCareActions()
       default:
         return [];
     }
   }
 
   // useEffect(()=>{}, [selection])
-  const patientListActions = (): ICommandBarItemProps[] => {
+  const patientReceptionListActions = (): ICommandBarItemProps[] => {
     let commandBarItems: ICommandBarItemProps[] = []
     // if (selected.selectedCount === 1 && selected.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
-    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
-      commandBarItems.push({
-        key: "patient-list-accept",
-        text: "Đồng ý",
-        iconProps: {
-          iconName: "EventAccepted",
-          style: { color: "#00794E" },
-        },
-        onClick: () => {
-          props.showPatientAccept!();
-        },
-      });
-    }
-    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
-      commandBarItems.push({
-        key: "patient-list-decline",
-        text: "Từ chối",
-        iconProps: {
-          iconName: "EventDeclined",
-          style: { color: "#AC0000" },
-        },
-        onClick: () => {
-          props.showPatientRefuse!();
-        },
-      });
-    }
-    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === AppointmentStatus.Success) {
-      commandBarItems.push({
-        key: "patient-list-cancel",
-        text: "Hủy lịch",
-        iconProps: { iconName: "Cancel", style: { color: "#AC0000" } },
-        onClick: () => {
-          props.showPatientCancel!();
-        },
-      });
-    }
-
-    // if (selected.selectedCount === 1 && selected.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting)
-    //   commandBarItems.push({
-    //     key: "patient-list-edit",
-    //     text: "Chỉnh sửa",
-    //     iconProps: { iconName: "Edit", style: { color: "#707070" } },
-    //     onClick: () => {
-    //       console.log("ok");
-    //     },
-    //   });
+    
+    commandBarItems.push(
+      {
+        key: 'account-create',
+        text: 'Tạo hồ sơ',
+        href: '/admin/tiep-don-benh-nhan/them-moi-ho-so',
+        iconProps: { iconName: 'Add', style: { color: '#00794E' } },
+        // onClick: () => {
+        //   props.showAccountCreate!()
+        // }
+      }
+    )
 
     commandBarItems.push({
       key: "patient-list-export",
@@ -290,6 +266,64 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
         }
       }
     )
+    return commandBarItems
+  }
+
+  const serviceManagerActions = (): ICommandBarItemProps[] => {
+    let commandBarItems: ICommandBarItemProps[] = []
+    commandBarItems.push(
+      {
+        key: 'add-service',
+        text: 'Thêm dịch vụ',
+        iconProps: { iconName: 'Add', style: { color: '#00794E' } },
+        onClick: () => {
+          props.showAddService!()
+        }
+      }
+    )
+    return commandBarItems
+  }
+
+  const paidContentActions = (): ICommandBarItemProps[] => {
+    let commandBarItems: ICommandBarItemProps[] = []
+    if (selection.selectedCount !== 0) { 
+      commandBarItems.push(
+        {
+          key: 'pay-service',
+          text: 'Thanh toán',
+          iconProps: { iconName: 'ShoppingCart', style: { color: '#707070' } },
+          onClick: () => {
+            props.showPayService!()
+          }
+        }
+      )
+    }
+    return commandBarItems
+  }
+
+  const paidManagerActions = (): ICommandBarItemProps[] => {
+    let commandBarItems: ICommandBarItemProps[] = []
+    commandBarItems.push({
+      key: "patient-list-export",
+      text: "Xuất file",
+      iconProps: { iconName: "Export", style: { color: "#1976d2" } },
+      onClick: () => {
+        console.log("ok");
+      },
+    });
+    return commandBarItems
+  }
+
+  const healthCareActions = (): ICommandBarItemProps[] => {
+    let commandBarItems: ICommandBarItemProps[] = []
+    commandBarItems.push({
+      key: "patient-list-export",
+      text: "Xuất file",
+      iconProps: { iconName: "Export", style: { color: "#1976d2" } },
+      onClick: () => {
+        console.log("ok");
+      },
+    });
     return commandBarItems
   }
 

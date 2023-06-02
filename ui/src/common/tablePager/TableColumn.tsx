@@ -1,26 +1,22 @@
 import { TableType } from "../../model/enum/tableTypeEnum";
 import { HeadCell } from "./TablePager";
 
-const patientListStaticColumn: () => HeadCell[] = () => [
+const patientReceptionListStaticColumn: () => HeadCell[] = () => [
     {
-        id: 'appointmentId',
-        label: 'Mã đặt lịch',
+        id: 'profileCode',
+        label: 'Mã hồ sơ',
     },
     {
-        id: 'appointmentStatus',
-        label: 'Trạng thái',
+        id: 'profileDate',
+        label: 'Ngày đăng ký',
     },
     {
-        id: 'dateAppointment',
-        label: 'Ngày đặt khám',
-    },
-    {
-        id: 'timeAppointment',
-        label: 'Khung giờ đặt khám',
-    },
-    {
-        id: 'patientId',
+        id: 'patientCode',
         label: 'Mã bệnh nhân',
+    },
+    {
+        id: 'emergencyStatus',
+        label: 'Cấp cứu',
     },
     {
         id: 'patientName',
@@ -31,21 +27,13 @@ const patientListStaticColumn: () => HeadCell[] = () => [
         label: 'Ngày sinh',
     },
     {
-        id: 'patientSex',
+        id: 'patientGender',
         label: 'Giới tính',
     },
-    // {
-    //     id: 'patientPhoneNumber',
-    //     label: 'Số điện thoại',
-    // },
-    // {
-    //     id: 'patientIdentityNumber',
-    //     label: 'CCCD/ CMND',
-    // },
-    // {
-    //     id: 'patientAddress',
-    //     label: 'Địa chỉ',
-    // },
+    {
+        id: 'patientPhone',
+        label: 'Số điện thoại',
+    },
 ]
 
 const accountManagerStaticColumn: () => HeadCell[] = () => [
@@ -155,11 +143,150 @@ const addUserAssignStaticColumn: () => HeadCell[] = () => [
     },
 ]
 
+const serviceManagerStaticColumn: () => HeadCell[] = () => [
+    {
+        id: 'serviceCode',
+        label: 'Mã DV',
+    },
+    {
+        id: 'serviceName',
+        label: 'Tên DV',
+    },
+    {
+        id: 'designatedRoom',
+        label: 'Phòng thực hiện',
+    },
+    {
+        id: 'designatedFaculty',
+        label: 'Khoa chỉ định',
+    },
+    {
+        id: 'designatedDoctor',
+        label: 'Người chỉ định',
+    },
+    {
+        id: 'serviceCost',
+        label: 'Giá dịch vụ' 
+    },
+    {
+        id: 'patientPaid',
+        label: 'BN thanh toán'
+    },
+    {
+        id: 'task',
+        label: 'Tác vụ'
+    },
+]
+
+const addServiceManagerStaticColumn: () => HeadCell[] = () => [
+    {
+        id: 'serviceCode',
+        label: 'Mã dịch vụ',
+    },
+    {
+        id: 'serviceName',
+        label: 'Tên dịch vụ',
+    },
+    {
+        id: 'serviceCost',
+        label: 'Giá dịch vụ'
+    },
+]
+
+const paidManagerStaticColumn: () => HeadCell[] = () => [
+    {
+        id: 'profileCode',
+        label: 'Mã hồ sơ',
+    },
+    {
+        id: 'patientCode',
+        label: 'Mã bệnh nhân',
+    },
+    {
+        id: 'profileDate',
+        label: 'Ngày tiếp nhận'
+    },
+    {
+        id: 'profileTime',
+        label: 'Giờ tiếp nhận'
+    },
+    {
+        id: 'paidStatus',
+        label: 'Trạng thái'
+    },
+    {
+        id: 'patientName',
+        label: 'Tên bệnh nhân'
+    },
+    {
+        id: 'patientDateOfBirthe',
+        label: 'Ngày sinh'
+    },
+    {
+        id: 'patientPhone',
+        label: 'Số điện thoại'
+    },
+]
+
+const paidContentStaticColumn: () => HeadCell[] = () => [
+    {
+        id: 'serviceCode',
+        label: 'Mã',
+    },
+    {
+        id: 'serviceName',
+        label: 'Nội dung',
+    },
+    {
+        id: 'serviceCost',
+        label: 'Đơn giá'
+    },
+]
+
+const healthCareStaticColumn: () => HeadCell[] = () => [
+    {
+        id: 'profileCode',
+        label: 'Mã hồ sơ',
+    },
+    {
+        id: 'patientCode',
+        label: 'Mã bệnh nhân',
+    },
+    {
+        id: 'emergencyStatus',
+        label: 'Cấp cứu',
+    },
+    {
+        id: 'patientName',
+        label: 'Tên bệnh nhân',
+    },
+    {
+        id: 'serviceName',
+        label: 'Tên dịch vụ',
+    },
+    {
+        id: 'healthcareStatus',
+        label: 'Trạng thái',
+    },
+    {
+        id: 'patientDateOfBirth',
+        label: 'Ngày sinh',
+    },
+    {
+        id: 'patientGender',
+        label: 'Giới tính',
+    },
+    {
+        id: 'patientPhone',
+        label: 'Số điện thoại',
+    },
+]
+
 export const getColumnWithType: (tableType: TableType) => HeadCell[] = (tableType) => {
     let basicColumns: HeadCell[];
     switch (tableType) {
-        case TableType.PatientListTable: {
-            basicColumns = patientListStaticColumn()
+        case TableType.PatientReceptionListTable: {
+            basicColumns = patientReceptionListStaticColumn()
             break;
         }
         case TableType.AccountManagerTable: {
@@ -180,6 +307,26 @@ export const getColumnWithType: (tableType: TableType) => HeadCell[] = (tableTyp
         }
         case TableType.AddUserAssignTable: {
             basicColumns = addUserAssignStaticColumn()
+            break;
+        }
+        case TableType.ServiceManagerTable: {
+            basicColumns = serviceManagerStaticColumn()
+            break;
+        }
+        case TableType.AddServiceManagerTable: {
+            basicColumns = addServiceManagerStaticColumn()
+            break;
+        }
+        case TableType.PaidManagerTable: {
+            basicColumns = paidManagerStaticColumn()
+            break;
+        }
+        case TableType.PaidContentTable: {
+            basicColumns = paidContentStaticColumn()
+            break;
+        }
+        case TableType.HealthCareTable: {
+            basicColumns = healthCareStaticColumn()
             break;
         }
         default: {

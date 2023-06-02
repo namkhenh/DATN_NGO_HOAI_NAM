@@ -1,11 +1,19 @@
 import { AccountStatus } from "../../pages/adminPageContainer/accountManagerPage/AccountManagerPage";
 import { PermissionStatus } from "../../pages/adminPageContainer/addRolePage/AddRolePage";
+import { HealthCareStatus } from "../../pages/adminPageContainer/healthCarePage/HealthCarePage";
+import { PaidStatus } from "../../pages/adminPageContainer/paidDetailManagerPage/PaidDetailManagerPage";
 import { RoleStatus } from "../../pages/adminPageContainer/roleManagerPage/RoleManagerPage";
 import { AccountRoleEnum } from "./accPermissionEnum"
 import { AppointmentStatus } from "./appointmentEnum"
 
 export enum TableType {
     PatientListTable,
+    PatientReceptionListTable,
+    ServiceManagerTable,
+    AddServiceManagerTable,
+    PaidContentTable,
+    PaidManagerTable,
+    HealthCareTable,
     AccountManagerTable,
     RoleManagerTable,
     PermissionTable,
@@ -14,34 +22,108 @@ export enum TableType {
 }
 
 export interface PatientListTableColumns {
-    appointmentCode: string;
-    appointmentStatus: JSX.Element;
-    appointmentDate: string;
-    appointmentTime: string;
-    patientId: string;
-    patientName: string;
-    patientDateOfBirth: string;
-    patientSex: string;
-    // patientPhoneNumber: string
-    // patientIdentityNumber: string
-    // patientAddress: string
+    profileCode: string
+    profileDate: string
+    patientCode: string
+    emergencyStatus: JSX.Element
+    patientName: string
+    patientDateOfBirth: string
+    patientGender: string
+    patientPhoneNumber: string
 }
 
 export interface PatientListTableDatas {
-    appointmentId: string;
-    appointmentCode: string;
-    appointmentStatus: AppointmentStatus;
-    appointmentDate: string;
-    appointmentTime: string;
-    appointmentReason: string;
+    profileId: string;
+    profileCode: string;
+    profileDate: string;
+    profileTime: string;
+    profileReason: string;
     patientId: string;
+    patientCode: string;
     patientName: string;
-    patientAvatar: string;
+    emergencyStatus: boolean
+    patientAvatar?: string;
     patientDateOfBirth: string;
-    patientSex: number;
-    patientPhoneNumber: string
-    patientIdentityNumber: string
+    patientGender: number;
+    patientPhoneNumber?: string;
+    patientIdentityNumber?: string;
+    patientAddress: string;
+    guardianName?: string;
+    guardianPhone?: string;
+    guardianRelation?: string
+}
+
+export interface ServiceListTableColumns {
+    serviceCode: string
+    serviceName: string
+    designatedRoom?: string
+    designatedFaculty?: string
+    designatedDoctor?: string
+    serviceCost: string
+    patientPaid?: string
+    task?: JSX.Element
+}
+
+export interface ServiceListTableDatas {
+    serviceId: string
+    serviceCode: string
+    serviceName: string
+    designatedRoom?: string
+    designatedFaculty?: string
+    designatedDoctor?: string
+    serviceCost: string
+    patientPaid?: string
+}
+
+export interface PaidListTableColumns {
+    profileCode: string
+    patientCode: string
+    profileDate: string
+    profileTime: string
+    paidStatus: JSX.Element
+    patientName: string
+    patientDateOfBirth: string
+    patientPhone: string
+}
+
+export interface PaidListTableDatas {
+    profileId: string
+    profileCode: string
+    patientId: string
+    patientCode: string
+    patientDateOfBirth: string
+    patientPhone: string
+    profileDate: string
+    profileTime: string
     patientAddress: string
+    paidStatus: PaidStatus
+    paidContent?: ServiceListTableDatas[]
+}
+
+export interface HealthCareTableColumns {
+    profileCode: string
+    patientCode: string
+    emergencyStatus: JSX.Element
+    patientName: string
+    serviceName: string
+    healthCareStatus: string
+    patientGender: string
+    patientDateOfBirth: string
+    patientPhoneNumber: string
+}
+
+export interface HealthCareTableDatas {
+    profileId: string
+    profileCode: string
+    patientId: string
+    patientCode: string
+    emergencyStatus: boolean
+    patientName: string
+    serviceName: string
+    healthCareStatus: number
+    patientGender: number
+    patientDateOfBirth: string
+    patientPhoneNumber: string
 }
 
 export enum PatientListAction {

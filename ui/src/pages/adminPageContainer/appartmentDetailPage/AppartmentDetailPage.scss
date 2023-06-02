@@ -16,14 +16,19 @@
             margin-top: 12px;
             margin-bottom: 20px;
         }
+        .search-id {
+            width: 800px;
+            margin-bottom: 24px;
+        }
         .appoitment-info {
             width: 100%;
             margin-bottom: 36px;
             .appointment-info-wrap {
                 display: flex;
                 gap: 40px;
+                justify-content: space-between;
                 .appointment-info-item {
-                    min-width: 25%;
+                    min-width: calc(25% - 40px);
                 }
             }
         }
@@ -55,24 +60,23 @@
                     display: flex;
                     flex-wrap: wrap;
                     justify-content: space-between;
-    
-                    label {
-                        font-size: 16px;
-                        font-weight: 500;
-                        font-family: "Roboto", sans-serif !important;
-                        padding-bottom: 4px;
-                    }
                 }
             }
         }
         .appointment-info-button {
             display: flex;
-            justify-content: center;
+            justify-content: flex-end;
             align-items: center;
             gap: 24px;
             button {
                 min-width: 100px;
             }
+        }
+        label {
+            font-size: 16px;
+            font-weight: 500;
+            font-family: "Roboto", sans-serif !important;
+            padding-bottom: 4px;
         }
     }
 

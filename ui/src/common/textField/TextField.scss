@@ -1,4 +1,5 @@
 .s-common-input-disabled {
+    width: 100%;
     .ms-TextField-fieldGroup {
         border-radius: 4px;
         height: 44px;
@@ -25,6 +26,7 @@
 }
 
 .s-common-input {
+    width: 100%;
     .ms-TextField-wrapper {
         >label {
             font-size: 16px;

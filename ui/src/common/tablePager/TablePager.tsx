@@ -205,6 +205,7 @@ interface TablePagerProps<T, D> {
   hasNavigate?: boolean
   navigateLink?: string
   className?: string
+  hasTablePaging?: boolean
 }
 
 export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
@@ -433,16 +434,17 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
                 </TableBody>
               </Table>
             </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[10]}
-              component="div"
-              count={props.total}
-              rowsPerPage={10}
-              page={props.page}
-              onPageChange={(e, page) => {
-                props.handleChangePage(page);
-              }}
-            />
+            {props.hasTablePaging &&
+              <TablePagination
+                rowsPerPageOptions={[10]}
+                component="div"
+                count={props.total}
+                rowsPerPage={10}
+                page={props.page}
+                onPageChange={(e, page) => {
+                  props.handleChangePage(page);
+                }}
+              />}
           </div>
         ) : (
           <div className="table-pager-nodata">

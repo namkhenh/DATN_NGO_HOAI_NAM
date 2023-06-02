@@ -18,233 +18,233 @@ import Radio from '@mui/material/Radio';
 import { NavLink } from 'react-router-dom';
 
 function PatientListPage() {
-  const [showDialog, setShowDialog] = useState<boolean>(false)
-  const [loadingButton, setLoading] = useState<boolean>(false)
-  const [currentPage,setCurrentPage]= useState<number>(0)
-  const [patientAction, setPatientAction] = useState<PatientListAction>()
-  const onSearch = (newValue: string) => {
-    console.log(newValue);
+  // const [showDialog, setShowDialog] = useState<boolean>(false)
+  // const [loadingButton, setLoading] = useState<boolean>(false)
+  // const [currentPage,setCurrentPage]= useState<number>(0)
+  // const [patientAction, setPatientAction] = useState<PatientListAction>()
+  // const onSearch = (newValue: string) => {
+  //   console.log(newValue);
     
-  }
+  // }
 
-  const onRenderActionButtons = (): JSX.Element[] => {
-    return ([
-      <PatientListCommandBar
-        key={'patient-list-commandbar'}
-        // {...props}
-        tableType={TableType.PatientListTable}
-        showPatientAccept={() => { setShowDialog(true); setPatientAction(PatientListAction.Accept) }}
-        showPatientRefuse={() => { setShowDialog(true); setPatientAction(PatientListAction.Refuse) }}
-        showPatientCancel={() => { setShowDialog(true); setPatientAction(PatientListAction.Cancel) }}
-      />
-    ])
-  }
+  // const onRenderActionButtons = (): JSX.Element[] => {
+  //   return ([
+  //     <PatientListCommandBar
+  //       key={'patient-list-commandbar'}
+  //       // {...props}
+  //       tableType={TableType.PatientListTable}
+  //       showPatientAccept={() => { setShowDialog(true); setPatientAction(PatientListAction.Accept) }}
+  //       showPatientRefuse={() => { setShowDialog(true); setPatientAction(PatientListAction.Refuse) }}
+  //       showPatientCancel={() => { setShowDialog(true); setPatientAction(PatientListAction.Cancel) }}
+  //     />
+  //   ])
+  // }
 
-  const [, dispatch] = useStateValue()
-  const showMessageBar = (message: string, isOpen: boolean, status: MessageBarStatus) => {
-    dispatch({ type: actionType.SET_MESSAGE_BAR, messageBar: { isOpen: isOpen, text: message, status: status } })
-  }
+  // const [, dispatch] = useStateValue()
+  // const showMessageBar = (message: string, isOpen: boolean, status: MessageBarStatus) => {
+  //   dispatch({ type: actionType.SET_MESSAGE_BAR, messageBar: { isOpen: isOpen, text: message, status: status } })
+  // }
 
-  const onSave = () => {
-      let requestBody = {
+  // const onSave = () => {
+  //     let requestBody = {
 
-      }
-      const result = new Promise((resolve) => {
-        setLoading(true)
-        setTimeout(() => {
-          setLoading(false)
-          setShowDialog(false)
-          showMessageBar("Cập nhật thông tin thành công", true, MessageBarStatus.Success)
-          resolve('success')
-        }, 4000);
-      }).then(() => {/*  */
+  //     }
+  //     const result = new Promise((resolve) => {
+  //       setLoading(true)
+  //       setTimeout(() => {
+  //         setLoading(false)
+  //         setShowDialog(false)
+  //         showMessageBar("Cập nhật thông tin thành công", true, MessageBarStatus.Success)
+  //         resolve('success')
+  //       }, 4000);
+  //     }).then(() => {/*  */
 
-      })
+  //     })
 
-      return result
-  }
+  //     return result
+  // }
 
-  function createData(
-    appointmentCode: string,
-    appointmentStatusI: AppointmentStatus,
-    appointmentDate: string,
-    appointmentTime: string,
-    patientId: string,
-    patientName: string,
-    patientDateOfBirth: string,
-    patientSexI: number,
-    // patientPhoneNumber: string,
-    // patientIdentityNumber: string,
-    // patientAddress: string,
+  // function createData(
+  //   appointmentCode: string,
+  //   appointmentStatusI: AppointmentStatus,
+  //   appointmentDate: string,
+  //   appointmentTime: string,
+  //   patientId: string,
+  //   patientName: string,
+  //   patientDateOfBirth: string,
+  //   patientSexI: number,
+  //   // patientPhoneNumber: string,
+  //   // patientIdentityNumber: string,
+  //   // patientAddress: string,
 
-  ): PatientListTableColumns {
-    // let appointmentId: JSX.Element = (
-    //   <NavLink
-    //     style={{ color: 'rgba(0, 0, 0, 0.87)'}}
-    //     to={`/admin/danh-sach-dat-kham/chi-tiet-dat-kham/${appointmentIdI}`}
-    //   >
-    //     { appointmentIdI }
-    //   </NavLink>
-    // );
-    let patientSex: string = patientSexI === 0 ? "Nam" : "Nữ" 
-    let appointmentStatus: JSX.Element = appointmentStatusI === AppointmentStatus.Success ? <div className='appointment-success'>Đã duyệt</div> : (appointmentStatusI === AppointmentStatus.Cancel ? <div className='appointment-cancel'>Đã hủy</div> : <div className='appointment-waiting'>Chờ duyệt</div>)
-    return {
-      appointmentCode,
-      appointmentStatus,
-      appointmentDate,
-      appointmentTime,
-      patientId,
-      patientName,
-      patientDateOfBirth,
-      patientSex,
-      // patientPhoneNumber,
-      // patientIdentityNumber,
-      // patientAddress,
+  // ): PatientListTableColumns {
+  //   // let appointmentId: JSX.Element = (
+  //   //   <NavLink
+  //   //     style={{ color: 'rgba(0, 0, 0, 0.87)'}}
+  //   //     to={`/admin/danh-sach-dat-kham/chi-tiet-dat-kham/${appointmentIdI}`}
+  //   //   >
+  //   //     { appointmentIdI }
+  //   //   </NavLink>
+  //   // );
+  //   let patientSex: string = patientSexI === 0 ? "Nam" : "Nữ" 
+  //   let appointmentStatus: JSX.Element = appointmentStatusI === AppointmentStatus.Success ? <div className='appointment-success'>Đã duyệt</div> : (appointmentStatusI === AppointmentStatus.Cancel ? <div className='appointment-cancel'>Đã hủy</div> : <div className='appointment-waiting'>Chờ duyệt</div>)
+  //   return {
+  //     appointmentCode,
+  //     appointmentStatus,
+  //     appointmentDate,
+  //     appointmentTime,
+  //     patientId,
+  //     patientName,
+  //     patientDateOfBirth,
+  //     patientSex,
+  //     // patientPhoneNumber,
+  //     // patientIdentityNumber,
+  //     // patientAddress,
 
-    };
-  }
+  //   };
+  // }
 
-  const rows: PatientListTableColumns[][] = [
-    [createData(
-      "DL20230001",
-      AppointmentStatus.Cancel,
-      "11/02/2023",
-      "09:00",
-      "BN20230001",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      1
-    ),
-    createData(
-      "DL20230002",
-      AppointmentStatus.Success,
-      "11/02/2023",
-      "09:00",
-      "BN20230002",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      0
-    ),
-    createData(
-      "DL20230003",
-      AppointmentStatus.Waiting,
-      "11/02/2023",
-      "09:00",
-      "BN20230003",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      0
-    )],[
-    createData(
-      "DL20230004",
-      AppointmentStatus.Cancel,
-      "11/02/2023",
-      "09:00",
-      "BN20230004",
-      "Ngô Hoài Nam",
-      "19/05/2001",
-      0
-    )
-    ]
-  ];
+  // const rows: PatientListTableColumns[][] = [
+  //   [createData(
+  //     "DL20230001",
+  //     AppointmentStatus.Cancel,
+  //     "11/02/2023",
+  //     "09:00",
+  //     "BN20230001",
+  //     "Ngô Hoài Nam",
+  //     "19/05/2001",
+  //     1
+  //   ),
+  //   createData(
+  //     "DL20230002",
+  //     AppointmentStatus.Success,
+  //     "11/02/2023",
+  //     "09:00",
+  //     "BN20230002",
+  //     "Ngô Hoài Nam",
+  //     "19/05/2001",
+  //     0
+  //   ),
+  //   createData(
+  //     "DL20230003",
+  //     AppointmentStatus.Waiting,
+  //     "11/02/2023",
+  //     "09:00",
+  //     "BN20230003",
+  //     "Ngô Hoài Nam",
+  //     "19/05/2001",
+  //     0
+  //   )],[
+  //   createData(
+  //     "DL20230004",
+  //     AppointmentStatus.Cancel,
+  //     "11/02/2023",
+  //     "09:00",
+  //     "BN20230004",
+  //     "Ngô Hoài Nam",
+  //     "19/05/2001",
+  //     0
+  //   )
+  //   ]
+  // ];
 
-  const datas: PatientListTableDatas[][] = [
-    [
-      {
-        appointmentId: "asdaskfhjk23123123",
-        appointmentCode: "DL20230001",
-        appointmentStatus: AppointmentStatus.Cancel,
-        appointmentDate: "11/02/2023",
-        appointmentTime: "09:00",
-        appointmentReason: "aaaa",
-        patientId: "BN20230001",
-        patientName: "Ngô Hoài Nam",
-        patientAvatar: "",
-        patientDateOfBirth: "10/05/2001",
-        patientSex: 1,
-        patientPhoneNumber: "0123456789",
-        patientIdentityNumber: "012345678",
-        patientAddress: "aaaaaaaa",
-      },
-      {
-        appointmentId: "asdwe2reter3tt",
-        appointmentCode: "DL20230002",
-        appointmentStatus: AppointmentStatus.Success,
-        appointmentDate: "11/02/2023",
-        appointmentTime: "09:00",
-        appointmentReason: "aaaa",
-        patientId: "BN20230002",
-        patientName: "Ngô Hoài Nam",
-        patientAvatar: "",
-        patientDateOfBirth: "10/05/2001",
-        patientSex: 0,
-        patientPhoneNumber: "0123456789",
-        patientIdentityNumber: "012345678",
-        patientAddress: "aaaaaaaa",
-      },
-      {
-        appointmentId: "24sedfsdf32refs",
-        appointmentCode: "DL20230003",
-        appointmentStatus: AppointmentStatus.Waiting,
-        appointmentDate: "11/02/2023",
-        appointmentTime: "09:00",
-        appointmentReason: "aaaa",
-        patientId: "BN20230003",
-        patientName: "Ngô Hoài Nam",
-        patientAvatar: "",
-        patientDateOfBirth: "10/05/2001",
-        patientSex: 0,
-        patientPhoneNumber: "0123456789",
-        patientIdentityNumber: "012345678",
-        patientAddress: "aaaaaaaa",
-      }
-    ],
-    [
-      {
-        appointmentId: "asd3wrefsdf3fsd",
-        appointmentCode: "DL20230004",
-        appointmentStatus: AppointmentStatus.Cancel,
-        appointmentDate: "11/02/2023",
-        appointmentTime: "09:00",
-        appointmentReason: "aaaa",
-        patientId: "BN20230004",
-        patientName: "Ngô Hoài Nam",
-        patientAvatar: "",
-        patientDateOfBirth: "10/05/2001",
-        patientSex: 0,
-        patientPhoneNumber: "0123456789",
-        patientIdentityNumber: "012345678",
-        patientAddress: "aaaaaaaa",
-      }
-    ]
-  ];
+  // const datas: PatientListTableDatas[][] = [
+  //   [
+  //     {
+  //       appointmentId: "asdaskfhjk23123123",
+  //       appointmentCode: "DL20230001",
+  //       appointmentStatus: AppointmentStatus.Cancel,
+  //       appointmentDate: "11/02/2023",
+  //       appointmentTime: "09:00",
+  //       appointmentReason: "aaaa",
+  //       patientId: "BN20230001",
+  //       patientName: "Ngô Hoài Nam",
+  //       patientAvatar: "",
+  //       patientDateOfBirth: "10/05/2001",
+  //       patientSex: 1,
+  //       patientPhoneNumber: "0123456789",
+  //       patientIdentityNumber: "012345678",
+  //       patientAddress: "aaaaaaaa",
+  //     },
+  //     {
+  //       appointmentId: "asdwe2reter3tt",
+  //       appointmentCode: "DL20230002",
+  //       appointmentStatus: AppointmentStatus.Success,
+  //       appointmentDate: "11/02/2023",
+  //       appointmentTime: "09:00",
+  //       appointmentReason: "aaaa",
+  //       patientId: "BN20230002",
+  //       patientName: "Ngô Hoài Nam",
+  //       patientAvatar: "",
+  //       patientDateOfBirth: "10/05/2001",
+  //       patientSex: 0,
+  //       patientPhoneNumber: "0123456789",
+  //       patientIdentityNumber: "012345678",
+  //       patientAddress: "aaaaaaaa",
+  //     },
+  //     {
+  //       appointmentId: "24sedfsdf32refs",
+  //       appointmentCode: "DL20230003",
+  //       appointmentStatus: AppointmentStatus.Waiting,
+  //       appointmentDate: "11/02/2023",
+  //       appointmentTime: "09:00",
+  //       appointmentReason: "aaaa",
+  //       patientId: "BN20230003",
+  //       patientName: "Ngô Hoài Nam",
+  //       patientAvatar: "",
+  //       patientDateOfBirth: "10/05/2001",
+  //       patientSex: 0,
+  //       patientPhoneNumber: "0123456789",
+  //       patientIdentityNumber: "012345678",
+  //       patientAddress: "aaaaaaaa",
+  //     }
+  //   ],
+  //   [
+  //     {
+  //       appointmentId: "asd3wrefsdf3fsd",
+  //       appointmentCode: "DL20230004",
+  //       appointmentStatus: AppointmentStatus.Cancel,
+  //       appointmentDate: "11/02/2023",
+  //       appointmentTime: "09:00",
+  //       appointmentReason: "aaaa",
+  //       patientId: "BN20230004",
+  //       patientName: "Ngô Hoài Nam",
+  //       patientAvatar: "",
+  //       patientDateOfBirth: "10/05/2001",
+  //       patientSex: 0,
+  //       patientPhoneNumber: "0123456789",
+  //       patientIdentityNumber: "012345678",
+  //       patientAddress: "aaaaaaaa",
+  //     }
+  //   ]
+  // ];
 
-  const renderBodyForm = () => {
-    switch (patientAction) {
-      case PatientListAction.Accept:
-        return <span>Bạn có chắc chắn muốn <strong>Đồng ý</strong> lịch khám: <strong>DL1234</strong> vào lúc <strong>09:45</strong> ngày <strong>19/04/2023</strong></span>
-      case PatientListAction.Refuse:
-        return <div className='dialog-content'>
-          <span>Bạn có chắc chắn muốn <strong>Từ chối</strong> lịch khám: <strong>DL1234</strong> vào lúc <strong>09:45</strong> ngày <strong>19/04/2023</strong></span>
-          <Label>Lý do:</Label>
-          <RadioGroup
-            aria-labelledby="demo-controlled-radio-buttons-group"
-            name="controlled-radio-buttons-group"
-            value={'1'}
-            // onChange={}
-          >
-            <FormControlLabel value="1" control={<Radio />} label="Khung giờ được chọn đã đầy" />
-            <FormControlLabel value="2" control={<Radio />} label="..." />
-          </RadioGroup>        
-        </div>
-      case PatientListAction.Cancel:
-        return <span>Bạn có chắc chắn muốn <strong>Hủy</strong> lịch khám: <strong>DL1234</strong> vào lúc <strong>09:45</strong> ngày <strong>19/04/2023</strong></span>
-    }
-  }
+  // const renderBodyForm = () => {
+  //   switch (patientAction) {
+  //     case PatientListAction.Accept:
+  //       return <span>Bạn có chắc chắn muốn <strong>Đồng ý</strong> lịch khám: <strong>DL1234</strong> vào lúc <strong>09:45</strong> ngày <strong>19/04/2023</strong></span>
+  //     case PatientListAction.Refuse:
+  //       return <div className='dialog-content'>
+  //         <span>Bạn có chắc chắn muốn <strong>Từ chối</strong> lịch khám: <strong>DL1234</strong> vào lúc <strong>09:45</strong> ngày <strong>19/04/2023</strong></span>
+  //         <Label>Lý do:</Label>
+  //         <RadioGroup
+  //           aria-labelledby="demo-controlled-radio-buttons-group"
+  //           name="controlled-radio-buttons-group"
+  //           value={'1'}
+  //           // onChange={}
+  //         >
+  //           <FormControlLabel value="1" control={<Radio />} label="Khung giờ được chọn đã đầy" />
+  //           <FormControlLabel value="2" control={<Radio />} label="..." />
+  //         </RadioGroup>        
+  //       </div>
+  //     case PatientListAction.Cancel:
+  //       return <span>Bạn có chắc chắn muốn <strong>Hủy</strong> lịch khám: <strong>DL1234</strong> vào lúc <strong>09:45</strong> ngày <strong>19/04/2023</strong></span>
+  //   }
+  // }
 
   return (
     <div className='patientlist-page'>
-      <BreadCrumb
+      {/* <BreadCrumb
         breadcrumbItem={[
           { key: 1, text: 'Danh sách lịch đặt khám', href: '/danh-sach-dat-kham' },
         ]}
@@ -291,7 +291,7 @@ function PatientListPage() {
       <div className='line' style={{ width: '100%', height: '1px', backgroundColor: '#cccccc' }}></div>
       {/* <DataTable/> */}
       
-      <div className="patient-list-table">
+      {/* <div className="patient-list-table">
         <TablePager<PatientListTableColumns, PatientListTableDatas>
           tableType={TableType.PatientListTable}
           batchActionElements={onRenderActionButtons()}
@@ -314,7 +314,7 @@ function PatientListPage() {
         closeButtonText='Hủy bỏ'
         close={() => { setShowDialog(false) }}
         loading={loadingButton}
-      />
+      />  */}
     </div>
   )
 }

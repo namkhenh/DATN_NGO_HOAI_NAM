@@ -18,11 +18,17 @@ import ProtectedRoutes from "./components/protectedRoutes/ProtectedRoutes";
 import AdminLayout from "./structure/layout/AdminLayout";
 import { AccountRoleEnum } from "./model/enum/accPermissionEnum";
 import PatientListPage from "./pages/adminPageContainer/patientListPage/PatientListPage";
-import AppartmentDetailPage from "./pages/adminPageContainer/appartmentDetailPage/AppartmentDetailPage";
+import AppartmentDetailPage, { IAppointmentAction } from "./pages/adminPageContainer/appartmentDetailPage/AppartmentDetailPage";
 import AccountManagerPage from "./pages/adminPageContainer/accountManagerPage/AccountManagerPage";
 import RoleManagerPage from "./pages/adminPageContainer/roleManagerPage/RoleManagerPage";
 import AddRolePage, { PermissionAction } from "./pages/adminPageContainer/addRolePage/AddRolePage";
 import AssignUserPage from "./pages/adminPageContainer/assignUserPage/AssignUserPage";
+import PatientReceptionList from "./pages/adminPageContainer/patientReceptionList/PatientReceptionList";
+import ProfileDetailPage from "./pages/adminPageContainer/profileDetailPage/ProfileDetailPage";
+import PaidManagerPage from "./pages/adminPageContainer/paidManagerPage/PaidManagerPage";
+import PaidDetailManagerPage from "./pages/adminPageContainer/paidDetailManagerPage/PaidDetailManagerPage";
+import HealthCarePage from "./pages/adminPageContainer/healthCarePage/HealthCarePage";
+import HealthCareDetail from "./pages/adminPageContainer/healthCareDetailPage/HealthCareDetail";
 
 function App() {
   return (
@@ -97,12 +103,20 @@ function App() {
             <Route path="/admin/dashboard" element={<div>Dash</div>}></Route>
             <Route path="/admin/quan-ly-tai-khoan" element={<AccountManagerPage />}></Route>
             <Route path="/admin/quan-ly-vai-tro" element={<RoleManagerPage />}></Route>
+            <Route path="/admin/tiep-don-benh-nhan/danh-sach-benh-nhan" element={<PatientReceptionList />}></Route>
             <Route path="/admin/quan-ly-vai-tro/them-moi-vai-tro" element={<AddRolePage actionType={PermissionAction.Create} />}></Route>
             <Route path="/admin/quan-ly-vai-tro/chi-tiet-vai-tro/:id" element={<AddRolePage actionType={PermissionAction.Edit} />}></Route>
             <Route path="/admin/quan-ly-vai-tro/gan-nguoi-dung/:id" element={<AssignUserPage/>}></Route>
-            <Route path="/admin/quan-ly-dat-kham" element={<PatientListPage />}></Route>
-            <Route path="/admin/quan-ly-dat-kham/chi-tiet-dat-kham/:id" element={<AppartmentDetailPage actionType="edit"/>}></Route>
-            <Route path="/admin/them-moi-hen-kham" element={<AppartmentDetailPage actionType="add" />}></Route>
+            {/* <Route path="/admin/quan-ly-dat-kham" element={<PatientListPage />}></Route>
+            <Route path="/admin/chi-tiet-ho-so/" element={<AppartmentDetailPage actionType={IAppointmentAction.Edit} />}></Route> */}
+            <Route path="/admin/tiep-don-benh-nhan" element={<Navigate replace to="danh-sach-benh-nhan" />}></Route>
+            <Route path="/admin/tiep-don-benh-nhan/chi-dinh-dich-vu/:id" element={<ProfileDetailPage/>}></Route>
+            <Route path="/admin/tiep-don-benh-nhan/them-moi-ho-so" element={<AppartmentDetailPage actionType={IAppointmentAction.Create} />}></Route>
+            <Route path="/admin/thanh-toan-ngoai-tru" element={<PaidManagerPage />}></Route>
+            <Route path="/admin/thanh-toan-ngoai-tru/chi-tiet-thanh-toan/:id" element={<PaidDetailManagerPage />}></Route>
+            <Route path="/admin/kham-chua-benh" element={<Navigate replace to="danh-sach-benh-nhan" />}></Route>
+            <Route path="/admin/kham-chua-benh/danh-sach-benh-nhan" element={<HealthCarePage />}></Route>
+            <Route path="/admin/kham-chua-benh/chi-tiet-kham-benh/:id" element={<HealthCareDetail />}></Route>
           </Route>
         </Route>
 

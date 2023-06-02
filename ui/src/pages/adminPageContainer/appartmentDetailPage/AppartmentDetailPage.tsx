@@ -17,6 +17,7 @@ import Button from '@mui/material/Button'
 import { ButtonColorType, ButtonVariantType } from '../../../model/enum/buttonEnum'
 import DialogView from '../../../common/dialog/Dialog'
 import { useParams } from 'react-router-dom'
+import { SearchBoxView } from '../../../common/searchBox/SearchBox'
 
 export enum IAppointmentAction {
     Create,
@@ -24,7 +25,7 @@ export enum IAppointmentAction {
 }
 
 interface IAppartmentDetailPageProps {
-    actionType: string
+    actionType: IAppointmentAction
 }
 
 function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
@@ -54,41 +55,55 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
     return (
         <div className='appointmentdetail-page'>
             <div className='appointmentdetail-page-container'>
-                {props.actionType === "edit" ?
+                {props.actionType === IAppointmentAction.Edit ?
                     <BreadCrumb
                         breadcrumbItem={[
-                            { key: 1, text: 'Danh sách bệnh nhân đặt khám', href: '/admin/quan-ly-dat-kham' },
-                            { key: 2, text: 'Chi tiết hồ sơ đặt khám', href: '/admin/quan-ly-dat-kham/chi-tiet-dat-kham' },
+                            { key: 1, text: 'Tiếp đón bệnh nhân', href: '/admin/danh-sach-benh-nhan' },
+                            { key: 2, text: 'Chi tiết hồ sơ', href: '/admin/chi-tiet-ho-so' },
                         ]}
                     /> :
                     <BreadCrumb
                         breadcrumbItem={[
-                            { key: 1, text: 'Đặt lịch trực tiếp', href: '/admin/them-moi-hen-kham' },
+                            { key: 1, text: 'Tiếp đón bệnh nhân', href: '/admin/danh-sach-benh-nhan' },
+                            { key: 2, text: 'Thêm mới', href: '/admin/them-moi-hen-kham' },
                         ]}
                     />
                 }
-                {props.actionType === "edit" ?
+                {props.actionType === IAppointmentAction.Edit ?
                     <div className="appointmentdetail-page-title">
-                        Chi tiết lịch đặt khám
+                        Chi tiết hồ sơ bệnh nhân
                     </div> :
                     <div className="appointmentdetail-page-title">
-                        Thêm mới lịch đặt khám
+                        Thêm mới hồ sơ bệnh nhân
                     </div>
                 }
-
+                <div className="search-id">
+                    <SearchBoxView
+                        placeholder='Mã bệnh nhân/ Số điện thoại/ CMND'
+                        onSearch={() => { }}
+                    />
+                </div>
                 <div className="appoitment-info">
                     <div className="appointment-sub-title">
-                        Thông tin đặt khám
-                        <div className="appointment-status">
-                            Chờ duyệt
-                        </div>
+                        Thông tin hồ sơ
                     </div>
                     <div className="appointment-info-wrap">
+                        <div className="appointment-info-item">
+                            <Label required>Phân loại bệnh nhân</Label>
+                            <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                            >
+                                <FormControlLabel value="normal" control={<Radio />} label="BN thường" />
+                                <FormControlLabel value="emergency" control={<Radio />} label="BN cấp cứu" />
+                            </RadioGroup>
+                        </div>
                         <div className="appointment-info-item">
                             <DatePicker
                                 placeholder="Chọn một giá trị"
                                 ariaLabel="Chọn một giá trị"
-                                label='Ngày khám'
+                                label='Ngày đăng kí'
                                 isRequired={true}
                                 // strings={defaultDatePickerStrings}
                                 onSelectDate={(date) => {
@@ -100,14 +115,13 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                             />
                         </div>
                         <div className="appointment-info-item">
-                            <Dropdown
-                                placeholder="Chọn một giá trị"
-                                label="Khung giờ khám"
-                                options={HourBooking}
-                                selectedKey={appointmentInfo.appointmentTime}
+                            <TextField
+                                label='Giờ đăng kí'
                                 required
-                                onChange={(_, selected) => {
-                                    onChangeOneField(AppointmentInfoModelProperty.appointmentTime, Number(selected?.key))
+                                placeholder='--'
+                                value={`${new Date().getHours().toString()}` + ':' + `${new Date().getMinutes().toString()}`}
+                                onChange={(_, value) => {
+                                    onChangeOneField(AppointmentInfoModelProperty.appointmentReason, value)
                                 }}
                             />
                         </div>
@@ -174,7 +188,7 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                         <div className="patient-info-item-child">
                             <div className="patient-info-detail width49">
                                 <TextField
-                                    label='CMND/ CCCD'
+                                    label='Mã bệnh nhân'
                                     placeholder='--'
                                 // value={userMainInfo.userIdentityNumber}
                                 // onChange={(_, value) => {
@@ -348,16 +362,10 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                         </div>
                     </div>
                 </div>
-                {props.actionType === "edit" ?
-                    <div className="appointment-info-button">
-                        <Button variant={ButtonVariantType.Outlined} color={ButtonColorType.Inherit}>Trở lại</Button>
-                        {true && <Button variant={ButtonVariantType.Contained}>Cập nhật</Button>}
-                    </div> :
-                    <div className="appointment-info-button">
-                        <Button variant={ButtonVariantType.Outlined} color={ButtonColorType.Inherit}>Hủy</Button>
-                        <Button variant={ButtonVariantType.Contained}>Lưu</Button>
-                    </div>
-                }
+                <div className="appointment-info-button">
+                    <Button variant={ButtonVariantType.Outlined} color={ButtonColorType.Inherit}>Hủy</Button>
+                    {true && <Button variant={ButtonVariantType.Contained}>Lưu</Button>}
+                </div> 
             </div>
         </div>
     )

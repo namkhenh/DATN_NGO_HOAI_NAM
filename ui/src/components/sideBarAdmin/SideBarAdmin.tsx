@@ -11,6 +11,8 @@ import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import EngineeringIcon from '@mui/icons-material/Engineering';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
 function SideBarAdmin() {
     const [isCollapse, setOpen] = React.useState(true);
 
@@ -43,7 +45,25 @@ function SideBarAdmin() {
                             <div className="nav-item-text">Quản lý vai trò</div>
                         </div>
                     </NavLink>
-                    <NavLink to={'/admin/quan-ly-dat-kham'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
+                    <NavLink to={'/admin/tiep-don-benh-nhan'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
+                        <div className="nav-item">
+                            <EventNoteIcon />
+                            <div className="nav-item-text">Tiếp đón bệnh nhân</div>
+                        </div>
+                    </NavLink>
+                    <NavLink to={'/admin/thanh-toan-ngoai-tru'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
+                        <div className="nav-item">
+                            <MonetizationOnOutlinedIcon />
+                            <div className="nav-item-text">Thanh toán ngoại trú</div>
+                        </div>
+                    </NavLink>
+                    <NavLink to={'/admin/kham-chua-benh'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
+                        <div className="nav-item">
+                            <LocalHospitalIcon />
+                            <div className="nav-item-text">KCB ngoại trú</div>
+                        </div>
+                    </NavLink>
+                    {/* <NavLink to={'/admin/quan-ly-dat-kham'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
                         <div className="nav-item">
                             <EventNoteIcon />
                             <div className="nav-item-text">Quản lý lịch đặt</div>
@@ -51,10 +71,10 @@ function SideBarAdmin() {
                     </NavLink>
                     <NavLink to={'/admin/them-moi-hen-kham'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
                         <div className="nav-item">
-                            <PersonAddAlt1Icon />
+                            <EventAvailableIcon />
                             <div className="nav-item-text">Đặt lịch trực tiếp</div>
                         </div>
-                    </NavLink>
+                    </NavLink> */}
                 </div>
                 <div className="nav-footer" onClick={() => { setOpen(!isCollapse)}}>
                     {isCollapse ? <KeyboardArrowRightIcon /> : <KeyboardArrowLeftIcon/>}

@@ -6,6 +6,7 @@
   max-width: 700px !important;
   justify-content: space-between;
   max-height: calc(100% - 120px) !important;
+  overflow-y: hidden;
 
   h2 {
     display: flex;

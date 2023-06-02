@@ -16,6 +16,9 @@ import { MessageBarStatus } from '../../../model/enum/messageBarEnum'
 import { useStateValue } from '../../../context/StateProvider'
 import { actionType } from '../../../context/Reducer'
 import { SearchBoxView } from '../../../common/searchBox/SearchBox'
+import { ShimmeredDetailsList } from '@fluentui/react'
+import { ButtonColorType, ButtonVariantType } from '../../../model/enum/buttonEnum'
+import Button from '@mui/material/Button'
 function AssignUserPage() {
     const [{ selection }, dispatch] = useStateValue();
     const [showDialog, setShowDialog] = useState<boolean>(false)
@@ -78,9 +81,99 @@ function AssignUserPage() {
         createDataForm('ngo_hoai_nam1', 'Ngô Hoài Nam', '0123456788', '012345678'),
         createDataForm('ngo_hoai_nam2', 'Ngô Hoài Nam', '0123456788', '012345678'),
         createDataForm('ngo_hoai_nam3', 'Ngô Hoài Nam', '0123456788', '012345678'),
+        createDataForm('ngo_hoai_nam1', 'Ngô Hoài Nam', '0123456788', '012345678'),
+        createDataForm('ngo_hoai_nam2', 'Ngô Hoài Nam', '0123456788', '012345678'),
+        createDataForm('ngo_hoai_nam3', 'Ngô Hoài Nam', '0123456788', '012345678'),
+        createDataForm('ngo_hoai_nam1', 'Ngô Hoài Nam', '0123456788', '012345678'),
+        createDataForm('ngo_hoai_nam2', 'Ngô Hoài Nam', '0123456788', '012345678'),
+        createDataForm('ngo_hoai_nam3', 'Ngô Hoài Nam', '0123456788', '012345678'),
+        createDataForm('ngo_hoai_nam1', 'Ngô Hoài Nam', '0123456788', '012345678'),
+        createDataForm('ngo_hoai_nam2', 'Ngô Hoài Nam', '0123456788', '012345678'),
+        createDataForm('ngo_hoai_nam3', 'Ngô Hoài Nam', '0123456788', '012345678'),
     ];
 
     const datas: UserAssignTableDatas[] = [
+        {
+            id: 'asd2klhdfjksk',
+            userName: 'ngo_hoai_nam1',
+            fullName: 'Ngô Hoài Nam',
+            phoneNumber: '0123456788',
+            insuranceNumber: '012345678',
+            gender: 0,
+            status: AccountStatus.Able
+        },
+        {
+            id: 'aksjhdakjsh29',
+            userName: 'ngo_hoai_nam2',
+            fullName: 'Ngô Hoài Nam',
+            phoneNumber: '0123456788',
+            insuranceNumber: '012345678',
+            gender: 1,
+            status: AccountStatus.Enable
+        },
+        {
+            id: 'qwefdf2412rf',
+            userName: 'ngo_hoai_nam3',
+            fullName: 'Ngô Hoài Nam',
+            phoneNumber: '0123456788',
+            insuranceNumber: '012345678',
+            gender: 1,
+            status: AccountStatus.Enable
+        },
+        {
+            id: 'asd2klhdfjksk',
+            userName: 'ngo_hoai_nam1',
+            fullName: 'Ngô Hoài Nam',
+            phoneNumber: '0123456788',
+            insuranceNumber: '012345678',
+            gender: 0,
+            status: AccountStatus.Able
+        },
+        {
+            id: 'aksjhdakjsh29',
+            userName: 'ngo_hoai_nam2',
+            fullName: 'Ngô Hoài Nam',
+            phoneNumber: '0123456788',
+            insuranceNumber: '012345678',
+            gender: 1,
+            status: AccountStatus.Enable
+        },
+        {
+            id: 'qwefdf2412rf',
+            userName: 'ngo_hoai_nam3',
+            fullName: 'Ngô Hoài Nam',
+            phoneNumber: '0123456788',
+            insuranceNumber: '012345678',
+            gender: 1,
+            status: AccountStatus.Enable
+        },
+        {
+            id: 'asd2klhdfjksk',
+            userName: 'ngo_hoai_nam1',
+            fullName: 'Ngô Hoài Nam',
+            phoneNumber: '0123456788',
+            insuranceNumber: '012345678',
+            gender: 0,
+            status: AccountStatus.Able
+        },
+        {
+            id: 'aksjhdakjsh29',
+            userName: 'ngo_hoai_nam2',
+            fullName: 'Ngô Hoài Nam',
+            phoneNumber: '0123456788',
+            insuranceNumber: '012345678',
+            gender: 1,
+            status: AccountStatus.Enable
+        },
+        {
+            id: 'qwefdf2412rf',
+            userName: 'ngo_hoai_nam3',
+            fullName: 'Ngô Hoài Nam',
+            phoneNumber: '0123456788',
+            insuranceNumber: '012345678',
+            gender: 1,
+            status: AccountStatus.Enable
+        },
         {
             id: 'asd2klhdfjksk',
             userName: 'ngo_hoai_nam1',
@@ -250,7 +343,12 @@ function AssignUserPage() {
                         page={currentPage}
                         handleChangePage={(page) => { setCurrentPage(page) }}
                         total={10}
+                        className='assignuser-table'
                     />
+                </div>
+                <div className="assignuser-page-button">
+                    <Button variant={ButtonVariantType.Outlined} color={ButtonColorType.Inherit}>Hủy</Button>
+                    {true && <Button variant={ButtonVariantType.Contained}>Lưu</Button>}
                 </div>
                 <DialogView
                     title={'Thêm người dùng'}
