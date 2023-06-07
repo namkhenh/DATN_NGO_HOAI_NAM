@@ -1,120 +1,107 @@
-import React, {useState} from 'react'
-import './PatientReceptionList.scss'
-import BreadCrumb from '../../../common/breadCrumb/BreadCrumb';
-import {SearchBoxView} from '../../../common/searchBox/SearchBox';
-import {Label} from '@fluentui/react';
-import {DatePicker} from '../../../common/datePicker/DatePicker';
-import TablePager from '../../../common/tablePager/TablePager';
-import {PatientReceptionTableColumns, PatientReceptionTableDatas, TableType, UserGender} from '../../../model/enum/tableTypeEnum';
-import PatientListCommandBar from '../patientListPage/PatientListCommandBar';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import UnpublishedIcon from '@mui/icons-material/Unpublished';
-
-function PatientReceptionList() {
+import React, { useState } from 'react'
+import './AppointmentReceptionPage.scss'
+import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
+import { Label } from '@fluentui/react/lib/Label'
+import { DatePicker } from '../../../common/datePicker/DatePicker'
+import { SearchBoxView } from '../../../common/searchBox/SearchBox'
+import TablePager from '../../../common/tablePager/TablePager'
+import { AppointmentReceptionTableColumns, AppointmentReceptionTableDatas, TableType, UserGender } from '../../../model/enum/tableTypeEnum'
+function AppointmentReceptionPage() {
     const [currentPage, setCurrentPage] = useState<number>(0)
-    const onSearch = (newValue: string) => {
-        console.log(newValue);
-
-    }
-
-    const onRenderActionButtons = (): JSX.Element[] => {
-        return ([
-            <PatientListCommandBar
-                key={'patient-list-commandbar'}
-                // {...props}
-                tableType={TableType.PatientReceptionListTable}
-            />
-        ])
-    }
 
     function createData(
-        profileDateI: string,
-        profileTimeI: string,
-        profileCode: string,
+        appointmentCode: string,
+        appointmentDateI: string,
+        appointmentTimeI: string,
         patientCode: string,
-        emergencyStatusI: boolean,
         patientName: string,
         patientDateOfBirth: string,
         patientGenderI: number,
         patientPhoneNumber: string,
-    ): PatientReceptionTableColumns {
-        let profileDate = profileDateI + '    ' + profileTimeI
-        let emergencyStatus: JSX.Element = emergencyStatusI ? <CheckCircleIcon color='success' /> : <UnpublishedIcon color='error' />
+        patientIdentityNumber: string,
+        patientAddress: string,
+    ): AppointmentReceptionTableColumns {
+        let appointmentTime: string = appointmentDateI + ' ' + appointmentTimeI
         let patientGender: string = patientGenderI === UserGender.Male ? 'Nam' : 'Nữ'
         return {
-            profileCode,
-            profileDate,
+            appointmentCode,
+            appointmentTime,
             patientCode,
-            emergencyStatus,
             patientName,
             patientDateOfBirth,
             patientGender,
-            patientPhoneNumber
+            patientPhoneNumber,
+            patientIdentityNumber,
+            patientAddress,
         };
     }
 
-    const rows: PatientReceptionTableColumns[][] = [
+    const rows: AppointmentReceptionTableColumns[][] = [
         [
             createData(
-                '22/03/2003',
+                'DL12345',
+                '20/03/2023',
                 '09:45',
-                'HS12345',
                 'BN23456',
-                true,
                 'Ngô Hoài Nam',
                 '23/05/2001',
                 0,
-                '0123456789'
+                '0123456789',
+                '01234567',
+                'Tân Triều'
             ),
             createData(
-                '22/03/2003',
+                'DL12346',
+                '20/03/2023',
                 '09:45',
-                'HS12346',
-                'BN23457',
-                false,
+                'BN23456',
                 'Ngô Hoài Nam',
                 '23/05/2001',
                 0,
-                '0123456789'
+                '0123456789',
+                '01234567',
+                'Tân Triều'
             ),
             createData(
-                '22/03/2003',
+                'DL123475',
+                '20/03/2023',
                 '09:45',
-                'HS12347',
-                'BN23458',
-                true,
+                'BN23456',
                 'Ngô Hoài Nam',
                 '23/05/2001',
                 0,
-                '0123456789'
+                '0123456789',
+                '01234567',
+                'Tân Triều'
             ),
         ], [
             createData(
-                '22/03/2003',
+                'DL123475',
+                '20/03/2023',
                 '09:45',
-                'HS12348',
-                'BN23459',
-                false,
+                'BN23456',
                 'Ngô Hoài Nam',
                 '23/05/2001',
-                1,
-                '0123456789'
+                0,
+                '0123456789',
+                '01234567',
+                'Tân Triều'
             )
         ]
     ];
 
-    const datas: PatientReceptionTableDatas[][] = [
+    const datas: AppointmentReceptionTableDatas[][] = [
         [
             {
-                profileId: 'sdklghsdhjfjk34234',
-                profileCode: 'HS12345',
-                profileDate: '22/03/2003',
-                profileTime: '09:45',
-                profileReason: 'đau đầu',
+                appointmentId: 'sdklghsdhjfjk34234',
+                appointmentCode: 'HS12345',
+                appointmentDate: '22/03/2003',
+                appointmentTime: '09:45',
+                appointmentReason: 'đau đầu',
                 patientId: 'asdawds2312edawsd',
                 patientCode: 'BN23458',
                 patientName: 'Ngô Hoài Nam',
-                emergencyStatus: true,
+                appointmentStatus: 0,
                 patientDateOfBirth: '22/03/2002',
                 patientGender: 0,
                 patientPhoneNumber: '0123456789',
@@ -122,15 +109,15 @@ function PatientReceptionList() {
                 patientAddress: 'ngõ 118, Tân Triều',
             },
             {
-                profileId: 'sdgjhsdkjfsdjk223',
-                profileCode: 'HS12345',
-                profileDate: '22/03/2003',
-                profileTime: '09:45',
-                profileReason: 'đau đầu',
-                patientId: 'lkdfjklasjdf23123',
+                appointmentId: 'kasdfhkahsfjk22',
+                appointmentCode: 'HS12345',
+                appointmentDate: '22/03/2003',
+                appointmentTime: '09:45',
+                appointmentReason: 'đau đầu',
+                patientId: 'asdawds2312edawsd',
                 patientCode: 'BN23458',
                 patientName: 'Ngô Hoài Nam',
-                emergencyStatus: true,
+                appointmentStatus: 0,
                 patientDateOfBirth: '22/03/2002',
                 patientGender: 0,
                 patientPhoneNumber: '0123456789',
@@ -138,55 +125,54 @@ function PatientReceptionList() {
                 patientAddress: 'ngõ 118, Tân Triều',
             },
             {
-                profileId: 'asfdf2343rfsdfsg',
-                profileCode: 'HS12345',
-                profileDate: '22/03/2003',
-                profileTime: '09:45',
-                profileReason: 'đau đầu',
-                patientId: 'sdgdsfhdgfh234rd',
+                appointmentId: 'klsdhfjshdfkj3423j43',
+                appointmentCode: 'HS12345',
+                appointmentDate: '22/03/2003',
+                appointmentTime: '09:45',
+                appointmentReason: 'đau đầu',
+                patientId: 'asdawds2312edawsd',
                 patientCode: 'BN23458',
                 patientName: 'Ngô Hoài Nam',
-                emergencyStatus: true,
+                appointmentStatus: 0,
                 patientDateOfBirth: '22/03/2002',
                 patientGender: 0,
                 patientPhoneNumber: '0123456789',
                 patientIdentityNumber: '0123456712312',
                 patientAddress: 'ngõ 118, Tân Triều',
-            }
+            },
         ],
         [
             {
-                profileId: 'aslkjfhsdjkhfjk324234',
-                profileCode: 'HS12345',
-                profileDate: '22/03/2003',
-                profileTime: '09:45',
-                profileReason: 'đau đầu',
-                patientId: 'sdfsdflkmmas23m4k32',
+                appointmentId: 'asdasdjkjh213h123j',
+                appointmentCode: 'HS12345',
+                appointmentDate: '22/03/2003',
+                appointmentTime: '09:45',
+                appointmentReason: 'đau đầu',
+                patientId: 'asdawds2312edawsd',
                 patientCode: 'BN23458',
                 patientName: 'Ngô Hoài Nam',
-                emergencyStatus: true,
+                appointmentStatus: 0,
                 patientDateOfBirth: '22/03/2002',
                 patientGender: 0,
                 patientPhoneNumber: '0123456789',
                 patientIdentityNumber: '0123456712312',
                 patientAddress: 'ngõ 118, Tân Triều',
-            }
+            },
         ]
     ];
-
     return (
         <div className='patientlist-page'>
             <BreadCrumb
                 breadcrumbItem={[
-                    { key: 1, text: 'Tiếp đón bệnh nhân', href: '/tiep-don-benh-nhan' },
+                    { key: 1, text: 'Tiếp đón bệnh nhân đặt khám', href: '/tiep-don-dat-kham' },
                 ]}
             />
             <div className="patientlist-page-title">
-                Danh sách bệnh nhân
+                Danh sách bệnh nhân đặt khám
             </div>
             <div className="patientlist-page-search">
                 <div className="search-date">
-                    <Label>Ngày đăng ký:</Label>
+                    <Label>Thời gian:</Label>
                     <div className="search-date-item">
                         <DatePicker
                             placeholder="Chọn một giá trị"
@@ -215,8 +201,8 @@ function PatientReceptionList() {
                 </div>
                 <div className="search-id">
                     <SearchBoxView
-                        placeholder='Mã bệnh nhân/ Số điện thoại/ CMND'
-                        onSearch={onSearch}
+                        placeholder='Mã đặt lịch/ Mã bệnh nhân/ CMND'
+                        onSearch={() => {}}
                     />
                 </div>
             </div>
@@ -224,21 +210,21 @@ function PatientReceptionList() {
             {/* <DataTable/> */}
 
             <div className="patient-list-table">
-                <TablePager<PatientReceptionTableColumns, PatientReceptionTableDatas>
-                    tableType={TableType.PatientReceptionListTable}
-                    batchActionElements={onRenderActionButtons()}
+                <TablePager<AppointmentReceptionTableColumns, AppointmentReceptionTableDatas>
+                    tableType={TableType.AppointmentReceptionTable}
                     rowData={rows[currentPage]}
                     dataTotal={datas[currentPage]}
                     hasCheckBox
+                    hasTablePaging
                     page={currentPage}
                     handleChangePage={(page) => { setCurrentPage(page) }}
                     total={15}
                     hasNavigate
-                    navigateLink={"/admin/tiep-don-benh-nhan/chi-dinh-dich-vu/"}
+                    navigateLink={"/admin/tiep-don-dat-kham/chi-tiet-dat-kham/"}
                 />
             </div>
         </div>
     )
 }
 
-export default PatientReceptionList
+export default AppointmentReceptionPage

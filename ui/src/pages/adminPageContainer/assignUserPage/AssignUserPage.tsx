@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import './AssignUserPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
-import { TextField } from '../../../common/textField/TextField'
-import { DatePicker } from '../../../common/datePicker/DatePicker'
-import { Label } from '@fluentui/react/lib/Label'
+import {TextField} from '../../../common/textField/TextField'
+import {DatePicker} from '../../../common/datePicker/DatePicker'
+import {Label} from '@fluentui/react/lib/Label'
 import Switch from '@mui/material/Switch'
 import TablePager from '../../../common/tablePager/TablePager'
-import { TableType, UserAssignTableColumns, UserAssignTableDatas } from '../../../model/enum/tableTypeEnum'
+import {TableType, UserAssignTableColumns, UserAssignTableDatas} from '../../../model/enum/tableTypeEnum'
 import PatientListCommandBar from '../patientListPage/PatientListCommandBar'
-import { AccountStatus } from '../accountManagerPage/AccountManagerPage'
+import {AccountStatus} from '../accountManagerPage/AccountManagerPage'
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DialogView from '../../../common/dialog/Dialog'
-import { MessageBarStatus } from '../../../model/enum/messageBarEnum'
-import { useStateValue } from '../../../context/StateProvider'
-import { actionType } from '../../../context/Reducer'
-import { SearchBoxView } from '../../../common/searchBox/SearchBox'
-import { ShimmeredDetailsList } from '@fluentui/react'
-import { ButtonColorType, ButtonVariantType } from '../../../model/enum/buttonEnum'
+import {MessageBarStatus} from '../../../model/enum/messageBarEnum'
+import {useStateValue} from '../../../context/StateProvider'
+import {actionType} from '../../../context/Reducer'
+import {SearchBoxView} from '../../../common/searchBox/SearchBox'
+import {ButtonColorType, ButtonVariantType} from '../../../model/enum/buttonEnum'
 import Button from '@mui/material/Button'
+
 function AssignUserPage() {
     const [{ selection }, dispatch] = useStateValue();
     const [showDialog, setShowDialog] = useState<boolean>(false)

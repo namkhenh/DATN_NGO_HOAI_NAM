@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { TableType } from '../../../model/enum/tableTypeEnum'
-import { IButtonProps, ICommandBarItemProps, ICommandBarStyles, styled } from '@fluentui/react'
-import { CommandBarView } from '../../../common/commandBar/CommandBar'
-import { useStateValue } from '../../../context/StateProvider'
+import React from 'react'
+import {TableType} from '../../../model/enum/tableTypeEnum'
+import {IButtonProps, ICommandBarItemProps, ICommandBarStyles} from '@fluentui/react'
+import {CommandBarView} from '../../../common/commandBar/CommandBar'
+import {useStateValue} from '../../../context/StateProvider'
+import {AccountStatus} from '../accountManagerPage/AccountManagerPage'
 import { AppointmentStatus } from '../../../model/enum/appointmentEnum'
-import { AccountStatus } from '../accountManagerPage/AccountManagerPage'
 
 interface IPatientListCommandBar {
   tableType: TableType
-  showPatientAccept?: () => void
-  showPatientRefuse?: () => void
-  showPatientCancel?: () => void
+  showAppointmentAccept?: () => void
+  showAppointmentRefuse?: () => void
+  showAppointmentCancel?: () => void
   showAccountCreate?: () => void
   showAccountEdit?: () => void
   showAccountAssign?: () => void
@@ -18,9 +18,6 @@ interface IPatientListCommandBar {
   showAccountEnable?: () => void
   showAccountAble?: () => void
   showAccountDelete?: () => void
-  showRoleCreate?: () => void
-  showRoleEdit?: () => void
-  showRoleAssign?: () => void
   showRoleDelete?: () => void
   showPermissionCreate?: () => void
   showPermissionEdit?: () => void
@@ -36,6 +33,8 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
     switch (props.tableType) {
       case TableType.PatientReceptionListTable:
         return patientReceptionListActions()
+      case TableType.ApproveCalendarTable:
+        return approveCalendarListActions()
       case TableType.AccountManagerTable:
         return accountManagerActions()
       case TableType.RoleManagerTable:
@@ -82,7 +81,50 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
         console.log("ok");
       },
     });
-    // console.log(commandBarItems)
+    // console.log(commanarItems)
+    return commandBarItems
+  }
+
+  const approveCalendarListActions = (): ICommandBarItemProps[] => {
+    let commandBarItems: ICommandBarItemProps[] = []
+    // if (selected.selectedCount === 1 && selected.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
+    
+    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
+      commandBarItems.push({
+        key: "patient-list-accept",
+        text: "Đồng ý",
+        iconProps: {
+          iconName: "EventAccepted",
+          style: { color: "#00794E" },
+        },
+        onClick: () => {
+          props.showAppointmentAccept!();
+        },
+      });
+    }
+    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
+      commandBarItems.push({
+        key: "patient-list-decline",
+        text: "Từ chối",
+        iconProps: {
+          iconName: "EventDeclined",
+          style: { color: "#AC0000" },
+        },
+        onClick: () => {
+          props.showAppointmentRefuse!();
+        },
+      });
+    }
+    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === AppointmentStatus.Success) {
+      commandBarItems.push({
+        key: "patient-list-cancel",
+        text: "Hủy lịch",
+        iconProps: { iconName: "Cancel", style: { color: "#AC0000" } },
+        onClick: () => {
+          props.showAppointmentCancel!();
+        },
+      });
+    }
     return commandBarItems
   }
 

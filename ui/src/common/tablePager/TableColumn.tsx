@@ -282,6 +282,80 @@ const healthCareStaticColumn: () => HeadCell[] = () => [
     },
 ]
 
+const approveCalendarStaticColumn: () => HeadCell[] = () => [
+    {
+        id: 'appointmentCode',
+        label: 'Mã đặt lịch',
+    },
+    {
+        id: 'appointmentTime',
+        label: 'Thời gian đặt khám',
+    },
+    {
+        id: 'appointmentStatus',
+        label: 'Trạng thái',
+    },
+    {
+        id: 'patientCode',
+        label: 'Mã bệnh nhân',
+    },
+    {
+        id: 'patientName',
+        label: 'Tên bệnh nhân',
+    },
+    {
+        id: 'patientDateBirth',
+        label: 'Ngày sinh',
+    },
+    {
+        id: 'patientGender',
+        label: 'Giới tính',
+    },
+    {
+        id: 'patientPhone',
+        label: 'Số điện thoại',
+    },
+]
+
+const appointmentReceptionStaticColumn: () => HeadCell[] = () => [
+    {
+        id: 'appointmentCode',
+        label: 'Mã đặt lịch',
+    },
+    {
+        id: 'appointmentTime',
+        label: 'Thời gian đặt khám',
+    },
+    {
+        id: 'patientCode',
+        label: 'Mã bệnh nhân',
+    },
+    {
+        id: 'patientName',
+        label: 'Tên bệnh nhân',
+    },
+    {
+        id: 'patientDateBirth',
+        label: 'Ngày sinh',
+    },
+    {
+        id: 'patientGender',
+        label: 'Giới tính',
+    },
+    {
+        id: 'patientPhone',
+        label: 'Số điện thoại',
+    },
+    {
+        id: 'patientIdentify',
+        label: 'CMND',
+    },
+    {
+        id: 'patientAddress',
+        label: 'Địa chỉ',
+    },
+]
+
 export const getColumnWithType: (tableType: TableType) => HeadCell[] = (tableType) => {
     let basicColumns: HeadCell[];
     switch (tableType) {
@@ -327,6 +401,14 @@ export const getColumnWithType: (tableType: TableType) => HeadCell[] = (tableTyp
         }
         case TableType.HealthCareTable: {
             basicColumns = healthCareStaticColumn()
+            break;
+        }
+        case TableType.ApproveCalendarTable: {
+            basicColumns = approveCalendarStaticColumn()
+            break;
+        }
+        case TableType.AppointmentReceptionTable: {
+            basicColumns = appointmentReceptionStaticColumn()
             break;
         }
         default: {

@@ -1,31 +1,31 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import './AccountManagerPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
 import TablePager from '../../../common/tablePager/TablePager'
-import { AccountManagerTableColumns, AccountManagerTableDatas, TableType, UserGender } from '../../../model/enum/tableTypeEnum'
+import {
+    AccountManagerTableColumns,
+    AccountManagerTableDatas,
+    TableType,
+    UserGender
+} from '../../../model/enum/tableTypeEnum'
 import PatientListCommandBar from '../patientListPage/PatientListCommandBar'
-import { AccountRoleEnum } from '../../../model/enum/accPermissionEnum'
-import { SearchBoxView } from '../../../common/searchBox/SearchBox'
+import {AccountRoleEnum} from '../../../model/enum/accPermissionEnum'
+import {SearchBoxView} from '../../../common/searchBox/SearchBox'
 import DialogView from '../../../common/dialog/Dialog'
-import { TextField } from '../../../common/textField/TextField'
-import { useStateValue } from '../../../context/StateProvider'
-import { MessageBarStatus } from '../../../model/enum/messageBarEnum'
-import { actionType } from '../../../context/Reducer'
-import { DatePicker } from '../../../common/datePicker/DatePicker'
-import { Dropdown } from '../../../common/dropdown/DropDown'
-import { UserSexView } from '../../../model/apimodel/userInfo'
-import { Label } from '@fluentui/react/lib/Label'
+import {TextField} from '../../../common/textField/TextField'
+import {useStateValue} from '../../../context/StateProvider'
+import {MessageBarStatus} from '../../../model/enum/messageBarEnum'
+import {actionType} from '../../../context/Reducer'
+import {DatePicker} from '../../../common/datePicker/DatePicker'
+import {Label} from '@fluentui/react/lib/Label'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
-import FormGroup from '@mui/material/FormGroup';
-import Checkbox from '@mui/material/Checkbox';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import NotInterestedOutlinedIcon from '@mui/icons-material/NotInterestedOutlined';
-import AddRoleForm from '../../../components/assignRoleForm/AssignRoleForm'
 import AssignRoleForm from '../../../components/assignRoleForm/AssignRoleForm'
 import Switch from '@mui/material/Switch'
-import { RoleStatus } from '../roleManagerPage/RoleManagerPage'
+import {RoleStatus} from '../roleManagerPage/RoleManagerPage'
 
 export enum AccountAction {
     Create,

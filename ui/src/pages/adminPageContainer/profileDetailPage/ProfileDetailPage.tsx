@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import './ProfileDetailPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { Button } from '@mui/material';
-import { ButtonColorType, ButtonVariantType } from '../../../model/enum/buttonEnum';
+import {Button} from '@mui/material';
+import {ButtonColorType, ButtonVariantType} from '../../../model/enum/buttonEnum';
 import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import PointOfSaleOutlinedIcon from '@mui/icons-material/PointOfSaleOutlined';
 import TablePager from '../../../common/tablePager/TablePager';
-import { ServiceListTableColumns, ServiceListTableDatas, TableType, UserAssignTableColumns, UserAssignTableDatas } from '../../../model/enum/tableTypeEnum';
+import {ServiceListTableColumns, ServiceListTableDatas, TableType} from '../../../model/enum/tableTypeEnum';
 import PatientListCommandBar from '../patientListPage/PatientListCommandBar';
 import DialogView from '../../../common/dialog/Dialog';
-import { useStateValue } from '../../../context/StateProvider';
-import { SearchBoxView } from '../../../common/searchBox/SearchBox';
+import {useStateValue} from '../../../context/StateProvider';
+import {SearchBoxView} from '../../../common/searchBox/SearchBox';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+
 function ProfileDetailPage() {
     const [{ selection }, dispatch] = useStateValue();
     const [showDialog, setShowDialog] = useState<boolean>(false)

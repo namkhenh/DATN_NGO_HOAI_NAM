@@ -123,7 +123,7 @@ const ListAppointment = (props: any) => {
                     </div>
                     <div className="booking-new-appointment">
                         <Button variant={ButtonVariantType.Outlined} startIcon={<AddIcon/>}>
-                            <Link to='/quan-ly/quan-ly-lich-kham/dat-lich-kham' style={{color: '#1976d2'}}>
+                            <Link to='/quan-ly/dat-lich-kham' style={{color: '#1976d2'}}>
                                 Đặt khám mới
                             </Link>
                         </Button>

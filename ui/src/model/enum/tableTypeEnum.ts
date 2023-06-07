@@ -7,7 +7,9 @@ import { AccountRoleEnum } from "./accPermissionEnum"
 import { AppointmentStatus } from "./appointmentEnum"
 
 export enum TableType {
-    PatientListTable,
+    // PatientListTable,
+    ApproveCalendarTable,
+    AppointmentReceptionTable,
     PatientReceptionListTable,
     ServiceManagerTable,
     AddServiceManagerTable,
@@ -21,7 +23,72 @@ export enum TableType {
     AddUserAssignTable,
 }
 
-export interface PatientListTableColumns {
+export interface ApproveCalendarTableColumns {
+    appointmentCode: string
+    appointmentTime: string
+    appointmentStatus: JSX.Element
+    patientCode: string
+    patientName: string
+    patientDateOfBirth: string
+    patientGender: string
+    patientPhoneNumber: string
+}
+
+export interface ApproveCalendarTableDatas {
+    appointmentId: string
+    appointmentCode: string
+    appointmentDate: string
+    appointmentTime: string
+    appointmentReason: string
+    appointmentStatus: number
+    patientId: string
+    patientCode: string
+    patientName: string
+    patientAvatar?: string;
+    patientDateOfBirth: string;
+    patientGender: number;
+    patientPhoneNumber?: string;
+    patientIdentityNumber?: string;
+    patientAddress: string;
+    guardianName?: string;
+    guardianPhone?: string;
+    guardianRelation?: string
+}
+
+export interface AppointmentReceptionTableColumns {
+    appointmentCode: string
+    appointmentTime: string
+    patientCode: string
+    patientName: string
+    patientDateOfBirth: string
+    patientGender: string
+    patientPhoneNumber: string
+    patientIdentityNumber: string
+    patientAddress: string
+}
+
+export interface AppointmentReceptionTableDatas {
+    appointmentId: string
+    appointmentCode: string
+    appointmentDate: string
+    appointmentTime: string
+    appointmentReason: string
+    appointmentStatus: number
+    patientId: string
+    patientCode: string
+    patientName: string
+    patientAvatar?: string;
+    patientDateOfBirth: string;
+    patientGender: number;
+    patientPhoneNumber?: string;
+    patientIdentityNumber?: string;
+    patientAddress: string;
+    guardianName?: string;
+    guardianPhone?: string;
+    guardianRelation?: string
+}
+
+export interface PatientReceptionTableColumns {
     profileCode: string
     profileDate: string
     patientCode: string
@@ -32,7 +99,7 @@ export interface PatientListTableColumns {
     patientPhoneNumber: string
 }
 
-export interface PatientListTableDatas {
+export interface PatientReceptionTableDatas {
     profileId: string;
     profileCode: string;
     profileDate: string;
@@ -126,7 +193,7 @@ export interface HealthCareTableDatas {
     patientPhoneNumber: string
 }
 
-export enum PatientListAction {
+export enum ApproveCalendarAction {
     Accept,
     Refuse,
     Cancel,

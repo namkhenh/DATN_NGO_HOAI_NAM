@@ -1,13 +1,10 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import './RoleManagerPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
-import { SearchBoxView } from '../../../common/searchBox/SearchBox';
+import {SearchBoxView} from '../../../common/searchBox/SearchBox';
 import TablePager from '../../../common/tablePager/TablePager';
-import { AccountManagerTableColumns, RoleManagerTableColumns, RoleManagerTableDatas, TableType } from '../../../model/enum/tableTypeEnum';
+import {RoleManagerTableColumns, RoleManagerTableDatas, TableType} from '../../../model/enum/tableTypeEnum';
 import PatientListCommandBar from '../patientListPage/PatientListCommandBar';
-import { AppointmentStatus } from '../../../model/enum/appointmentEnum';
-import Checkbox from '@mui/material/Checkbox';
-import TablePagerCheckBox from '../../../common/tablePager/TablePagerCheckBox';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import NotInterestedOutlinedIcon from '@mui/icons-material/NotInterestedOutlined';
 

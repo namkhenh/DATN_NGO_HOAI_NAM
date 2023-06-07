@@ -1,21 +1,27 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import './AddRolePage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
-import { TextField } from '../../../common/textField/TextField'
-import { DatePicker } from '../../../common/datePicker/DatePicker'
-import { ActionManagerTableColumns, ActionTableDatas, PermissionManagerTableColumns, PermissionManagerTableDatas, TableType } from '../../../model/enum/tableTypeEnum'
+import {TextField} from '../../../common/textField/TextField'
+import {DatePicker} from '../../../common/datePicker/DatePicker'
+import {
+    ActionManagerTableColumns,
+    ActionTableDatas,
+    PermissionManagerTableColumns,
+    PermissionManagerTableDatas,
+    TableType
+} from '../../../model/enum/tableTypeEnum'
 import TablePager from '../../../common/tablePager/TablePager'
 import PatientListCommandBar from '../patientListPage/PatientListCommandBar'
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import NotInterestedOutlinedIcon from '@mui/icons-material/NotInterestedOutlined';
-import { Label } from '@fluentui/react/lib/Label'
+import {Label} from '@fluentui/react/lib/Label'
 import Switch from '@mui/material/Switch'
 import DialogView from '../../../common/dialog/Dialog'
 import Checkbox from "@mui/material/Checkbox";
-import { useStateValue } from '../../../context/StateProvider'
-import { MessageBarStatus } from '../../../model/enum/messageBarEnum'
-import { actionType } from '../../../context/Reducer'
-import { Dropdown } from '../../../common/dropdown/DropDown'
+import {useStateValue} from '../../../context/StateProvider'
+import {MessageBarStatus} from '../../../model/enum/messageBarEnum'
+import {actionType} from '../../../context/Reducer'
+import {Dropdown} from '../../../common/dropdown/DropDown'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';

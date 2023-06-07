@@ -13,6 +13,8 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import EngineeringIcon from '@mui/icons-material/Engineering';
 import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import ContactsIcon from '@mui/icons-material/Contacts';
 function SideBarAdmin() {
     const [isCollapse, setOpen] = React.useState(true);
 
@@ -45,9 +47,21 @@ function SideBarAdmin() {
                             <div className="nav-item-text">Quản lý vai trò</div>
                         </div>
                     </NavLink>
-                    <NavLink to={'/admin/tiep-don-benh-nhan'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
+                    <NavLink to={'/admin/duyet-lich-dat-kham'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
+                        <div className="nav-item">
+                            <EventAvailableIcon />
+                            <div className="nav-item-text">Duyệt lịch đặt khám</div>
+                        </div>
+                    </NavLink>
+                    <NavLink to={'/admin/tiep-don-dat-kham'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
                         <div className="nav-item">
                             <EventNoteIcon />
+                            <div className="nav-item-text">Tiếp đón đặt khám</div>
+                        </div>
+                    </NavLink>
+                    <NavLink to={'/admin/tiep-don-benh-nhan'} className={({ isActive }) => (isActive ? 'nav-item-wrap-selected' : 'nav-item-wrap')}>
+                        <div className="nav-item">
+                            <ContactsIcon />
                             <div className="nav-item-text">Tiếp đón bệnh nhân</div>
                         </div>
                     </NavLink>

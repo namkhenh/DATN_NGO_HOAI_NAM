@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import './HealthCareDetail.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
 import Button from '@mui/material/Button'
-import { ButtonVariantType } from '../../../model/enum/buttonEnum'
-import { SearchBoxView } from '../../../common/searchBox/SearchBox'
+import {ButtonVariantType} from '../../../model/enum/buttonEnum'
+import {SearchBoxView} from '../../../common/searchBox/SearchBox'
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import PointOfSaleOutlinedIcon from '@mui/icons-material/PointOfSaleOutlined';
 import TabContext from '@mui/lab/TabContext'

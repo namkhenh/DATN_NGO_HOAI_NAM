@@ -87,7 +87,7 @@ const BookingAppointment = (props: any) => {
     const [state, setState] = useState<BookingAppointmentState>({
         userProfile: {
             patientId: "BN123456",
-            patientName: "nguyễn văn 1",
+            patientName: "Ngô Hoài Nam",
             patientDateBirth: "05/18/2001",
             patientSex: 0,
             patientAddress: {

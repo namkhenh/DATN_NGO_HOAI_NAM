@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import './HealthCarePage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
-import { Label } from '@fluentui/react/lib/Label'
-import { Dropdown } from '../../../common/dropdown/DropDown'
-import { DatePicker } from '../../../common/datePicker/DatePicker'
+import {Label} from '@fluentui/react/lib/Label'
+import {Dropdown} from '../../../common/dropdown/DropDown'
+import {DatePicker} from '../../../common/datePicker/DatePicker'
 import TablePager from '../../../common/tablePager/TablePager'
-import { HealthCareTableColumns, HealthCareTableDatas, TableType, UserGender } from '../../../model/enum/tableTypeEnum'
+import {HealthCareTableColumns, HealthCareTableDatas, TableType, UserGender} from '../../../model/enum/tableTypeEnum'
 import PatientListCommandBar from '../patientListPage/PatientListCommandBar'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import UnpublishedIcon from '@mui/icons-material/Unpublished';
@@ -156,6 +156,19 @@ function HealthCarePage() {
             <div className="healthcare-page-header">
                 <div className="healthcare-page-status">
                     <Label>Chọn phòng khám</Label>
+                    <div className="status-option">
+                        <Dropdown
+                            placeholder="--"
+                            options={[]}
+                            selectedKey={1}
+                            onChange={(_, selected) => { }}
+                            errorMessage={''}
+                        // onFocus={() => { this.getDistrictOptions.bind(this)(Number(patientAddress.province?.key)) }}
+                        />
+                    </div>
+                </div>
+                <div className="healthcare-page-status">
+                    <Label>Trạng thái</Label>
                     <div className="status-option">
                         <Dropdown
                             placeholder="--"

@@ -1,23 +1,19 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import './AppartmentDetailPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
-import { DatePicker } from '../../../common/datePicker/DatePicker'
-import { Dropdown } from '../../../common/dropdown/DropDown'
-import { TextField } from '../../../common/textField/TextField'
-import { AppointmentInfoModelProperty, IAppointmentInfo } from '../../../model/apimodel/appointmentInfo'
-import { HourBooking } from '../../../model/enum/appointmentEnum'
-import Avatar from '@mui/material/Avatar'
-import flag from '../../../base/image/anh-la-co-viet-nam-dep-1.png'
+import {DatePicker} from '../../../common/datePicker/DatePicker'
+import {Dropdown} from '../../../common/dropdown/DropDown'
+import {TextField} from '../../../common/textField/TextField'
+import {AppointmentInfoModelProperty, IAppointmentInfo} from '../../../model/apimodel/appointmentInfo'
 import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
-import { Label } from '@fluentui/react'
+import {Label} from '@fluentui/react'
 import Button from '@mui/material/Button'
-import { ButtonColorType, ButtonVariantType } from '../../../model/enum/buttonEnum'
-import DialogView from '../../../common/dialog/Dialog'
-import { useParams } from 'react-router-dom'
-import { SearchBoxView } from '../../../common/searchBox/SearchBox'
+import {ButtonColorType, ButtonVariantType} from '../../../model/enum/buttonEnum'
+import {useParams} from 'react-router-dom'
+import {SearchBoxView} from '../../../common/searchBox/SearchBox'
 
 export enum IAppointmentAction {
     Create,
@@ -58,8 +54,8 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                 {props.actionType === IAppointmentAction.Edit ?
                     <BreadCrumb
                         breadcrumbItem={[
-                            { key: 1, text: 'Tiếp đón bệnh nhân', href: '/admin/danh-sach-benh-nhan' },
-                            { key: 2, text: 'Chi tiết hồ sơ', href: '/admin/chi-tiet-ho-so' },
+                            { key: 1, text: 'Tiếp đón bệnh nhân đặt khám', href: '/admin/tiep-don-dat-kham' },
+                            { key: 2, text: 'Chi tiết', href: '/admin/chi-tiet-ho-so' },
                         ]}
                     /> :
                     <BreadCrumb

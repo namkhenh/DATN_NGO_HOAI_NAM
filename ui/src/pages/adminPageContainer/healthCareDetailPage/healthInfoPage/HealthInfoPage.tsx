@@ -1,11 +1,11 @@
 import React from 'react'
 import './HealthInfoPage.scss'
-import { TextField } from '../../../../common/textField/TextField'
-import { DatePicker } from '../../../../common/datePicker/DatePicker'
-import { Label } from '@fluentui/react/lib/Label'
-import { Dropdown } from '../../../../common/dropdown/DropDown'
+import {TextField} from '../../../../common/textField/TextField'
+import {DatePicker} from '../../../../common/datePicker/DatePicker'
+import {Dropdown} from '../../../../common/dropdown/DropDown'
 import Button from '@mui/material/Button'
-import { ButtonVariantType } from '../../../../model/enum/buttonEnum'
+import {ButtonVariantType} from '../../../../model/enum/buttonEnum'
+
 function HealthInfoPage() {
     return (
         <div className='healthinfo-page'>
