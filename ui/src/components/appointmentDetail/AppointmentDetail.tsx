@@ -140,7 +140,7 @@ function AppointmentDetail(props: IAppointmentDetailProps) {
                             Số điện thoại:
                         </div>
                         <div className="item-content">
-                            {!!appointment.patientPhone ? appointment.patientPhone : 'Chưa có'}
+                            {!!appointment.patientPhoneNumber ? appointment.patientPhoneNumber : 'Chưa có'}
                         </div>
                     </div>
                     <div className="appointment-detail-item">

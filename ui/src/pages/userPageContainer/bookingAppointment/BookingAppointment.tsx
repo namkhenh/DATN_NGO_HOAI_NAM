@@ -420,7 +420,7 @@ const BookingAppointment = (props: any) => {
                 patientName: allProfile[currentSelection].patientName,
                 patientBirth: allProfile[currentSelection].patientDateBirth,
                 patientSex: allProfile[currentSelection].patientSex,
-                patientPhone: allProfile[currentSelection].patientPhoneNumber!,
+                patientPhoneNumber: allProfile[currentSelection].patientPhoneNumber!,
                 patientAddress: allProfile[currentSelection].patientAddress,
                 patientId: allProfile[currentSelection].patientId
                 }}

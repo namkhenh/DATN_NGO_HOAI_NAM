@@ -1,53 +1,144 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import './AppartmentDetailPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
-import {DatePicker} from '../../../common/datePicker/DatePicker'
-import {Dropdown} from '../../../common/dropdown/DropDown'
-import {TextField} from '../../../common/textField/TextField'
-import {AppointmentInfoModelProperty, IAppointmentInfo} from '../../../model/apimodel/appointmentInfo'
+import { DatePicker } from '../../../common/datePicker/DatePicker'
+import { Dropdown } from '../../../common/dropdown/DropDown'
+import { TextField } from '../../../common/textField/TextField'
+import { IAppointmenViewModel, IAppointmentInfo, IPatientProfileViewModel, AppointmenModelProperty } from '../../../model/apimodel/appointmentInfo'
 import ImageNotSupportedOutlinedIcon from '@mui/icons-material/ImageNotSupportedOutlined';
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
-import {Label} from '@fluentui/react'
+import { Label } from '@fluentui/react'
 import Button from '@mui/material/Button'
-import {ButtonColorType, ButtonVariantType} from '../../../model/enum/buttonEnum'
-import {useParams} from 'react-router-dom'
-import {SearchBoxView} from '../../../common/searchBox/SearchBox'
+import { ButtonColorType, ButtonVariantType } from '../../../model/enum/buttonEnum'
+import { useParams } from 'react-router-dom'
+import { SearchBoxView } from '../../../common/searchBox/SearchBox'
+import { actionType } from '../../../context/Reducer'
+import { UserGender } from '../../../model/enum/tableTypeEnum'
+import { isStringEmpty, validateNumberField, validateRequireLimitCharacter, validateRequireLimitCharacterForm } from '../../../utils/commonFunction'
+import { PatientReceptionService } from '../../../api/patientReception/patientReception'
 
 export enum IAppointmentAction {
     Create,
     Edit
 }
 
+export enum PatientType {
+    Normal,
+    Emergency
+}
+
 interface IAppartmentDetailPageProps {
     actionType: IAppointmentAction
 }
 
+interface IFormErrorMessage {
+    patientName: string;
+    patientSex: string;
+    patientDateBirth: string;
+    patientPhoneNumber: string;
+    patientIdentityNumber: string;
+    patientAddress: IAddressErrorMessage
+    guardianName: string
+    guardianPhone: string
+    guardianRelation: string
+}
+
+interface IAddressErrorMessage {
+    province: string
+    district: string
+    commune: string
+}
+
 function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
-    const appointmentId = useParams().id;
-    
-    const [isOpenAccpet, setOpen] = useState<boolean>(false)
-    const [isOpenDialog, setOpenDialog] = useState<boolean>(false);
-    const [loadingButton, setLoading] = useState<boolean>(false)
-    const [appointmentInfo, setAppointment] = useState<IAppointmentInfo>({
-        appointmentDate: new Date().toString(), 
-        appointmentReason: '',
-        appointmentTime: 0
+    // const appointmentId = useParams().id;
+
+    // const [isOpenAccpet, setOpen] = useState<boolean>(false)
+    // const [isOpenDialog, setOpenDialog] = useState<boolean>(false);
+    // const [loadingButton, setLoading] = useState<boolean>(false)
+    const [emergencyStatus, setEmergency] = useState<string>(PatientType.Normal.toString())
+    const [profileDate, setProfileDate] = useState<Date>(new Date())
+    const [profileTime, setProfileTime] = useState<string>()
+    const [profileReason, setProfileReason] = useState<string>()
+    const [patientIdentityNumber, setPatientIdentityNumber] = useState<string>()
+    const [patientPhoneNumber, setPatientPhoneNumber] = useState<string>()
+    const [patientCode, setPatientCode] = useState<string>()
+    const [appointmentCode, setAppointmentCode] = useState<string>()
+    const [patientName, setPatientName] = useState<string>()
+    const [patientDateOfBirth, setPatientDateOfBirth] = useState<Date>()
+    const [patientGender, setPatientGender] = useState<string>(UserGender.Male.toString())
+    const [patientAddress, setPatientAddress] = useState<string>()
+    const [guardianName, setGuardianName] = useState<string>()
+    const [guardianPhone, setGuardianPhone] = useState<string>()
+    const [guardianRelation, setGuardianRelation] = useState<string>()
+    const [errorMessageFormString, setErrorMessage] = useState<IFormErrorMessage>({
+        patientName: '',
+        patientSex: '',
+        patientDateBirth: '',
+        patientPhoneNumber: '',
+        patientIdentityNumber: '',
+        patientAddress: {
+            province: '',
+            commune: '',
+            district: '',
+        },
+        guardianName: '',
+        guardianPhone: '',
+        guardianRelation: ''
     })
-    const onChangeOneField = (key: keyof IAppointmentInfo, value: any) => {
-        setAppointment({
-            ...appointmentInfo,
-            [key]: value
+
+    const validate = (key: keyof IAppointmenViewModel, value: any) => {
+        setErrorMessage({
+            ...errorMessageFormString,
+            [key]: validateField(key, value)
         })
     }
-    const handleBackDialog = () => {
-        setOpenDialog(false)
+
+    const getStaticTableData = () => {
+        return PatientReceptionService.getPatientReceptionStaticReport()
     }
-    const handleCloseDialog = () => {
-        setOpen(false)
-        setOpenDialog(false)
+
+    console.log(getStaticTableData());
+    
+
+    const validateField = (key: keyof IAppointmenViewModel, value: any) => {
+        switch (key) {
+            case AppointmenModelProperty.patientName:
+                return validateRequireLimitCharacter(value)
+            case AppointmenModelProperty.patientPhoneNumber:
+            case AppointmenModelProperty.guardianPhone:
+                return validateNumberField(value, 10)
+            case AppointmenModelProperty.patientIdentityNumber:
+                return validateNumberField(value, 12)
+            case AppointmenModelProperty.guardianName:
+            case AppointmenModelProperty.guardianRelation:
+                return validateRequireLimitCharacterForm(value)
+            default:
+        }
     }
+
+    const validateFunction = () => {
+        let passedVerify = true;
+        let tempNameError = validateRequireLimitCharacter(patientName)
+        // let tempProvinceError = validateRequire(patientAddress.province.text)
+        // let tempDistrictError = validateRequire(patientAddress.district.text)
+        // let tempCommuneError = validateRequire(patientAddress.commune.text)
+
+        passedVerify = isStringEmpty(tempNameError) && isStringEmpty(errorMessageFormString.patientPhoneNumber) && isStringEmpty(errorMessageFormString.patientIdentityNumber) && isStringEmpty(errorMessageFormString.guardianName) && isStringEmpty(errorMessageFormString.guardianPhone) && isStringEmpty(errorMessageFormString.guardianRelation)
+
+        setErrorMessage({
+            ...errorMessageFormString,
+            patientName: tempNameError,
+            // patientAddress: {
+            //     province: tempProvinceError,
+            //     district: tempDistrictError,
+            //     commune: tempCommuneError,
+            // }
+        })
+        return passedVerify
+    }
+
     return (
         <div className='appointmentdetail-page'>
             <div className='appointmentdetail-page-container'>
@@ -90,9 +181,12 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                                 row
                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                 name="row-radio-buttons-group"
+                                value={emergencyStatus}
+                                onChange={(_, value) => props.actionType === IAppointmentAction.Create && setEmergency(value)}
+
                             >
-                                <FormControlLabel value="normal" control={<Radio />} label="BN thường" />
-                                <FormControlLabel value="emergency" control={<Radio />} label="BN cấp cứu" />
+                                <FormControlLabel value={PatientType.Normal} control={<Radio />} label="BN thường" />
+                                <FormControlLabel value={PatientType.Emergency} control={<Radio />} label="BN cấp cứu" />
                             </RadioGroup>
                         </div>
                         <div className="appointment-info-item">
@@ -103,11 +197,11 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                                 isRequired={true}
                                 // strings={defaultDatePickerStrings}
                                 onSelectDate={(date) => {
-                                    onChangeOneField(AppointmentInfoModelProperty.appointmentDate, `${date!.getMonth() + 1}/${date!.getDate()}/${date!.getFullYear()}`)
+                                    setProfileDate(date as Date)
                                 }}
-                                value={new Date(appointmentInfo.appointmentDate)}
-                                // parseDateFromString={()}'
-                                minDate={new Date()}
+                                disabled
+                                value={profileDate}
+                            // parseDateFromString={()}'
                             />
                         </div>
                         <div className="appointment-info-item">
@@ -116,9 +210,7 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                                 required
                                 placeholder='--'
                                 value={`${new Date().getHours().toString()}` + ':' + `${new Date().getMinutes().toString()}`}
-                                onChange={(_, value) => {
-                                    onChangeOneField(AppointmentInfoModelProperty.appointmentReason, value)
-                                }}
+                                disabled
                             />
                         </div>
                         <div className="appointment-info-item">
@@ -126,9 +218,9 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                                 label='Lý do/ Triệu chứng'
                                 required
                                 placeholder='--'
-                                value={appointmentInfo.appointmentReason}
+                                value={profileReason}
                                 onChange={(_, value) => {
-                                    onChangeOneField(AppointmentInfoModelProperty.appointmentReason, value)
+                                    setProfileReason(value as string)
                                 }}
                             />
                         </div>
@@ -150,22 +242,24 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                                 <TextField
                                     label='CMND/ CCCD'
                                     placeholder='--'
-                                // value={userMainInfo.userIdentityNumber}
-                                // onChange={(_, value) => {
-                                //     onChangeOneField(UserInfoModelProperty.userIdentityNumber, value)
-                                // }}
-                                // errorMessage={errorMessageString.userIdentityNumber}
+                                    value={patientIdentityNumber}
+                                    onChange={(_, value) => {
+                                        setPatientIdentityNumber(value)
+                                        validate(AppointmenModelProperty.patientIdentityNumber, value)
+                                    }}
+                                    errorMessage={errorMessageFormString?.patientIdentityNumber}
                                 />
                             </div>
                             <div className="patient-info-detail width49">
                                 <TextField
                                     label='Số điện thoại'
                                     placeholder='--'
-                                    value={"userMainInfo.userPhoneNumber"}
+                                    value={patientPhoneNumber}
                                     onChange={(_, value) => {
-                                        // onChangeOneField(UserInfoModelProperty.userPhoneNumber, value)
+                                        setPatientPhoneNumber(value)
+                                        validate(AppointmenModelProperty.patientPhoneNumber, value)
                                     }}
-                                // errorMessage={errorMessageString.userPhoneNumber}
+                                    errorMessage={errorMessageFormString?.patientPhoneNumber}
                                 />
                             </div>
                             <div className="patient-info-detail width100">
@@ -173,11 +267,12 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                                     label='Họ và tên'
                                     required
                                     placeholder='--'
-                                    value={"userMainInfo.userPhoneNumber"}
+                                    value={patientName}
                                     onChange={(_, value) => {
-                                        // onChangeOneField(UserInfoModelProperty.userPhoneNumber, value)
+                                        setPatientName(value)
+                                        validate(AppointmenModelProperty.patientName, value)
                                     }}
-                                // errorMessage={errorMessageString.userPhoneNumber}
+                                    errorMessage={errorMessageFormString?.patientName}
                                 />
                             </div>
                         </div>
@@ -186,22 +281,16 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                                 <TextField
                                     label='Mã bệnh nhân'
                                     placeholder='--'
-                                // value={userMainInfo.userIdentityNumber}
-                                // onChange={(_, value) => {
-                                //     onChangeOneField(UserInfoModelProperty.userIdentityNumber, value)
-                                // }}
-                                // errorMessage={errorMessageString.userIdentityNumber}
+                                    value={patientCode}
+                                    disabled
                                 />
                             </div>
                             <div className="patient-info-detail width49">
                                 <TextField
                                     label='Mã đặt lịch'
                                     placeholder='--'
-                                    value={"userMainInfo.userPhoneNumber"}
-                                    onChange={(_, value) => {
-                                        // onChangeOneField(UserInfoModelProperty.userPhoneNumber, value)
-                                    }}
-                                // errorMessage={errorMessageString.userPhoneNumber}
+                                    value={appointmentCode}
+                                    disabled
                                 />
                             </div>
 
@@ -211,12 +300,12 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                                         placeholder="Chọn một giá trị"
                                         ariaLabel="Chọn một giá trị"
                                         label='Ngày sinh'
-                                        isRequired={true}
+                                        isRequired={false}
                                         // strings={defaultDatePickerStrings}
                                         onSelectDate={(date) => {
-                                            // onChangeOneField(UserInfoModelProperty.userDateBirth, `${date?.getMonth()}/${date?.getDay()}/${date?.getFullYear()}`)
+                                            setPatientDateOfBirth(date as Date)
                                         }}
-                                        value={new Date()}
+                                        value={patientDateOfBirth}
                                         // parseDateFromString={()}'
                                         maxDate={new Date()}
                                     />
@@ -225,11 +314,8 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                                     <TextField
                                         label='Tuổi'
                                         placeholder='--'
-                                        value={"userMainInfo.userPhoneNumber"}
-                                        onChange={(_, value) => {
-                                            // onChangeOneField(UserInfoModelProperty.userPhoneNumber, value)
-                                        }}
-                                    // errorMessage={errorMessageString.userPhoneNumber}
+                                        value={!!patientDateOfBirth ? (new Date().getFullYear() - patientDateOfBirth?.getFullYear()).toString() : ''}
+                                        disabled
                                     />
                                 </div>
                             </div>
@@ -239,9 +325,11 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                                     row
                                     aria-labelledby="demo-row-radio-buttons-group-label"
                                     name="row-radio-buttons-group"
+                                    value={patientGender}
+                                    onChange={(_, value) => setPatientGender(value)}
                                 >
-                                    <FormControlLabel value="male" control={<Radio />} label="Nam" />
-                                    <FormControlLabel value="female" control={<Radio />} label="Nữ" />
+                                    <FormControlLabel value={UserGender.Male} control={<Radio />} label="Nam" />
+                                    <FormControlLabel value={UserGender.Female} control={<Radio />} label="Nữ" />
                                 </RadioGroup>
                             </div>
                         </div>
@@ -312,7 +400,8 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                                 label='Địa chỉ'
                                 placeholder='--'
                                 required
-                                value={"userMainInfo.userAddress.address"}
+                                value={patientAddress}
+                                disabled
                             // onChange={(_, selected) => {
                             //     onChangeAddress(UserAddressModelProperty.address, selected)
                             // }}
@@ -330,38 +419,44 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
                             <TextField
                                 label='Người giám hộ'
                                 placeholder='--'
-                                value={appointmentInfo.appointmentReason}
+                                value={guardianName}
                                 onChange={(_, value) => {
-                                    onChangeOneField(AppointmentInfoModelProperty.appointmentReason, value)
+                                    setGuardianName(value)
+                                    validate(AppointmenModelProperty.guardianName, value)
                                 }}
+                                errorMessage={errorMessageFormString?.guardianName}
                             />
                         </div>
                         <div className="appointment-info-item">
                             <TextField
                                 label='SĐT người dám hộ'
                                 placeholder='--'
-                                value={appointmentInfo.appointmentReason}
+                                value={guardianPhone}
                                 onChange={(_, value) => {
-                                    onChangeOneField(AppointmentInfoModelProperty.appointmentReason, value)
+                                    setGuardianPhone(value)
+                                    validate(AppointmenModelProperty.guardianPhone, value)
                                 }}
+                                errorMessage={errorMessageFormString?.guardianPhone}
                             />
                         </div>
                         <div className="appointment-info-item">
                             <TextField
                                 label='Mối quan hệ'
                                 placeholder='--'
-                                value={appointmentInfo.appointmentReason}
+                                value={guardianRelation}
                                 onChange={(_, value) => {
-                                    onChangeOneField(AppointmentInfoModelProperty.appointmentReason, value)
+                                    setGuardianRelation(value)
+                                    validate(AppointmenModelProperty.guardianRelation, value)
                                 }}
+                                errorMessage={errorMessageFormString?.guardianRelation}
                             />
                         </div>
                     </div>
                 </div>
                 <div className="appointment-info-button">
                     <Button variant={ButtonVariantType.Outlined} color={ButtonColorType.Inherit}>Hủy</Button>
-                    {true && <Button variant={ButtonVariantType.Contained}>Lưu</Button>}
-                </div> 
+                    {true && <Button variant={ButtonVariantType.Contained} onClick={validateFunction}>Lưu</Button>}
+                </div>
             </div>
         </div>
     )

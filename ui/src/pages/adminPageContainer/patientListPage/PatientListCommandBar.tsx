@@ -125,6 +125,14 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
         },
       });
     }
+    commandBarItems.push({
+      key: "patient-list-export",
+      text: "Xuất file",
+      iconProps: { iconName: "Export", style: { color: "#1976d2" } },
+      onClick: () => {
+        console.log("ok");
+      },
+    });
     return commandBarItems
   }
 

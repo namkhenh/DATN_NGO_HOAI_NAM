@@ -1,9 +1,9 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import './ApproveCalendarPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb';
-import {SearchBoxView} from '../../../common/searchBox/SearchBox';
-import {Label} from '@fluentui/react';
-import {DatePicker} from '../../../common/datePicker/DatePicker';
+import { SearchBoxView } from '../../../common/searchBox/SearchBox';
+import { Label } from '@fluentui/react';
+import { DatePicker } from '../../../common/datePicker/DatePicker';
 import TablePager from '../../../common/tablePager/TablePager';
 import {
     ApproveCalendarAction,
@@ -11,11 +11,11 @@ import {
     ApproveCalendarTableDatas,
     TableType
 } from '../../../model/enum/tableTypeEnum';
-import {AppointmentStatus} from '../../../model/enum/appointmentEnum';
+import { AppointmentStatus } from '../../../model/enum/appointmentEnum';
 import DialogView from '../../../common/dialog/Dialog';
-import {useStateValue} from '../../../context/StateProvider';
-import {MessageBarStatus} from '../../../model/enum/messageBarEnum';
-import {actionType} from '../../../context/Reducer';
+import { useStateValue } from '../../../context/StateProvider';
+import { MessageBarStatus } from '../../../model/enum/messageBarEnum';
+import { actionType } from '../../../context/Reducer';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
@@ -26,7 +26,7 @@ import PatientListCommandBar from '../patientListPage/PatientListCommandBar';
 function ApproveCalendarPage() {
     const [showDialog, setShowDialog] = useState<boolean>(false)
     const [loadingButton, setLoading] = useState<boolean>(false)
-    const [currentPage,setCurrentPage]= useState<number>(0)
+    const [currentPage, setCurrentPage] = useState<number>(0)
     const [appointmentAction, setAppointmentAction] = useState<ApproveCalendarAction>()
     const onSearch = (newValue: string) => {
         console.log(newValue);
@@ -113,17 +113,18 @@ function ApproveCalendarPage() {
     }
 
     const rows: ApproveCalendarTableColumns[][] = [
-        [createData(
-            "DL20230001",
-            AppointmentStatus.Success,
-            "11/02/2023",
-            "09:00",
-            "BN20230001",
-            "Ngô Hoài Nam",
-            "19/05/2001",
-            1,
-            "0123456789"
-        ),
+        [
+            createData(
+                "DL20230001",
+                AppointmentStatus.Success,
+                "11/02/2023",
+                "09:00",
+                "BN20230001",
+                "Ngô Hoài Nam",
+                "19/05/2001",
+                1,
+                "0123456789"
+            ),
             createData(
                 "DL20230002",
                 AppointmentStatus.Waiting,
@@ -145,7 +146,7 @@ function ApproveCalendarPage() {
                 "19/05/2001",
                 0,
                 "0123456789"
-            )],[
+            )], [
             createData(
                 "DL20230004",
                 AppointmentStatus.Waiting,
@@ -243,7 +244,7 @@ function ApproveCalendarPage() {
                         aria-labelledby="demo-controlled-radio-buttons-group"
                         name="controlled-radio-buttons-group"
                         value={'1'}
-                        // onChange={}
+                    // onChange={}
                     >
                         <FormControlLabel value="1" control={<Radio />} label="Khung giờ được chọn đã đầy" />
                         <FormControlLabel value="2" control={<Radio />} label="..." />
@@ -285,7 +286,7 @@ function ApproveCalendarPage() {
                             maxDate={new Date()}
                         />
                     </div>
-                    <div className='line' style={{ width: '12px', height: '1px', backgroundColor: '#000000', margin: '0 8px'}}></div>
+                    <div className='line' style={{ width: '12px', height: '1px', backgroundColor: '#000000', margin: '0 8px' }}></div>
                     <div className="search-date-item">
                         <DatePicker
                             placeholder="Chọn một giá trị"
@@ -311,7 +312,7 @@ function ApproveCalendarPage() {
                     hasCheckBox
                     hasTablePaging
                     page={currentPage}
-                    handleChangePage={ (page) => { setCurrentPage(page) } }
+                    handleChangePage={(page) => { setCurrentPage(page) }}
                     total={15}
                     hasNavigate={false}
                 />

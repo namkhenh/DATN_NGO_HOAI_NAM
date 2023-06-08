@@ -214,7 +214,7 @@ function AppointmentReceptionPage() {
                     tableType={TableType.AppointmentReceptionTable}
                     rowData={rows[currentPage]}
                     dataTotal={datas[currentPage]}
-                    hasCheckBox
+                    hasCheckBox={false}
                     hasTablePaging
                     page={currentPage}
                     handleChangePage={(page) => { setCurrentPage(page) }}

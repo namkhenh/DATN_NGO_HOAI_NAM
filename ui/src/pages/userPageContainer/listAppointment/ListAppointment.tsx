@@ -27,7 +27,7 @@ const ListAppointment = (props: any) => {
             patientName: "nguyễn văn A",
             patientBirth: "05/18/2001",
             patientSex: 0,
-            patientPhone: "0123456789",
+            patientPhoneNumber: "0123456789",
             patientAddress: {
                 province: {
                     key: 1,
@@ -54,7 +54,7 @@ const ListAppointment = (props: any) => {
                 patientName: "nguyễn văn X",
                 patientBirth: "05/18/2001",
                 patientSex: 1,
-                patientPhone: "0123456789",
+                patientPhoneNumber: "0123456789",
                 patientAddress: {
                     province: {
                         key: 1,

@@ -1,0 +1,1 @@
+export * as PatientReceptionService from "./patientReception/patientReception";

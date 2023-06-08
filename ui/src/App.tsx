@@ -30,6 +30,7 @@ import HealthCarePage from "./pages/adminPageContainer/healthCarePage/HealthCare
 import HealthCareDetail from "./pages/adminPageContainer/healthCareDetailPage/HealthCareDetail";
 import ApproveCalendarPage from "./pages/adminPageContainer/browseCalendarPage/ApproveCalendarPage";
 import AppointmentReceptionPage from "./pages/adminPageContainer/appointmentReceptionPage/AppointmentReceptionPage";
+import Signup from "./structure/signup/Signup";
 
 function App() {
   return (
@@ -117,7 +118,8 @@ function App() {
             <Route path="/admin/tiep-don-dat-kham" element={<Navigate replace to="danh-sach-benh-nhan" />}></Route>
             <Route path="/admin/tiep-don-dat-kham/danh-sach-benh-nhan" element={<AppointmentReceptionPage />}></Route>
             <Route path="/admin/tiep-don-dat-kham/chi-tiet-dat-kham/:id" element={<AppartmentDetailPage actionType={IAppointmentAction.Edit}/>}></Route>
-            <Route path="/admin/thanh-toan-ngoai-tru" element={<PaidManagerPage />}></Route>
+            <Route path="/admin/thanh-toan-ngoai-tru" element={<Navigate replace to="danh-sach-benh-nhan" />}></Route>
+            <Route path="/admin/thanh-toan-ngoai-tru/danh-sach-benh-nhan" element={<PaidManagerPage />}></Route>
             <Route path="/admin/thanh-toan-ngoai-tru/chi-tiet-thanh-toan/:id" element={<PaidDetailManagerPage />}></Route>
             <Route path="/admin/kham-chua-benh" element={<Navigate replace to="danh-sach-benh-nhan" />}></Route>
             <Route path="/admin/kham-chua-benh/danh-sach-benh-nhan" element={<HealthCarePage />}></Route>
@@ -127,6 +129,7 @@ function App() {
 
         {/* </Route> */}
         <Route path="/dang-nhap" element={<Login></Login>}></Route>
+        <Route path="/dang-ky" element={<Signup></Signup>}></Route>
         <Route path="*" element={<>Sai roi</>}></Route>
       </Routes>
     </div>

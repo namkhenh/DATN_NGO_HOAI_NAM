@@ -7,7 +7,8 @@ export interface IAppointmenViewModel {
     patientName: string;
     patientBirth: string;
     patientSex: number;
-    patientPhone: string
+    patientPhoneNumber?: string
+    patientIdentityNumber?: string
     patientAddress: IUserAddress
     appointmentDate: string
     appointmentTime: number
@@ -15,6 +16,29 @@ export interface IAppointmenViewModel {
     appointmentStatus?: AppointmentStatus
     appointmentId?: string
     appointmentNumber?: number
+    guardianName?: string
+    guardianPhone?: string
+    guardianRelation?: string
+}
+
+export enum AppointmenModelProperty {
+    patientId =  'patientId',
+    patientAvatar =  'patientAvatar',
+    patientName =  'patientName',
+    patientBirth = 'patientBirth' ,
+    patientSex =  'patientSex',
+    patientPhoneNumber = 'patientPhoneNumber' ,
+    patientIdentityNumber = 'patientIdentityNumber' ,
+    patientAddress ='patientAddress'  ,
+    appointmentDate ='appointmentDate'  ,
+    appointmentTime = 'appointmentTime' ,
+    appointmentReason ='appointmentReason'  ,
+    appointmentStatus = 'appointmentStatus' ,
+    appointmentId =  'appointmentId',
+    appointmentNumber = 'appointmentNumber' ,
+    guardianName =  'guardianName',
+    guardianPhone =  'guardianPhone',
+    guardianRelation = 'guardianRelation'  ,
 }
 
 export interface IPatientProfileViewModel {
