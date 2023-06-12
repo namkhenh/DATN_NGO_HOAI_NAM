@@ -80,6 +80,8 @@ function AddRolePage(props: AddRolePageProps) {
     const [loadingButtonRole, setLoadingButtonRole] = useState<boolean>(false)
     const [loadingButtonPer, setLoadingButtonPer] = useState<boolean>(false)
     const [loadingPermission, setLoadingPermission] = useState<boolean>(false)
+    const [loadingPerDetail, setLoadingPerDetail] = useState<boolean>(false)
+    const [loadingRoleDetail, setLoadingRoleDetail] = useState<boolean>(false)
 
     const [rows, setRow] = useState<PermissionManagerTableColumns[]>([createData('', '', '')])
     const [datas, setData] = useState<PermissionManagerTableDatas[]>([{
@@ -89,7 +91,7 @@ function AddRolePage(props: AddRolePageProps) {
         path: '',
         roleId: '',
         menuId: '',
-        // status: true
+        status: true
     }]
     )
 
@@ -114,8 +116,12 @@ function AddRolePage(props: AddRolePageProps) {
     }
 
     useEffect(() => {
+        
         if (props.actionType === RoleAction.Edit) {
+
             setRoleId(roleIdFromProps!)
+            setLoadingPermission(true)
+            setLoadingRoleDetail(true)
         }
     }, [])
 
@@ -158,43 +164,98 @@ function AddRolePage(props: AddRolePageProps) {
 
     useEffect(() => {
         if (roleId) {
-            setLoadingPermission(true)
-            Promise.all([PermissionService.getPermissionByRoleId(roleId), RoleService.getRoleDetail(roleId)]).then(res => {
-                if (res[0].success) {
-                    let rows: PermissionManagerTableColumns[] = []
-                    let datas: PermissionManagerTableDatas[] = []
-                    !!res[0].data && res[0].data.forEach((e: any) => {
-                        rows.push(createData(e.code, e.name, e.menuId, e.status))
-                        datas.push({
-                            id: e.id,
-                            code: e.code,
-                            name: e.name,
-                            roleId: e.roleId,
-                            path: e.path,
-                            menuId: e.menuId,
+            // setRow([createData('', '', '')])
+            // setData([{
+            //     id: '',
+            //     code: '',
+            //     name: '',
+            //     path: '',
+            //     roleId: '',
+            //     menuId: '',
+            //     status: true
+            // }])
+            if (loadingRoleDetail) {
+                RoleService.getRoleDetail(roleId).then(res => {
+                    if (res.success) {
+                        setRoleCode(res.data.code)
+                        setRoleName(res.data.name)
+                        setRoleDescription(res.data.description ? res.data.description : '')
+                        setRoleStatus(res.data.status)
+                        setRoleStart(res.data.startDate)
+                        setRoleEnd(res.data.endDate)
+                        setLoadingRoleDetail(false)
+                    } else {
+                        setLoadingRoleDetail(false)
+                    }
+                })
+            }
+
+            if (loadingPermission) {
+                PermissionService.getPermissionByRoleId(roleId).then(res => {
+                    if (res.success) {
+                        let rows: PermissionManagerTableColumns[] = []
+                        let datas: PermissionManagerTableDatas[] = []
+                        !!res.data && res.data.forEach((e: any) => {
+                            rows.push(createData(e.code, e.name, e.menu.name, e.status))
+                            datas.push({
+                                id: e.id,
+                                code: e.code,
+                                name: e.name,
+                                roleId: e.roleId,
+                                path: e.path,
+                                menuId: e.menuId,
+                                status: true
+                            })
                         })
-                    })
-                    setRow(rows)
-                    setData(datas)
-                } else {
-                    setRow([])
-                    setData([])
-                }
-                if (res[1].success) {
-                    setRoleCode(res[1].data.code)
-                    setRoleName(res[1].data.name)
-                    setRoleDescription(res[1].data.description ? res[1].data.description : '')
-                    setRoleStatus(res[1].data.status)
-                    setRoleStart(res[1].data.startDate)
-                    setRoleEnd(res[1].data.endDate)
-                }
-            }).finally(() => setLoadingPermission(false))
+                        setLoadingPermission(false)
+                        setRow(rows)
+                        setData(datas)
+                    } else {
+                        setLoadingPermission(false)
+                        setRow([])
+                        setData([])
+                    }
+                })
+            }
+
+            
+            // Promise.all([PermissionService.getPermissionByRoleId(roleId), RoleService.getRoleDetail(roleId)]).then(res => {
+            //     if (res[0].success) {
+            //         let rows: PermissionManagerTableColumns[] = []
+            //         let datas: PermissionManagerTableDatas[] = []
+            //         !!res[0].data && res[0].data.forEach((e: any) => {
+            //             rows.push(createData(e.code, e.name, e.menu.name, e.status))
+            //             datas.push({
+            //                 id: e.id,
+            //                 code: e.code,
+            //                 name: e.name,
+            //                 roleId: e.roleId,
+            //                 path: e.path,
+            //                 menuId: e.menuId,
+            //                 status: true
+            //             })
+            //         })
+            //         setRow(rows)
+            //         setData(datas)
+            //     } else {
+            //         setRow([])
+            //         setData([])
+            //     }
+            //     if (res[1].success) {
+            //         setRoleCode(res[1].data.code)
+            //         setRoleName(res[1].data.name)
+            //         setRoleDescription(res[1].data.description ? res[1].data.description : '')
+            //         setRoleStatus(res[1].data.status)
+            //         setRoleStart(res[1].data.startDate)
+            //         setRoleEnd(res[1].data.endDate)
+            //     }
+            // }).finally(() => setLoadingPermission(false))
         }
-    }, [roleId, permissionId])
+    }, [loadingPermission, loadingRoleDetail])
 
     const changePermission = () => {
         let requestBodyCreatePermission = {
-            id: '00000000-0000-0000-0000-000000000000',
+            id: permissionAction === PermissionAction.Create ? '00000000-0000-0000-0000-000000000000' : selection.selectedItems[0]?.id,
             code: permissionCode,
             name: permissionName,
             path: '',
@@ -204,35 +265,67 @@ function AddRolePage(props: AddRolePageProps) {
             roleId: roleId,
             menuId: selectMenuId
         }
-        setLoadingButtonPer(true)
-        const result = PermissionService.createPermission(requestBodyCreatePermission).then(res => {
-            if (res.success) {
-                setPermissionId(res.data.id)
-                let requestBodyPerAct = {
-                    permissionActions: {
-                        key: res.data.id,
-                        value: selected
+       
+        if (permissionAction === PermissionAction.Create) {
+            setLoadingButtonPer(true)
+            const result = PermissionService.createPermission(requestBodyCreatePermission).then(res => {
+                if (res.success) {
+                    setPermissionId(res.data.id)
+                    let requestBodyPerAct = {
+                        permissionActions: {
+                            key: res.data.id,
+                            value: selected
+                        }
                     }
+                    showMessageBar("Tạo quyền thành công!", true, MessageBarStatus.Success)
+                    PermissionActionService.createPermissionAction(requestBodyPerAct).then(res => {
+                        if (res.success) {
+                            setLoadingButtonPer(false)
+                            closeForm()
+                            setLoadingPermission(true)
+                            showMessageBar("Gán thao tác thành công!", true, MessageBarStatus.Success)
+                        } else {
+                            setLoadingButtonPer(false)
+                            closeForm()
+                            setLoadingPermission(true)
+                            showMessageBar(`Gán thao tác thất bại! \n${res.message ? res.message : ''}`, true, MessageBarStatus.Error)
+                        }
+    
+                    })
+                } else {
+                    setLoadingButtonPer(false)
+                    showMessageBar(`Tạo quyền thất bại! \n${res.message ? res.message : ''}`, true, MessageBarStatus.Error)
                 }
-                PermissionActionService.createPermissionAction(requestBodyPerAct).then(res => {
-                    if (res.success) {
-                        setLoadingButtonPer(false)
-                        closeForm()
-                        showMessageBar("Gán thao tác thành công!", true, MessageBarStatus.Success)
-                    } else {
-                        setLoadingButtonPer(false)
-                        showMessageBar(`Gán thao tác thất bại! \n${res.message ? res.message : ''}`, true, MessageBarStatus.Error)
-                    }
+            })
 
-                })
-                showMessageBar("Tạo quyền thành công!", true, MessageBarStatus.Success)
-            } else {
-                setLoadingButtonPer(false)
-                showMessageBar(`Tạo quyền thất bại! \n${res.message ? res.message : ''}`, true, MessageBarStatus.Error)
+            return result
+        }
+        if (permissionAction === PermissionAction.Edit) {
+            setLoadingButtonPer(true)
+            let requestBodyPerAct = {
+                permissionActions: {
+                    key: selection.selectedItems[0]?.id,
+                    value: selected
+                }
             }
-
-        })
-        return result
+            const result = Promise.all([PermissionService.updatePermission(requestBodyCreatePermission), PermissionActionService.updatePermissionAction(requestBodyPerAct)]).then(res => {
+                if (res[0].success) {
+                    showMessageBar("Cập nhật quyền thành công!", true, MessageBarStatus.Success)
+                    if (res[1].success) {
+                        showMessageBar("Gán thao tác thành công!", true, MessageBarStatus.Success)
+                        closeForm()
+                    } else {
+                        showMessageBar("Gán thao tác thất bại!", true, MessageBarStatus.Error)
+                        closeForm()
+                    }
+                } else {
+                    showMessageBar("Cập nhật quyền thất bại!", true, MessageBarStatus.Error)
+                }
+                
+            }).finally(() => setLoadingButtonPer(false))
+            return result
+        }
+        return new Promise((res) => { })
     }
 
     const changeRole = () => {
@@ -250,6 +343,7 @@ function AddRolePage(props: AddRolePageProps) {
             const result = RoleService.createRole(requestCreateRole).then(res => {
                 if (res.success) {
                     setRoleId(res.data.id)
+                    setLoadingRoleDetail(true)
                     setLoadingButtonRole(false)
                     showMessageBar("Tạo vai trò thành công!", true, MessageBarStatus.Success)
                 } else {
@@ -262,6 +356,7 @@ function AddRolePage(props: AddRolePageProps) {
             const result = RoleService.updateRole(requestCreateRole).then(res => {
                 if (res.success) {
                     setLoadingButtonRole(false)
+                    setLoadingRoleDetail(true)
                     showMessageBar("Cập nhật vai trò thành công!", true, MessageBarStatus.Success)
                 } else {
                     setLoadingButtonRole(false)
@@ -271,6 +366,27 @@ function AddRolePage(props: AddRolePageProps) {
             return result
         }
        
+    }
+
+    const deletePermission = () => {
+        if (permissionAction === PermissionAction.Delete) {
+            setLoadingButtonPer(true)
+            const result = PermissionService.deletePermission(selection.selectedItems[0]?.id).then(res => {
+                if (res.success) {
+                    setLoadingButtonPer(false)
+                    closeForm()
+                    setLoadingPermission(true)
+                    showMessageBar("Xóa vai trò thành công!", true, MessageBarStatus.Success)
+                    setPermissionId('')
+                } else {
+                    setLoadingButtonPer(false)
+                    closeForm()
+                    showMessageBar("Xóa vai trò thất bại!", true, MessageBarStatus.Error)
+                }
+            })
+            return result
+        }
+        return new Promise((res) => { })
     }
 
     function createData(
@@ -395,76 +511,88 @@ function AddRolePage(props: AddRolePageProps) {
     };
 
     const renderBodyCreateForm = () => {
-        return (
+        return ( 
             <div className="permission-create-form">
-                <div className="permission-create-wrap">
-                    <div className="permission-create-item">
-                        <TextField
-                            label='Mã quyền'
-                            required
-                            placeholder='--'
-                            value={permissionCode}
-                            onChange={(_, value) => {
-                                setPermissionCode(value)
-                            }}
-                        />
+                {loadingPerDetail ? (
+                    <div className="permission-create-wrap">
+                        <Skeleton variant="rounded" height={40} className='permission-create-item' />
+                        <Skeleton variant="rounded" height={40} className='permission-create-item' />
+                        <Skeleton variant="rounded" height={40} className='permission-create-item' />
+                        <Skeleton variant="rounded" height={40} className='permission-create-item' />
+                        <Skeleton variant="rounded" height={40} className='permission-create-item' />
+                        <Skeleton variant="rounded" height={40} className='permission-create-item' />
                     </div>
-                    <div className="permission-create-item">
-                        <TextField
-                            label='Tên quyền'
-                            required
-                            placeholder='--'
-                            value={permissionName}
-                            onChange={(_, value) => {
-                                setPermissionName(value)
-                            }}
-                        />
-                    </div>
-                    <div className="permission-create-item">
-                        <DatePicker
-                            placeholder="Chọn một giá trị"
-                            ariaLabel="Chọn một giá trị"
-                            label='Thời gian bắt đầu'
-                            isRequired={true}
-                            onSelectDate={(date) => {
-                                setPermissionStart(date!)
-                            }}
-                            value={new Date(permissionStartTime)}
-                            minDate={new Date()}
-                        />
-                    </div>
-                    <div className="permission-create-item">
-                        <DatePicker
-                            placeholder="Chọn một giá trị"
-                            ariaLabel="Chọn một giá trị"
-                            label='Thời gian kết thúc'
-                            isRequired={true}
-                            onSelectDate={(date) => {
-                                setPermissionEnd(date!)
-                            }}
-                            value={new Date(permissionEndTime)}
-                            minDate={new Date()}
-                        />
-                    </div>
-                    <div className="permission-create-item">
-                        <Dropdown
-                            placeholder="--"
-                            label="Menu"
-                            options={menuOption}
-                            selectedKey={selectMenuId}
-                            required
-                            onChange={(_, selected) => { setSelectMenu(String(selected?.key)) }}
-                            errorMessage={''}
-                        />
-                    </div>
-                    <div className="permission-create-item">
-                        <Label required>Trạng thái</Label>
-                        <Switch
-                            checked={permissionStatus}
-                            onChange={(_, checked) => { setPermissionStatus(checked) }}
-                        />
-                    </div>
-                </div>
+                ) : (
+                        <div className="permission-create-wrap">
+                            <div className="permission-create-item">
+                                <TextField
+                                    label='Mã quyền'
+                                    required
+                                    placeholder='--'
+                                    value={permissionCode}
+                                    onChange={(_, value) => {
+                                        setPermissionCode(value)
+                                    }}
+                                />
+                            </div>
+                            <div className="permission-create-item">
+                                <TextField
+                                    label='Tên quyền'
+                                    required
+                                    placeholder='--'
+                                    value={permissionName}
+                                    onChange={(_, value) => {
+                                        setPermissionName(value)
+                                    }}
+                                />
+                            </div>
+                            <div className="permission-create-item">
+                                <DatePicker
+                                    placeholder="Chọn một giá trị"
+                                    ariaLabel="Chọn một giá trị"
+                                    label='Thời gian bắt đầu'
+                                    isRequired={true}
+                                    onSelectDate={(date) => {
+                                        setPermissionStart(date!)
+                                    }}
+                                    value={new Date(permissionStartTime)}
+                                    minDate={new Date()}
+                                />
+                            </div>
+                            <div className="permission-create-item">
+                                <DatePicker
+                                    placeholder="Chọn một giá trị"
+                                    ariaLabel="Chọn một giá trị"
+                                    label='Thời gian kết thúc'
+                                    isRequired={true}
+                                    onSelectDate={(date) => {
+                                        setPermissionEnd(date!)
+                                    }}
+                                    value={new Date(permissionEndTime)}
+                                    minDate={new Date()}
+                                />
+                            </div>
+                            <div className="permission-create-item">
+                                <Dropdown
+                                    placeholder="--"
+                                    label="Menu"
+                                    options={menuOption}
+                                    selectedKey={selectMenuId}
+                                    required
+                                    onChange={(_, selected) => { setSelectMenu(String(selected?.key)) }}
+                                    errorMessage={''}
+                                />
+                            </div>
+                            <div className="permission-create-item">
+                                <Label required>Trạng thái</Label>
+                                <Switch
+                                    checked={permissionStatus}
+                                    onChange={(_, checked) => { setPermissionStatus(checked) }}
+                                />
+                            </div>
+                        </div>
+                )}
+                
                 <div className="role-assign-list">
                     {isLoadingAction ?
                         (
@@ -537,8 +665,8 @@ function AddRolePage(props: AddRolePageProps) {
 
     const renderBodyDeleteForm = () => {
         return (
-            <div className="permission-create-form">
-                <div className=''>Bạn có chắc chắn muốn xóa quyền <strong>ngo_hoai_nam1</strong><br />Thao tác này không thể khôi phục!</div>
+            <div className="permission-delete-form">
+                <div className=''>Bạn có chắc chắn muốn xóa quyền <strong>{selection.selectedItems[0]?.name}</strong><br />Thao tác này không thể khôi phục!</div>
             </div>
         )
     }
@@ -547,14 +675,51 @@ function AddRolePage(props: AddRolePageProps) {
         dispatch({ type: actionType.SET_MESSAGE_BAR, messageBar: { isOpen: isOpen, text: message, status: status } })
     }
 
+    useEffect(() => {
+        if (permissionAction === PermissionAction.Create) {
+            // setPermissionCode('')
+            // setPermissionName('')
+            // setSelectMenu('')
+            // setPermissionStatus(true)
+            // setSelected([])
+            // setAction([])
+        }
+
+        if (permissionAction === PermissionAction.Edit) {
+            setLoadingPerDetail(true)
+            let actionsId: string[] = [] 
+            PermissionService.getPermissionById(selection.selectedItems[0]?.id).then(res => {
+                if (res.success) {
+                    setLoadingPerDetail(false)
+                    // setPermissionId(res.data.id)
+                    setPermissionCode(res.data.code)
+                    setPermissionName(res.data.name)
+                    // setPermissionStatus(res.data.code)
+                    setSelectMenu(res.data.menuId)
+                    !!res.data.actions && res.data.actions.forEach((action: ActionTableDatas) => {
+                        actionsId.push(action?.id)
+                    })
+                    setSelected(actionsId)
+                } else {
+                    setLoadingPerDetail(false)
+                    showMessageBar("Đã có lỗi xảy ra!", true, MessageBarStatus.Error)
+                }
+            })
+        }
+    }, [showDialog])
+
     const closeForm = () => {
         setShowDialog(false)
         setPermissionCode('')
         setPermissionName('')
+        setPermissionStart(new Date())
+        setPermissionEnd(new Date())
+        setPermissionStatus(true)
         setSelectMenu('')
         setAction([])
-        setPermissionStatus(true)
         setSelected([])
+        setLoadingPerDetail(false)
+        setPermissionAction(undefined)
     }
 
     return (
@@ -576,7 +741,7 @@ function AddRolePage(props: AddRolePageProps) {
                 <div className="addrole-page-sub-title">
                     Thông tin vai trò
                 </div>
-                {loadingPermission ? (
+                {loadingRoleDetail ? (
                     <div className="addrole-page-wrap">
                         <Skeleton variant="rounded" height={40} className='addrole-info-item' />
                         <Skeleton variant="rounded" height={40} className='addrole-info-item' />
@@ -699,7 +864,7 @@ function AddRolePage(props: AddRolePageProps) {
                 // closeWithPromise={this.onLogoutAction.bind(this)}
                 // confirm={this.handlecClosePopup.bind(this)}
                 confirmButtonText={'Lưu'}
-                confirmWithPromise={changePermission}
+                confirmWithPromise={permissionAction === PermissionAction.Delete ? deletePermission : changePermission}
                 closeButtonText='Hủy bỏ'
                 close={closeForm}
                 loading={loadingButtonPer}

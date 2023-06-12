@@ -290,7 +290,7 @@ export interface PermissionManagerTableDatas {
     code: string
     path: string
     menuId: string
-    // status: boolean
+    status: boolean
     roleId: string
     startAt?: Date
     endAt?: Date

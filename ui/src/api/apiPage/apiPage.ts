@@ -55,14 +55,17 @@ export class PermissionActionService {
     public static createPermissionAction = (object: any) => {
         return send(`${api.create_permission_action}`, 'POST', object)
     }
-    public static getActionByMenuId = (id: string) => {
-        return send(`${api.delete_permission_action}?Id=${id}`, 'DELETE')
+    public static updatePermissionAction = (object: any) => {
+        return send(`${api.update_permission_action}`, 'POST', object)
     }
 }
 
 export class PermissionService {
     public static getPermission = (object: any) => {
         return send(`${api.get_permission}`, 'POST', object)
+    }
+    public static getPermissionById = (id: string) => {
+        return send(`${api.get_permission_by_Id}?Id=${id}`, 'GET')
     }
     public static getPermissionByRoleId = (id: string) => {
         return send(`${api.get_permission_by_roleId}?roleId=${id}`, 'POST')
@@ -74,6 +77,6 @@ export class PermissionService {
         return send(`${api.update_permission}`, 'POST', object)
     }
     public static deletePermission = (id: string) => {
-        return send(`${api.delete_permission}?Id=${id}`, 'POST')
+        return send(`${api.delete_permission}?Id=${id}`, 'DELETE')
     }
 }

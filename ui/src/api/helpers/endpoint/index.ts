@@ -23,9 +23,11 @@ export default class Endpoint {
     static get delete_permission(): string { return Endpoint.baseUrl + Endpoint._delete_permission }
     static get get_permission(): string { return Endpoint.baseUrl + Endpoint._get_permission }
     static get get_permission_by_roleId(): string { return Endpoint.baseUrl + Endpoint._get_permission_by_roleId }
+    static get get_permission_by_Id(): string { return Endpoint.baseUrl + Endpoint._get_permission_by_Id }
 
     //permission-action
     static get create_permission_action(): string { return Endpoint.baseUrl + Endpoint._create_permission_action }
+     static get update_permission_action(): string { return Endpoint.baseUrl + Endpoint._update_permission_action }
     static get delete_permission_action(): string { return Endpoint.baseUrl + Endpoint._delete_permission_action }
 
     //role
@@ -63,9 +65,11 @@ export default class Endpoint {
     private static _delete_permission = "/Permission/rpc/Portal/permission/delete"
     private static _get_permission = "/Permission/rpc/Portal/permission/get-all-permission-paging"
     private static _get_permission_by_roleId = "/Permission/rpc/Portal/permission/get-permission-by-roleId"
+    private static _get_permission_by_Id = "/Permission/rpc/Portal/permission/get-permission-by-Id"
 
     //permission-action
     private static _create_permission_action = "/PermissionAction/rpc/Portal/permissionaction/create"
+    private static _update_permission_action = "/PermissionAction/rpc/Portal/permissionaction/update"
     private static _delete_permission_action = "/PermissionAction/rpc/Portal/permissionaction/delete"
 
     //role

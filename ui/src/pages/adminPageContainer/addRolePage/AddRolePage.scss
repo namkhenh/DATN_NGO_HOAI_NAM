@@ -56,6 +56,7 @@
 }
 
 .permission-create-form {
+    width: 620px;
     .permission-create-wrap {
         display: flex;
         gap: 24px;
@@ -74,3 +75,7 @@
         }
     }
 }
+
+// .permission-delete-form {
+//     width: 480;
+// }

@@ -56,9 +56,6 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
     }
   }
 
-  console.log(selection);
-  
-
   // useEffect(()=>{}, [selection])
   const patientReceptionListActions = (): ICommandBarItemProps[] => {
     let commandBarItems: ICommandBarItemProps[] = []
