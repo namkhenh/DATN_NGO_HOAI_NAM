@@ -164,17 +164,9 @@ function AddRolePage(props: AddRolePageProps) {
 
     useEffect(() => {
         if (roleId) {
-            // setRow([createData('', '', '')])
-            // setData([{
-            //     id: '',
-            //     code: '',
-            //     name: '',
-            //     path: '',
-            //     roleId: '',
-            //     menuId: '',
-            //     status: true
-            // }])
             if (loadingRoleDetail) {
+                console.log("?");
+                
                 RoleService.getRoleDetail(roleId).then(res => {
                     if (res.success) {
                         setRoleCode(res.data.code)
@@ -191,6 +183,17 @@ function AddRolePage(props: AddRolePageProps) {
             }
 
             if (loadingPermission) {
+                setRow([createData('', '', '')])
+                setData([{
+                    id: '',
+                    code: '',
+                    name: '',
+                    path: '',
+                    roleId: '',
+                    menuId: '',
+                    status: true
+                }])
+                
                 PermissionService.getPermissionByRoleId(roleId).then(res => {
                     if (res.success) {
                         let rows: PermissionManagerTableColumns[] = []
@@ -217,39 +220,6 @@ function AddRolePage(props: AddRolePageProps) {
                     }
                 })
             }
-
-            
-            // Promise.all([PermissionService.getPermissionByRoleId(roleId), RoleService.getRoleDetail(roleId)]).then(res => {
-            //     if (res[0].success) {
-            //         let rows: PermissionManagerTableColumns[] = []
-            //         let datas: PermissionManagerTableDatas[] = []
-            //         !!res[0].data && res[0].data.forEach((e: any) => {
-            //             rows.push(createData(e.code, e.name, e.menu.name, e.status))
-            //             datas.push({
-            //                 id: e.id,
-            //                 code: e.code,
-            //                 name: e.name,
-            //                 roleId: e.roleId,
-            //                 path: e.path,
-            //                 menuId: e.menuId,
-            //                 status: true
-            //             })
-            //         })
-            //         setRow(rows)
-            //         setData(datas)
-            //     } else {
-            //         setRow([])
-            //         setData([])
-            //     }
-            //     if (res[1].success) {
-            //         setRoleCode(res[1].data.code)
-            //         setRoleName(res[1].data.name)
-            //         setRoleDescription(res[1].data.description ? res[1].data.description : '')
-            //         setRoleStatus(res[1].data.status)
-            //         setRoleStart(res[1].data.startDate)
-            //         setRoleEnd(res[1].data.endDate)
-            //     }
-            // }).finally(() => setLoadingPermission(false))
         }
     }, [loadingPermission, loadingRoleDetail])
 
@@ -313,15 +283,16 @@ function AddRolePage(props: AddRolePageProps) {
                     showMessageBar("Cập nhật quyền thành công!", true, MessageBarStatus.Success)
                     if (res[1].success) {
                         showMessageBar("Gán thao tác thành công!", true, MessageBarStatus.Success)
+                        setLoadingPermission(true)
                         closeForm()
                     } else {
                         showMessageBar("Gán thao tác thất bại!", true, MessageBarStatus.Error)
+                        setLoadingPermission(true)
                         closeForm()
                     }
                 } else {
                     showMessageBar("Cập nhật quyền thất bại!", true, MessageBarStatus.Error)
                 }
-                
             }).finally(() => setLoadingButtonPer(false))
             return result
         }
@@ -720,6 +691,16 @@ function AddRolePage(props: AddRolePageProps) {
         setSelected([])
         setLoadingPerDetail(false)
         setPermissionAction(undefined)
+        setRow([createData('', '', '')])
+        setData([{
+            id: '',
+            code: '',
+            name: '',
+            path: '',
+            roleId: '',
+            menuId: '',
+            status: true
+        }])
     }
 
     return (
