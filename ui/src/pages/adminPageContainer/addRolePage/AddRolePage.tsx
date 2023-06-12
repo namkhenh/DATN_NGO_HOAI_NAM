@@ -118,7 +118,6 @@ function AddRolePage(props: AddRolePageProps) {
     useEffect(() => {
         
         if (props.actionType === RoleAction.Edit) {
-
             setRoleId(roleIdFromProps!)
             setLoadingPermission(true)
             setLoadingRoleDetail(true)
@@ -315,6 +314,8 @@ function AddRolePage(props: AddRolePageProps) {
                 if (res.success) {
                     setRoleId(res.data.id)
                     setLoadingRoleDetail(true)
+                    setRow([])
+                    setData([])
                     setLoadingButtonRole(false)
                     showMessageBar("Tạo vai trò thành công!", true, MessageBarStatus.Success)
                 } else {
@@ -691,16 +692,6 @@ function AddRolePage(props: AddRolePageProps) {
         setSelected([])
         setLoadingPerDetail(false)
         setPermissionAction(undefined)
-        setRow([createData('', '', '')])
-        setData([{
-            id: '',
-            code: '',
-            name: '',
-            path: '',
-            roleId: '',
-            menuId: '',
-            status: true
-        }])
     }
 
     return (
