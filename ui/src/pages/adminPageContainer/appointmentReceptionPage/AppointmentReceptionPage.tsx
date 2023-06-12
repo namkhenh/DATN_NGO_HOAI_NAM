@@ -221,6 +221,8 @@ function AppointmentReceptionPage() {
                     total={15}
                     hasNavigate
                     navigateLink={"/admin/tiep-don-dat-kham/chi-tiet-dat-kham/"}
+                    isLoading={false}
+
                 />
             </div>
         </div>

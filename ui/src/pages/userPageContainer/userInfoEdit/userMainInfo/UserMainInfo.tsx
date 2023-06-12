@@ -28,6 +28,7 @@ import {
     validateRequire,
     validateRequireLimitCharacter
 } from '../../../../utils/commonFunction';
+import { MenuService } from '../../../../api/apiPage/apiPage';
 
 initializeIcons();
 
@@ -109,6 +110,15 @@ function UserMainInfo(props: IUserMainInfoProps) {
         loadingButton: false,
         showMessage: false
     });
+
+    const getMenu = () => {
+        const aaa = MenuService.getMenuById('d00ecdf7-e075-49fa-1564-08db68c3a009').then(res => {
+            console.log(res);
+            
+        })
+        return aaa
+        
+    }
 
     const {userMainInfo, errorMessageString, canEditCommune, canEditDistrict, loadingButton} = state
     const {userAddress} = state.userMainInfo
@@ -364,9 +374,9 @@ function UserMainInfo(props: IUserMainInfoProps) {
                 <div className="user-main-container" style={{display: 'flex', flexWrap: 'wrap'}}>
                     {Array.from({length: 5}).map((item, index) => (
                         <>
-                            <Skeleton key={index} variant="rounded" width={300} height={72}
+                            <Skeleton variant="rounded" width={300} height={72}
                                       style={{opacity: 1 - 0.15 * index}}/>
-                            <Skeleton key={index} variant="rounded" width={300} height={72}
+                            <Skeleton variant="rounded" width={300} height={72}
                                       style={{opacity: 1 - 0.15 * index}}/>
                         </>
                     ))}
@@ -505,7 +515,7 @@ function UserMainInfo(props: IUserMainInfoProps) {
                     text={'Cập nhật thông tin'}
                     // disable={!canUpdate}
                     buttonVariantType={ButtonVariantType.Contained}
-                    promise={handleUpdateInfo}
+                    promise={getMenu}
                     loading={loadingButton}
                     loadingPosition={LoadingPosition.Center}
                 />

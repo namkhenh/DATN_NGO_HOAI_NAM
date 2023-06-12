@@ -315,6 +315,8 @@ function ApproveCalendarPage() {
                     handleChangePage={(page) => { setCurrentPage(page) }}
                     total={15}
                     hasNavigate={false}
+                    isLoading={false}
+
                 />
             </div>
             <DialogView

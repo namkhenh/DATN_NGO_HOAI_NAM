@@ -221,6 +221,8 @@ function AssignUserPage() {
                         page={currentPage}
                         handleChangePage={(page) => { setCurrentPage(page) }}
                         total={10}
+                        isLoading={false}
+
                     />
                 </div>
             </div>
@@ -344,6 +346,8 @@ function AssignUserPage() {
                         handleChangePage={(page) => { setCurrentPage(page) }}
                         total={10}
                         className='assignuser-table'
+                        isLoading={false}
+
                     />
                 </div>
                 <div className="assignuser-page-button">

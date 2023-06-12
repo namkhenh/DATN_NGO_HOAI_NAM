@@ -235,6 +235,8 @@ function PatientReceptionList() {
                     total={15}
                     hasNavigate
                     navigateLink={"/admin/tiep-don-benh-nhan/chi-dinh-dich-vu/"}
+                    isLoading={false}
+
                 />
             </div>
         </div>

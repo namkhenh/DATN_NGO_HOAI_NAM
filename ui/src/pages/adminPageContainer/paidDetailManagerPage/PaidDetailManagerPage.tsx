@@ -337,6 +337,8 @@ function PaidDetailManagerPage() {
                         handleChangePage={(page) => { setCurrentPage(page) }}
                         total={10}
                         className='paiddetail-table'
+                        isLoading={false}
+
                     />
                 </div>
                 <DialogView

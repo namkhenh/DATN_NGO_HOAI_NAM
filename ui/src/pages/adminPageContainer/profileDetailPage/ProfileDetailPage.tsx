@@ -43,22 +43,22 @@ function ProfileDetailPage() {
         setRowData(selection.selectedItems)
     }
 
-    useEffect(() => {
-        setRow(rowDatas.map((e: ServiceListTableDatas) => {
-            return {
-                serviceCode: e.serviceCode,
-                serviceName: e.serviceName,
-                designatedRoom: e.designatedRoom,
-                designatedFaculty: e.designatedFaculty,
-                designatedDoctor: e.designatedDoctor,
-                serviceCost: e.serviceCost,
-                patientPaid: e.patientPaid,
-                task: <IconButton aria-label="delete" size="small" onClick={() => { removeRole(e.serviceId) }}>
-                    <DeleteIcon color='error' />
-                </IconButton>
-            }
-        }))
-    }, [rows, rowDatas])
+    // useEffect(() => {
+    //     setRow(rowDatas.map((e: ServiceListTableDatas) => {
+    //         return {
+    //             serviceCode: e.serviceCode,
+    //             serviceName: e.serviceName,
+    //             designatedRoom: e.designatedRoom,
+    //             designatedFaculty: e.designatedFaculty,
+    //             designatedDoctor: e.designatedDoctor,
+    //             serviceCost: e.serviceCost,
+    //             patientPaid: e.patientPaid,
+    //             task: <IconButton aria-label="delete" size="small" onClick={() => { removeRole(e.serviceId) }}>
+    //                 <DeleteIcon color='error' />
+    //             </IconButton>
+    //         }
+    //     }))
+    // }, [rows, rowDatas])
 
     const removeRole = (idDel: string) => {
         setRowData(rowDatas.filter((e) => idDel !== e.serviceId))
@@ -230,6 +230,8 @@ function ProfileDetailPage() {
                         page={currentPage}
                         handleChangePage={(page) => { setCurrentPage(page) }}
                         total={2}
+                        isLoading={false}
+
                     />
                 </div>
             </div>
@@ -332,11 +334,13 @@ function ProfileDetailPage() {
                         hasNavigate={false}
                         className='service-table'
                         hasTablePaging={false}
+                        isLoading={false}
+
                     />
                 </div>
                 <div className="service-list-button">
                     <Button variant={ButtonVariantType.Outlined} color={ButtonColorType.Inherit}>Hủy</Button>
-                    {true && <Button variant={ButtonVariantType.Contained}>Lưu</Button>}
+                    {true && <Button variant={ButtonVariantType.Contained} onClick={() => {window.open('/admin/dashboard', '_self')}}>Lưu</Button>}
                 </div> 
                 <DialogView
                     title={'Thêm dịch vụ'}

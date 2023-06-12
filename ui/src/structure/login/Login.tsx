@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Login.scss'
 import doctor from '../../base/image/doctor.png'
 import user from '../../base/image/user.png'
@@ -6,29 +6,41 @@ import login from '../../base/image/login-form.png'
 import logo from '../../base/image/Riordan_Clinic_logo.png'
 import {TextField} from '../../common/textField/TextField'
 import SubmitButton from '../../common/button/SubmitButton'
-import {ButtonVariantType} from '../../model/enum/buttonEnum'
+import {ButtonVariantType, LoadingPosition} from '../../model/enum/buttonEnum'
 import {AccountRoleEnum} from '../../model/enum/accPermissionEnum'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
-
+import { AuthenService } from '../../api/apiPage/apiPage'
+import Cookies from 'js-cookie';
 function Login() {
+    const [loadingButton, setLoading] = useState<boolean>()
+    const [phoneNumber, setPhoneNumber] = useState<string>()
+    const [password, setPassword] = useState<string>()
+    const [rememberPass, setRemmemberPass] = useState<boolean>()
+
+    
     const navigate = useNavigate()
-    const handleUpdateInfo = () => {
-            let requestBody = {
-
+    const handleLogin = () => {
+        let requestBody = {
+            userName: phoneNumber,
+            password: password,
+            remmemberMe: true
+        }
+        setLoading(true)
+        const result = AuthenService.login(requestBody).then(res => {
+            if (res.success) {
+                Cookies.set("Token", res.data?.accessToken, {
+                    expires: 7,
+                });
+                setLoading(false)
+                navigate('/trang-chu')
+            } else {
+                setLoading(false)
             }
-            const result = new Promise((resolve) => {
-                setTimeout(() => {
-                    localStorage.setItem('user', JSON.stringify({ role: AccountRoleEnum.Admin }))
-                    navigate('/trang-chu')
-                    resolve('success')
-                }, 4000);
-            }).then(() => {/*  */
-
-            })
-
-            return result
+        })
+        return result
     }
+
     return (
         <div className='login-container'>
             <div className="login-form-wrap">
@@ -44,9 +56,9 @@ function Login() {
                         <TextField
                             label='Số điện thoại'
                             placeholder='--'
-                            value={''}
+                            value={phoneNumber}
                             required
-                            // onChange={(_, value) => { onChangeOneField(UserInfoModelProperty.userPhoneNumber, value) }}
+                            onChange={(_, value) => { setPhoneNumber(value) }}
                             errorMessage={''}
                         />
                     </div>
@@ -55,12 +67,12 @@ function Login() {
                             label='Mật khẩu'
                             placeholder='--'
                             required
-                            value={'sss'}
+                            value={password}
                             type="password"
                             canRevealPassword
                             revealPasswordAriaLabel="Show password"
-                            // onChange={(_, value) => { onChangeOneField(UserInfoModelProperty.userPhoneNumber, value) }}
-                            // errorMessage={errorMessageString.userPhoneNumber}
+                            onChange={(_, value) => { setPassword(value) }}
+                            errorMessage={''}
                         />
                     </div>
                     <div className="sign-up">
@@ -72,10 +84,10 @@ function Login() {
                             text={'Đăng nhập'}
                             // disable={!canUpdate}
                             buttonVariantType={ButtonVariantType.Contained}
-                            promise={handleUpdateInfo}
+                            promise={handleLogin}
                             fullWidth={true}
-                            // loading={loadingButton}
-                            // loadingPosition={LoadingPosition.Center}
+                            loading={loadingButton}
+                            loadingPosition={LoadingPosition.Center}
                             
                         />
                     </div>

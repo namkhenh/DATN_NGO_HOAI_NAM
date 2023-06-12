@@ -247,6 +247,7 @@ export interface AccountManagerTableDatas {
 export interface RoleManagerTableColumns {
     roleCode: string
     roleName: string
+    roleDescription: string
     roleStatus: JSX.Element
 }
 export interface RoleManagerTableDatas {
@@ -254,10 +255,11 @@ export interface RoleManagerTableDatas {
     // appUserRoleMappings?: IAppUserRole[]
     code: string
     name: string
-    // startAt?: string
-    // endAt?: string
+    description: string
+    startAt?: Date
+    endAt?: Date
     // permission?: PermissionManagerTableDatas[]
-    status: RoleStatus
+    status: boolean
     // used?: boolean
 }
 
@@ -265,8 +267,9 @@ export interface MenuTableDatas {
     id: string
     code: string
     name: string
-    isDeleted: boolean
-    actions?: ActionTableDatas[]
+    path: string
+    // isDeleted: boolean
+    // actions?: ActionTableDatas[]
 }
 export interface PermissionActionTableDatas {
     action: ActionTableDatas
@@ -283,15 +286,14 @@ export interface PermissionManagerTableColumns {
 }
 export interface PermissionManagerTableDatas {
     id: string
-    code: string
-    menu: MenuTableDatas
-    menuId: string
     name: string
-    status: PermissionStatus
-    permissionActionMapping?: PermissionActionTableDatas[]
+    code: string
+    path: string
+    menuId: string
+    // status: boolean
     roleId: string
-    startAt?: string
-    endAt?: string
+    startAt?: Date
+    endAt?: Date
 }
 
 export interface ActionManagerTableColumns {
@@ -299,9 +301,10 @@ export interface ActionManagerTableColumns {
 }
 export interface ActionTableDatas {
     id: string
+    code: string
     name: string
-    isDeleted: boolean
     menuId: string
+    path: string
 }
 
 export interface UserAssignTableColumns {

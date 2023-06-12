@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Signup.scss'
 import doctor from '../../base/image/doctor.png'
 import user from '../../base/image/user.png'
@@ -6,29 +6,60 @@ import login from '../../base/image/login-form.png'
 import logo from '../../base/image/Riordan_Clinic_logo.png'
 import { TextField } from '../../common/textField/TextField'
 import SubmitButton from '../../common/button/SubmitButton'
-import { ButtonVariantType } from '../../model/enum/buttonEnum'
+import { ButtonVariantType, LoadingPosition } from '../../model/enum/buttonEnum'
 import { useNavigate } from 'react-router-dom'
 import { AccountRoleEnum } from '../../model/enum/accPermissionEnum'
 import Button from '@mui/material/Button'
+import { AuthenService } from '../../api/apiPage/apiPage'
+import { useStateValue } from '../../context/StateProvider'
+import { MessageBarStatus } from '../../model/enum/messageBarEnum'
+import { actionType } from '../../context/Reducer'
+
+interface IErrorMessage {
+    phoneNumber: string;
+    password: string;
+    passwordAgain: string
+}
 
 function Signup() {
-    const navigate = useNavigate()
-    const handleUpdateInfo = () => {
-        let requestBody = {
-
+    const [loadingButton, setLoading] = useState<boolean>()
+    const [phoneNumber, setPhoneNumber] = useState<string>()
+    const [password, setPassword] = useState<string>()
+    const [passwordAgain, setPasswordAgain] = useState<string>()
+    const [errorMessage, setErrorMessage] = useState<IErrorMessage>(
+        {
+            phoneNumber: '',
+            password: '',
+            passwordAgain: ''
         }
-        const result = new Promise((resolve) => {
-            setTimeout(() => {
-                localStorage.setItem('user', JSON.stringify({ role: AccountRoleEnum.Admin }))
-                navigate('/trang-chu')
-                resolve('success')
-            }, 4000);
-        }).then(() => {/*  */
+    )
 
+
+    const navigate = useNavigate()
+    const [, dispatch] = useStateValue()
+    const showMessageBar = (message: string, isOpen: boolean, status: MessageBarStatus) => {
+        dispatch({ type: actionType.SET_MESSAGE_BAR, messageBar: { isOpen: isOpen, text: message, status: status } })
+    }
+    const handleSignup = () => {
+        let requestBody = {
+            phoneNumber: phoneNumber,
+            email: 'namkhenh81@gmail.com',
+            password: password
+        }
+        setLoading(true)
+        const result = AuthenService.register(requestBody).then(res => {
+            if (res.success) {
+                setLoading(false)
+                showMessageBar("Đăng ký thành công!", true, MessageBarStatus.Success)
+                navigate('/dang-nhap')
+            } else {
+                setLoading(false)
+                showMessageBar(`Đăng ký thất bại! \n${res.message ? res.message : ''}`, true, MessageBarStatus.Error)
+            }
         })
-
         return result
     }
+
     return (
         <div className='signup-container'>
             <div className="signup-form-wrap">
@@ -44,10 +75,10 @@ function Signup() {
                         <TextField
                             label='Số điện thoại'
                             placeholder='--'
-                            value={''}
+                            value={phoneNumber}
                             required
-                            // onChange={(_, value) => { onChangeOneField(UserInfoModelProperty.userPhoneNumber, value) }}
-                            errorMessage={''}
+                            onChange={(_, value) => { setPhoneNumber(value) }}
+                            errorMessage={errorMessage.phoneNumber}
                         />
                     </div>
                     <div className="form-field">
@@ -55,12 +86,12 @@ function Signup() {
                             label='Mật khẩu'
                             placeholder='--'
                             required
-                            value={'sss'}
+                            value={password}
                             type="password"
                             canRevealPassword
                             revealPasswordAriaLabel="Show password"
-                        // onChange={(_, value) => { onChangeOneField(UserInfoModelProperty.userPhoneNumber, value) }}
-                        // errorMessage={errorMessageString.userPhoneNumber}
+                            onChange={(_, value) => { setPassword(value) }}
+                            errorMessage={errorMessage.password}
                         />
                     </div>
                     <div className="form-field">
@@ -68,12 +99,12 @@ function Signup() {
                             label='Nhập lại mật khẩu'
                             placeholder='--'
                             required
-                            value={'sss'}
+                            value={passwordAgain}
                             type="password"
                             canRevealPassword
                             revealPasswordAriaLabel="Show password"
-                        // onChange={(_, value) => { onChangeOneField(UserInfoModelProperty.userPhoneNumber, value) }}
-                        // errorMessage={errorMessageString.userPhoneNumber}
+                            onChange={(_, value) => { setPasswordAgain(value) }}
+                            errorMessage={errorMessage.passwordAgain}
                         />
                     </div>
                     <div className="signup-button">
@@ -82,10 +113,10 @@ function Signup() {
                             text={'Đăng ký'}
                             // disable={!canUpdate}
                             buttonVariantType={ButtonVariantType.Contained}
-                            promise={handleUpdateInfo}
+                            promise={handleSignup}
                             fullWidth={true}
-                        // loading={loadingButton}
-                        // loadingPosition={LoadingPosition.Center}
+                            loading={loadingButton}
+                            loadingPosition={LoadingPosition.Center}
 
                         />
                     </div>

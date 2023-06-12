@@ -56,6 +56,9 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
     }
   }
 
+  console.log(selection);
+  
+
   // useEffect(()=>{}, [selection])
   const patientReceptionListActions = (): ICommandBarItemProps[] => {
     let commandBarItems: ICommandBarItemProps[] = []
@@ -250,7 +253,7 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
         },
       )
     }
-    if (selection.selectedCount !== 0) {
+    if (selection.selectedCount === 1) {
       commandBarItems.push(
         {
           key: 'role-delete',

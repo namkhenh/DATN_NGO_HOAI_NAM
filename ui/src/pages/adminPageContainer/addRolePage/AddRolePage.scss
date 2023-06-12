@@ -24,7 +24,7 @@
         .addrole-page-wrap {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            flex-wrap: wrap;
             gap: 20px;
             margin-bottom: 20px;
             label {
@@ -33,7 +33,7 @@
                 font-weight: 500;
             }
             .addrole-info-item {
-                width: calc(23% - 20px);
+                width: calc(33% - 20px);
             }
             .addrole-info-item:last-child {
                 width: calc(8% - 20px)
@@ -41,6 +41,16 @@
             .addrole-page-table {
                 max-height: 432px;
             }
+        }
+    }
+    .add-role-button {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 24px;
+    
+        button {
+            min-width: 100px;
         }
     }
 }
@@ -59,6 +69,7 @@
             label {
                 font-size: 16px;
                 font-weight: 500;
+                font-family: 'Roboto', sans-serif !important;;
             }
         }
     }

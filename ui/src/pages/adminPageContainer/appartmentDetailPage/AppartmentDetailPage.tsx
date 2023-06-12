@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './AppartmentDetailPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
 import { DatePicker } from '../../../common/datePicker/DatePicker'
@@ -17,7 +17,6 @@ import { SearchBoxView } from '../../../common/searchBox/SearchBox'
 import { actionType } from '../../../context/Reducer'
 import { UserGender } from '../../../model/enum/tableTypeEnum'
 import { isStringEmpty, validateNumberField, validateRequireLimitCharacter, validateRequireLimitCharacterForm } from '../../../utils/commonFunction'
-import { PatientReceptionService } from '../../../api/patientReception/patientReception'
 
 export enum IAppointmentAction {
     Create,
@@ -94,13 +93,6 @@ function AppartmentDetailPage(props: IAppartmentDetailPageProps) {
             [key]: validateField(key, value)
         })
     }
-
-    const getStaticTableData = () => {
-        return PatientReceptionService.getPatientReceptionStaticReport()
-    }
-
-    console.log(getStaticTableData());
-    
 
     const validateField = (key: keyof IAppointmenViewModel, value: any) => {
         switch (key) {

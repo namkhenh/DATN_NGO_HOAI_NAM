@@ -22,6 +22,8 @@ import Button from "@mui/material/Button";
 import { ButtonColorType } from "../../model/enum/buttonEnum";
 import { useStateValue } from "../../context/StateProvider";
 import { actionType } from "../../context/Reducer";
+import Skeleton from "@mui/material/Skeleton";
+import { useEffect } from "react";
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -206,6 +208,7 @@ interface TablePagerProps<T, D> {
   navigateLink?: string
   className?: string
   hasTablePaging?: boolean
+  isLoading: boolean
 }
 
 export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
@@ -216,6 +219,7 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [isLoading, setLoading] = React.useState<boolean>(props.isLoading)
   const [{ selection }, dispatch] = useStateValue();
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -232,7 +236,7 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
       // props.rowData.forEach((row: any, i) => { return props.hasNavigate ? newSelected.push(row[Object.keys(row)[0]]?.props.children) : newSelected.push(row[Object.keys(row)[0]]) });
       props.dataTotal.forEach((data: any, i) => { return newSelected.push(data[Object.keys(data)[0]]) });
       setSelected(newSelected);
-      
+
       const newSelectedC = props.dataTotal
       setSelectedC(newSelectedC)
 
@@ -284,7 +288,7 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
     }
     setSelected(newSelected);
     setSelectedC(newSelectedC)
-    dispatch({type: actionType.SET_SELECTION, selection: {...selection, selectedItems: newSelectedC, selectedCount: newSelectedC.length}});
+    dispatch({ type: actionType.SET_SELECTION, selection: { ...selection, selectedItems: newSelectedC, selectedCount: newSelectedC.length } });
   };
 
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -324,25 +328,45 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
     return (
       <>
         {Array.from({ length: Object.keys(row).length }).map((a, i) => {
-          return props.hasNavigate && i === 0 ? (
+          return isLoading ?
             <TableCell
-              component="th"
-              id={`enhanced-table-checkbox`}
               align="left"
-              scope="row"
-              sx={{ cursor: "pointer", fontWeight: "500" }}
             >
-              <NavLink to={`${props.navigateLink}${data[Object.keys(data)[0]]}`} style={{ color: 'rgba(0, 0, 0, 0.87)'}}>
-              {row[Object.keys(row)[i]]}
-              </NavLink>
-            </TableCell>
-          ) : (
-            <TableCell align="left">{row[Object.keys(row)[i]]}</TableCell>
-          );
+              <Skeleton variant="rounded" height={30} />
+            </TableCell> :
+            (props.hasNavigate && i === 0 ? (
+              <TableCell
+                component="th"
+                id={`enhanced-table-checkbox`}
+                align="left"
+                scope="row"
+                sx={{ cursor: "pointer", fontWeight: "500" }}
+              >
+                <NavLink to={`${props.navigateLink}${data[Object.keys(data)[0]]}`} style={{ color: 'rgba(0, 0, 0, 0.87)' }}>
+                  {row[Object.keys(row)[i]]}
+                </NavLink>
+              </TableCell>
+            ) : (
+              <TableCell align="left">{row[Object.keys(row)[i]]}</TableCell>
+            ))
         })}
       </>
     );
   };
+
+  useEffect(() => {
+    setLoading(props.isLoading)
+    setSelected([])
+    setSelectedC([])
+    dispatch({
+      type: actionType.SET_SELECTION,
+      selection: {
+        ...selection,
+        selectedItems: [],
+        selectedCount: 0,
+      },
+    });
+  },[props.isLoading])
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -372,7 +396,7 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
             </div>
           )}
         </div>
-        {props.rowData.length !== 0 ? (
+        {props.rowData.length !== 0 || isLoading ? (
           <div className="table-pager">
             <TableContainer className={props.className}>
               <Table
@@ -396,31 +420,49 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
                   {props.rowData.map((row, index) => {
                     const isItemSelected = isSelected(props.dataTotal[index]);
                     const labelId = `enhanced-table-checkbox-${index}`;
-                    return (
-                      <TableRow
-                        // hover
-                        // onClick={(event) => handleClick(event, row)}
-                        role="checkbox"
-                        aria-checked={isItemSelected}
-                        tabIndex={-1}
-                        key={index}
-                        selected={isItemSelected}
-                      >
-                        {props.hasCheckBox && (
-                          <TableCell padding="checkbox">
-                            <Checkbox
-                              color="primary"
-                              checked={isItemSelected}
-                              inputProps={{
-                                "aria-labelledby": labelId,
-                              }}
-                              onClick={(event) => handleClick(event, props.dataTotal[index])}
-                            />
-                          </TableCell>
-                        )}
-                        {onRenderCell(row, props.dataTotal[index])}
-                      </TableRow>
-                    );
+                    return isLoading ? (
+                      Array.from({ length: 5 }).map((item, index) => (
+                        <TableRow
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={index}
+                          selected={isItemSelected}
+                        >
+                          {props.hasCheckBox && (
+                            <TableCell padding="checkbox">
+                              <Skeleton variant="rounded" height={30} />
+                            </TableCell>
+                          )}
+                          {onRenderCell(row, props.dataTotal[index])}
+                        </TableRow>
+                      ))
+                    ) :
+                      (
+                        <TableRow
+                          // hover
+                          // onClick={(event) => handleClick(event, row)}
+                          role="checkbox"
+                          aria-checked={isItemSelected}
+                          tabIndex={-1}
+                          key={index}
+                          selected={isItemSelected}
+                        >
+                          {props.hasCheckBox && (
+                            <TableCell padding="checkbox">
+                              <Checkbox
+                                color="primary"
+                                checked={isItemSelected}
+                                inputProps={{
+                                  "aria-labelledby": labelId,
+                                }}
+                                onClick={(event) => handleClick(event, props.dataTotal[index])}
+                              />
+                            </TableCell>
+                          )}
+                          {onRenderCell(row, props.dataTotal[index])}
+                        </TableRow>
+                      );
                   })}
                   {emptyRows > 0 && (
                     <TableRow
@@ -442,7 +484,7 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
                 rowsPerPage={10}
                 page={props.page}
                 onPageChange={(e, page) => {
-                  props.handleChangePage(page);
+                  props.handleChangePage(page + 1);
                 }}
               />}
           </div>

@@ -237,6 +237,8 @@ function HealthCarePage() {
                     hasTablePaging
                     hasNavigate
                     navigateLink={"/admin/kham-chua-benh/chi-tiet-kham-benh/"}
+                    isLoading={false}
+
                 />
             </div>
         </div>

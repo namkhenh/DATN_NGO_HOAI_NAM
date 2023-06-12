@@ -6,6 +6,7 @@ interface SearchBoxProps {
     placeholder: string
     // onChange: () => {}
     onSearch: (newValue: string) => void
+    onClear?: () => void
 }
 
 /* eslint-disable react/jsx-no-bind */
@@ -17,10 +18,8 @@ export const SearchBoxView = (props: SearchBoxProps) => {
             onEscape={ev => {
                 
             }}
-            onClear={ev => {
-                
-            }}
-            onChange={(_, newValue) => console.log('SearchBox onChange fired: ' + newValue)}
+            onClear={ev => props.onClear!()}
+            // onChange={(_, newValue) => console.log('SearchBox onChange fired: ' + newValue)}
             onSearch={newValue => props.onSearch(newValue)}
         />
     )

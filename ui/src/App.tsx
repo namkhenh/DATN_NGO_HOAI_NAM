@@ -19,7 +19,7 @@ import AdminLayout from "./structure/layout/AdminLayout";
 import { AccountRoleEnum } from "./model/enum/accPermissionEnum";
 import AppartmentDetailPage, { IAppointmentAction } from "./pages/adminPageContainer/appartmentDetailPage/AppartmentDetailPage";
 import AccountManagerPage from "./pages/adminPageContainer/accountManagerPage/AccountManagerPage";
-import RoleManagerPage from "./pages/adminPageContainer/roleManagerPage/RoleManagerPage";
+import RoleManagerPage, { RoleAction } from "./pages/adminPageContainer/roleManagerPage/RoleManagerPage";
 import AddRolePage, { PermissionAction } from "./pages/adminPageContainer/addRolePage/AddRolePage";
 import AssignUserPage from "./pages/adminPageContainer/assignUserPage/AssignUserPage";
 import PatientReceptionList from "./pages/adminPageContainer/patientReceptionList/PatientReceptionList";
@@ -31,6 +31,8 @@ import HealthCareDetail from "./pages/adminPageContainer/healthCareDetailPage/He
 import ApproveCalendarPage from "./pages/adminPageContainer/browseCalendarPage/ApproveCalendarPage";
 import AppointmentReceptionPage from "./pages/adminPageContainer/appointmentReceptionPage/AppointmentReceptionPage";
 import Signup from "./structure/signup/Signup";
+import ErrorPage from "./structure/error/ErrorPage";
+import MessageBar from "./common/messageBar/MessageBar";
 
 function App() {
   return (
@@ -105,8 +107,8 @@ function App() {
             <Route path="/admin/dashboard" element={<div>Dash</div>}></Route>
             <Route path="/admin/quan-ly-tai-khoan" element={<AccountManagerPage />}></Route>
             <Route path="/admin/quan-ly-vai-tro" element={<RoleManagerPage />}></Route>
-            <Route path="/admin/quan-ly-vai-tro/them-moi-vai-tro" element={<AddRolePage actionType={PermissionAction.Create} />}></Route>
-            <Route path="/admin/quan-ly-vai-tro/chi-tiet-vai-tro/:id" element={<AddRolePage actionType={PermissionAction.Edit} />}></Route>
+            <Route path="/admin/quan-ly-vai-tro/them-moi-vai-tro" element={<AddRolePage actionType={RoleAction.Create} />}></Route>
+            <Route path="/admin/quan-ly-vai-tro/chi-tiet-vai-tro/:id" element={<AddRolePage actionType={RoleAction.Edit} />}></Route>
             <Route path="/admin/quan-ly-vai-tro/gan-nguoi-dung/:id" element={<AssignUserPage/>}></Route>
             {/* <Route path="/admin/quan-ly-dat-kham" element={<PatientListPage />}></Route>
             <Route path="/admin/chi-tiet-ho-so/" element={<AppartmentDetailPage actionType={IAppointmentAction.Edit} />}></Route> */}
@@ -130,8 +132,9 @@ function App() {
         {/* </Route> */}
         <Route path="/dang-nhap" element={<Login></Login>}></Route>
         <Route path="/dang-ky" element={<Signup></Signup>}></Route>
-        <Route path="*" element={<>Sai roi</>}></Route>
+        <Route path="*" element={<ErrorPage></ErrorPage>}></Route>
       </Routes>
+      <MessageBar/>
     </div>
   );
 }

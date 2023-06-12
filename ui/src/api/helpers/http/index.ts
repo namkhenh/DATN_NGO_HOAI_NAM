@@ -8,18 +8,17 @@ type ISendRequest = (
     method: string,
     body?: any,
     options?: any,
-    contentType?: string,
-    isBlob?: boolean) => Promise<any>;
+    contentType?: string) => Promise<any>;
 
 const send: ISendRequest = (
     path,
     method,
     body,
     options,
-    contentType,
-    isBlob) => {
+    contentType) => {
     let requestOptions: any = {
-        headers: { ...HttpAuthHeaderBuilder.build(), "Content-Type": contentType || "application/json" },
+        headers: { "Content-Type": contentType || "application/json" },
+        // credentials: 'include',
         method,
     };
     if (body) {
@@ -50,45 +49,45 @@ const send: ISendRequest = (
     });
 };
 
-const noTokenHeaderSend: ISendRequest = (
-    path,
-    method,
-    body,
-    options,
-    contentType,
-    isBlob) => {
-    let requestOptions: any = {
-        // headers: { Authorization: Bearer ${(window as any).context.businesscontexttoken}, "Content-Type": contentType || "application/json" },
-        headers: { "Content-Type": contentType || "application/json" },
-        method,
-    };
-    if (body) {
-        requestOptions = {
-            ...requestOptions,
-            body: JSON.stringify(body),
-        };
-    }
-    if (options) {
-        requestOptions = {
-            ...requestOptions,
-            ...options,
-        };
-    }
-    return fetch(path, requestOptions).then(handleBusinessContextResponse).catch((response) => {
-        if (response === 401) {
-            //replace original component with loading
-            //avoid js error
-            handleUnAuthorizedPage();
-        }
-        if (!response.code) {
-            //handleErrorPage(500);
-        }
-        return Promise.resolve({
-            isSuccessful: false,
-            status: ApiResultStatus.Failed
-        });
-    });
-};
+// const noTokenHeaderSend: ISendRequest = (
+//     path,
+//     method,
+//     body,
+//     options,
+//     contentType,
+//     ) => {
+//     let requestOptions: any = {
+//         // headers: { Authorization: Bearer ${(window as any).context.businesscontexttoken}, "Content-Type": contentType || "application/json" },
+//         headers: { "Content-Type": contentType || "application/json" },
+//         method,
+//     };
+//     if (body) {
+//         requestOptions = {
+//             ...requestOptions,
+//             body: JSON.stringify(body),
+//         };
+//     }
+//     if (options) {
+//         requestOptions = {
+//             ...requestOptions,
+//             ...options,
+//         };
+//     }
+//     return fetch(path, requestOptions).then(handleBusinessContextResponse).catch((response) => {
+//         if (response === 401) {
+//             //replace original component with loading
+//             //avoid js error
+//             handleUnAuthorizedPage();
+//         }
+//         if (!response.code) {
+//             //handleErrorPage(500);
+//         }
+//         return Promise.resolve({
+//             isSuccessful: false,
+//             status: ApiResultStatus.Failed
+//         });
+//     });
+// };
 
 function handleBusinessContextResponse(response: Response): Promise<any> {
     return response.text().then((text) => {
@@ -170,4 +169,4 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
     return window.btoa(binary);
 }
 
-export { send, noTokenHeaderSend, handleUnAuthorized, arrayBufferToBase64, commonFileRequestOptions,  };
+export { send, handleUnAuthorized, arrayBufferToBase64, commonFileRequestOptions,  };

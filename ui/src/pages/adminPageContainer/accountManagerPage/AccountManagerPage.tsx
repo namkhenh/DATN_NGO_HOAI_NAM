@@ -367,6 +367,7 @@ function AccountManagerPage() {
                     page={currentPage}
                     handleChangePage={(page) => { setCurrentPage(page) }}
                     total={10}
+                    isLoading={false}
                 />
             </div>
             <DialogView

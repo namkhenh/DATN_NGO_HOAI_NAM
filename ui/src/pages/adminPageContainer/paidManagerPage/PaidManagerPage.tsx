@@ -197,6 +197,8 @@ function PaidManagerPage() {
                     hasTablePaging
                     hasNavigate
                     navigateLink={"/admin/thanh-toan-ngoai-tru/chi-tiet-thanh-toan/"}
+                    isLoading={false}
+
                 />
             </div>
         </div>

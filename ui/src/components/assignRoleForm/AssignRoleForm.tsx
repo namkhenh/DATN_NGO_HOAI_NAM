@@ -54,7 +54,7 @@ function AssignRoleForm() {
           <Autocomplete
             disablePortal
             id="assignrole-box-select"
-            options={[{ name: "Bác sĩ", code: "Bác sĩ", id: "asdasdqw2212as", status: RoleStatus.Enable }, { name: "Admin", code: "Admin", id: "qwe2dgsdg323a", status: RoleStatus.Enable }, { name: "Bác", code: "Bác", id: "aa33", status: RoleStatus.Enable }]}
+            options={[{ name: "Bác sĩ", code: "Bác sĩ", id: "asdasdqw2212as", status: true, description: 'he' }, { name: "Admin", code: "Admin", id: "qwe2dgsdg323a", status: true, description: 'he' }, { name: "Bác", code: "Bác", id: "aa33", status: true, description: 'he' }]}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             getOptionLabel={(option) => option.name}
             sx={{ width: 420 }}

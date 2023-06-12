@@ -77,6 +77,10 @@ const roleManagerStaticColumn: () => HeadCell[] = () => [
         label: 'Tên vai trò',
     },
     {
+        id: 'roleDescription',
+        label: 'Mô tả',
+    },
+    {
         id: 'roleStatus',
         label: 'Trạng thái',
     },
