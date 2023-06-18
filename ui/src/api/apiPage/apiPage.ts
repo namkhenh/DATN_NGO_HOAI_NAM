@@ -1,11 +1,26 @@
 import { Endpoint as api, send } from "../helpers"
 
-export class AuthenService {
+export class UserService {
     public static login = (object: any) => {
         return send(`${api.authentication}`, 'POST', object)
     }
     public static register = (object: any) => {
         return send(`${api.register}`, 'POST', object)
+    }
+    public static getUserById = (id: string) => {
+        return send(`${api.get_user_by_Id}?Id=${id}`, 'GET')
+    }
+    public static getUserPaging = (object: any) => {
+        return send(`${api.get_user_paging}`, 'POST', object)
+    }
+    public static updateUser = (object: any) => {
+        return send(`${api.update_user}`, 'POST', object)
+    }
+    public static deleteUser = (id: string) => {
+        return send(`${api.delete_user}?Id=${id}`, 'DELETE')
+    }
+    public static assignRole = (id: string, object: any) => {
+        return send(`${api.assign_role}?userId=${id}`, 'POST', object)
     }
 }
 

@@ -202,7 +202,7 @@ export enum ApproveCalendarAction {
 
 export interface AccountManagerTableColumns {
     userName: string
-    role: JSX.Element
+    role: string
     fullName: string
     phoneNumber: string
     insuranceNumber: string
@@ -230,18 +230,18 @@ export interface IAppUserRole {
 export interface AccountManagerTableDatas {
     id: string
     userName: string
-    startAt?: string
-    endAt?: string
-    appUserRoleMappings: IAppUserRole[]
+    // startAt?: string
+    // endAt?: string
+    roles: IAppUserRole[]
     address?: string
     avatar?: string
     birthday?: string
     fullName: string
     phone?: string
-    insurance?: string
+    identify?: string
     gender?: UserGender
     status: AccountStatus
-    used: boolean
+    // used: boolean
 }
 
 export interface RoleManagerTableColumns {
@@ -256,8 +256,8 @@ export interface RoleManagerTableDatas {
     code: string
     name: string
     description: string
-    startAt?: Date
-    endAt?: Date
+    startDate?: Date
+    endDate?: Date
     // permission?: PermissionManagerTableDatas[]
     status: boolean
     // used?: boolean

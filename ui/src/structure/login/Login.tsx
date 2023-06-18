@@ -7,10 +7,8 @@ import logo from '../../base/image/Riordan_Clinic_logo.png'
 import {TextField} from '../../common/textField/TextField'
 import SubmitButton from '../../common/button/SubmitButton'
 import {ButtonVariantType, LoadingPosition} from '../../model/enum/buttonEnum'
-import {AccountRoleEnum} from '../../model/enum/accPermissionEnum'
-import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
-import { AuthenService } from '../../api/apiPage/apiPage'
+import { UserService } from '../../api/apiPage/apiPage'
 import Cookies from 'js-cookie';
 function Login() {
     const [loadingButton, setLoading] = useState<boolean>()
@@ -27,7 +25,7 @@ function Login() {
             remmemberMe: true
         }
         setLoading(true)
-        const result = AuthenService.login(requestBody).then(res => {
+        const result = UserService.login(requestBody).then(res => {
             if (res.success) {
                 Cookies.set("Token", res.data?.accessToken, {
                     expires: 7,
@@ -54,7 +52,7 @@ function Login() {
                     </div>
                     <div className="form-field">
                         <TextField
-                            label='Số điện thoại'
+                            label='Tên đăng nhập'
                             placeholder='--'
                             value={phoneNumber}
                             required

@@ -16,35 +16,69 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ContentPasteOffOutlinedIcon from "@mui/icons-material/ContentPasteOffOutlined";
 import { RoleManagerTableDatas } from '../../model/enum/tableTypeEnum'
 import { RoleStatus } from '../../pages/adminPageContainer/roleManagerPage/RoleManagerPage'
+import { RoleService } from '../../api/apiPage/apiPage'
 interface RoleTableColumns {
   roleCode: string
   roleName: string
   roleTask: JSX.Element
 }
 
+interface AssignRoleFormProps {
+  onChangeRoleSelect?: (role: string[]) => void
+}
 
 
 
-function AssignRoleForm() {
+function AssignRoleForm(props: AssignRoleFormProps) {
+  const [loadingRoleList, setLoadingRoleList] = useState<boolean>(false)
   const [roleList, setRoleList] = useState<RoleManagerTableDatas[]>([])
+  const [roleListSelect, setRoleListSelect] = useState<RoleManagerTableDatas[]>([])
   const [selected, setSelected] = useState<RoleManagerTableDatas>()
   const [rows, setRow] = useState<RoleTableColumns[]>([])
-  
+
+  useEffect(() => {
+    setLoadingRoleList(true)
+    RoleService.getRoleAll().then(res => {
+      if (res.success) {
+        let datas: RoleManagerTableDatas[] = []
+        !!res.data && res.data?.forEach((e: any) => {
+          datas.push({
+            id: e.id,
+            code: e.code,
+            name: e.name,
+            description: e.description,
+            startDate: e.startDate,
+            endDate: e.endDate,
+            status: e.status,
+          })
+        })
+        setLoadingRoleList(false)
+        setRoleList(datas)
+      } else {
+        setLoadingRoleList(false)
+      }
+    })
+  }, [])
+
   useEffect(() => {
     if (!!selected) {
-      setRow(roleList.map((e: RoleManagerTableDatas) => {
+      setRow(roleListSelect.map((e: RoleManagerTableDatas) => {
         return {
           roleCode: e.code, roleName: e.name, roleTask: <IconButton aria-label="delete" size="small" onClick={() => { removeRole(e.id) }}>
             <DeleteIcon color='error' />
           </IconButton>
         }
       }))
+      let roleIdList: string[] = []
+      roleListSelect.forEach(role => {
+        roleIdList.push(role.id)
+      })
+      props.onChangeRoleSelect!(roleIdList)
     }
-  }, [roleList])
-  console.log(roleList);
-  
+  }, [roleListSelect])
+
   const removeRole = (idDel: string) => {
-    setRoleList(roleList.filter((e) => idDel !== e.id))
+    setRoleListSelect(roleListSelect.filter((e) => idDel !== e.id))
   }
 
   return (
@@ -54,14 +88,16 @@ function AssignRoleForm() {
           <Autocomplete
             disablePortal
             id="assignrole-box-select"
-            options={[{ name: "Bác sĩ", code: "Bác sĩ", id: "asdasdqw2212as", status: true, description: 'he' }, { name: "Admin", code: "Admin", id: "qwe2dgsdg323a", status: true, description: 'he' }, { name: "Bác", code: "Bác", id: "aa33", status: true, description: 'he' }]}
+            options={roleList}
             isOptionEqualToValue={(option, value) => option.id === value.id}
             getOptionLabel={(option) => option.name}
             sx={{ width: 420 }}
-            renderInput={(params) => <TextField {...params} label="" placeholder='Chọn vai trò'/>}
+            renderInput={(params) => <TextField {...params} label="" placeholder='Chọn vai trò' />}
             onChange={(_, selected) => {
               setSelected(selected!)
             }}
+            loading={loadingRoleList}
+            loadingText={<>Vui lòng đợi...</>}
           />
         </div>
         <div className="assignrole-assign">
@@ -70,11 +106,12 @@ function AssignRoleForm() {
             endIcon={<AddCircleOutlineOutlinedIcon />}
             sx={{ textTransform: 'none' }}
             onClick={() => {
+
               if (!!selected) {
-                roleList.filter((role) => 
+                roleListSelect.filter((role) =>
                   role.id === selected.id
                 ).length === 0 &&
-                setRoleList(roleList.concat(selected))
+                  setRoleListSelect(roleListSelect.concat(selected))
               }
             }}
           >Gán vai trò</Button>

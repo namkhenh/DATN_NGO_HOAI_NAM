@@ -1,23 +1,25 @@
-import React, {useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import './AccountManagerPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
 import TablePager from '../../../common/tablePager/TablePager'
 import {
     AccountManagerTableColumns,
     AccountManagerTableDatas,
+    IAppUserRole,
+    RoleManagerTableDatas,
     TableType,
     UserGender
 } from '../../../model/enum/tableTypeEnum'
 import PatientListCommandBar from '../patientListPage/PatientListCommandBar'
-import {AccountRoleEnum} from '../../../model/enum/accPermissionEnum'
-import {SearchBoxView} from '../../../common/searchBox/SearchBox'
+import { AccountRoleEnum } from '../../../model/enum/accPermissionEnum'
+import { SearchBoxView } from '../../../common/searchBox/SearchBox'
 import DialogView from '../../../common/dialog/Dialog'
-import {TextField} from '../../../common/textField/TextField'
-import {useStateValue} from '../../../context/StateProvider'
-import {MessageBarStatus} from '../../../model/enum/messageBarEnum'
-import {actionType} from '../../../context/Reducer'
-import {DatePicker} from '../../../common/datePicker/DatePicker'
-import {Label} from '@fluentui/react/lib/Label'
+import { TextField } from '../../../common/textField/TextField'
+import { useStateValue } from '../../../context/StateProvider'
+import { MessageBarStatus } from '../../../model/enum/messageBarEnum'
+import { actionType } from '../../../context/Reducer'
+import { DatePicker } from '../../../common/datePicker/DatePicker'
+import { Label } from '@fluentui/react/lib/Label'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
@@ -25,7 +27,9 @@ import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutli
 import NotInterestedOutlinedIcon from '@mui/icons-material/NotInterestedOutlined';
 import AssignRoleForm from '../../../components/assignRoleForm/AssignRoleForm'
 import Switch from '@mui/material/Switch'
-import {RoleStatus} from '../roleManagerPage/RoleManagerPage'
+import { RoleStatus } from '../roleManagerPage/RoleManagerPage'
+import { UserService } from '../../../api/apiPage/apiPage'
+import Skeleton from '@mui/material/Skeleton'
 
 export enum AccountAction {
     Create,
@@ -46,7 +50,33 @@ function AccountManagerPage() {
     const [showDialog, setShowDialog] = useState<boolean>(false)
     const [loadingButton, setLoading] = useState<boolean>(false)
     const [accountAction, setAcountAction] = useState<AccountAction>()
-    const [currentPage, setCurrentPage] = useState<number>(0);
+    const [accountId, setAccountId] = useState<string>()
+    const [userName, setUserName] = useState<string>()
+    const [fullName, setFullName] = useState<string>()
+    const [identify, setIdentify] = useState<string>()
+    const [phoneNumber, setPhoneNumber] = useState<string>()
+    const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date())
+    const [gender, setGender] = useState<number>(0)
+    const [status, setStatus] = useState<boolean>(true)
+    const [loadingAccount, setLoadingAccount] = useState<boolean>(false)
+    const [loadingForm, setLoadingForm] = useState<boolean>(false)
+    const [searchTerm, setSearchTerm] = useState<string>('')
+    const [rows, setRow] = useState<AccountManagerTableColumns[]>([createData('', [], '', '', '', 0, 0)])
+    const [datas, setData] = useState<AccountManagerTableDatas[]>([{
+        id: '',
+        userName: '',
+        roles: [],
+        fullName: '',
+        status: AccountStatus.Able
+    }])
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalItems, setTotalItems] = useState<number>(0)
+
+    const [{ selection }, dispatch] = useStateValue()
+    const showMessageBar = (message: string, isOpen: boolean, status: MessageBarStatus) => {
+        dispatch({ type: actionType.SET_MESSAGE_BAR, messageBar: { isOpen: isOpen, text: message, status: status } })
+    }
+
     const onRenderActionButtons = (): JSX.Element[] => {
         return ([
             <PatientListCommandBar
@@ -66,34 +96,16 @@ function AccountManagerPage() {
 
     function createData(
         userName: string,
-        roleI: AccountRoleEnum[],
+        roleI: RoleManagerTableDatas[],
         fullName: string,
         phoneNumber: string,
         insuranceNumber: string,
         genderI: number,
         statusI: number
     ): AccountManagerTableColumns {
-        // let role: JSX.Element[] = [<></>]
-        // if (roleI.includes(AccountRoleEnum.Admin)) {
-        //     role.push(<div className='role-element-admin'>Admin</div>)
-        // }
-        // if (roleI.includes(AccountRoleEnum.Doctor)) {
-        //     role.push(<div className='role-element-doctor'>Bác sĩ</div>)
-        // }
-        // if (roleI.includes(AccountRoleEnum.Care)) {
-        //     role.push(<div className='role-element-care'>CSKH</div>)
-        // }
-        // if (roleI.includes(AccountRoleEnum.User)) {
-        //     role.push(<div className='role-element-user'>Người bệnh</div>)
-        // }
-        let role: JSX.Element = <div className='role-element'>
-            {roleI.includes(AccountRoleEnum.Admin) && <div className='role-element-admin'>Admin</div>}
-            {roleI.includes(AccountRoleEnum.Doctor) && <div className='role-element-doctor'>Bác sĩ</div>}
-            {roleI.includes(AccountRoleEnum.Care) && <div className='role-element-care'>CSKH</div>}
-            {roleI.includes(AccountRoleEnum.User) && <div className='role-element-user'>Người bệnh</div>}
-        </div>
+        let role: string = roleI.map(role => {return role.name}).join(", ")
         let gender: string = genderI === 0 ? 'Nam' : 'Nữ'
-        let status: JSX.Element = statusI === AccountStatus.Able ? <div className='status-element'><CheckCircleOutlineOutlinedIcon sx={{ color: '#2da55b86' }} />Hoạt động</div> : <div className='status-element'><NotInterestedOutlinedIcon sx={{ color: '#ff4646b4' }} />Vô hiệu hóa</div>
+        let status: JSX.Element = statusI ? <div className='status-element'><CheckCircleOutlineOutlinedIcon sx={{ color: '#2da55b86' }} />Hoạt động</div> : <div className='status-element'><NotInterestedOutlinedIcon sx={{ color: '#ff4646b4' }} />Vô hiệu hóa</div>
         return {
             userName,
             role,
@@ -105,53 +117,202 @@ function AccountManagerPage() {
         };
     }
 
-    const rows: AccountManagerTableColumns[] = [
-        createData('ngo_hoai_nam1', [AccountRoleEnum.Admin, AccountRoleEnum.Doctor], 'Ngô Hoài Nam', '0123456788', '012345678', 0, AccountStatus.Able),
-        createData('ngo_hoai_nam2', [AccountRoleEnum.Care, AccountRoleEnum.User], 'Ngô Hoài Nam', '0123456788', '012345678', 1, AccountStatus.Enable),
-    ];
+    const getAccount = () => {
+        let requestBody = {
+            pageIndex: currentPage,
+            pageSize: 10,
+            searchTerm: searchTerm
+        }
+        setLoadingAccount(true)
+        UserService.getUserPaging(requestBody).then(res => {
+            setLoadingAccount(false)
+            let rows: AccountManagerTableColumns[] = []
+            let datas: AccountManagerTableDatas[] = []
+            !!res.data.items && res.data.items.forEach((element: any) => {
+                rows.push(createData(element.userName, element.roles, element.fullName, element.phoneNumber, element.cmnd, element.sex, element.status))
+                datas.push({
+                    id: element.id,
+                    userName: element.userName,
+                    roles: element.roles,
+                    fullName: element.fullName,
+                    status: element.status
+                })
+            })
+            setRow(rows)
+            setData(datas)
+            setTotalItems(!!res.data.metaData ? res.data.metaData.totalCount : 0)
+        })
+    }
 
-    const datas: AccountManagerTableDatas[] = [
-        {
-            id: 'alksdjaskjd232sd',
-            userName: 'ngo_hoai_nam1',
-            appUserRoleMappings: [{
-                appUserId: 'alksdjaskjd232sd',
-                roleId: 'qafafasfasfa2123',
-                role: {
-                    id: 'qafafasfasfa2123',
-                    name: 'Admin',
-                    code: 'Admin',
-                    status: RoleStatus.Able
+    useEffect(() => {
+        getAccount()
+    }, [currentPage, searchTerm])
+
+    useEffect(() => {
+        if (accountAction === AccountAction.Create) {
+            let requestBody = {
+                id: accountId,
+                code: "",
+                fullName: fullName,
+                status: status,
+                description: "",
+                email: "namkhenh81@gmail.com",
+                userName: userName,
+                phone: phoneNumber,
+                sex: gender,
+                religion: 0,
+                provinceId: '00000000-0000-0000-0000-000000000000',
+                districtId: '00000000-0000-0000-0000-000000000000',
+                wardId: '00000000-0000-0000-0000-000000000000',
+                age: 0,
+                dateOfBirth: dateOfBirth,
+                cmnd: identify,
+                guardiasName: "",
+                guardiansPhoneNumber: "",
+                relationship: 0
+            }
+            if (!!accountId) {
+                UserService.updateUser(requestBody).then(res => {
+                    if (res.success) {
+                        setLoading(false)
+                        closeForm()
+                        showMessageBar("Tạo tài khoản thành công!", true, MessageBarStatus.Success)
+                        getAccount()
+                    } else {
+                        setLoading(false)
+                        showMessageBar("Tạo tài khoản thất bại!", true, MessageBarStatus.Success)
+                    }
+
+                })
+            }
+        }
+    }, [accountId])
+
+    useEffect(() => {
+        if (accountAction === AccountAction.Edit) {
+            setLoadingForm(true)
+            UserService.getUserById(selection.selectedItems[0]?.id).then(res => {
+                if (res.success) {
+                    setUserName(res.data.userName)
+                    setFullName(res.data.fullName)
+                    setIdentify(res.data.cmnd)
+                    setPhoneNumber(res.data.phoneNumber)
+                    setDateOfBirth(res.data.dateOfBirth)
+                    setGender(res.data.sex)
+                    setStatus(res.data.status)
+                    setLoadingForm(false)
                 }
-            }],
-            fullName: 'Ngô Hoài Nam',
-            phone: '0123456788',
-            insurance: '012345678',
-            gender: UserGender.Male,
-            status: AccountStatus.Able,
-            used: false
-        },
-        {
-            id: 'gdgdsgsd3423hhjj',
-            userName: 'ngo_hoai_nam1',
-            appUserRoleMappings: [{
-                appUserId: 'gdgdsgsd3423hhjj',
-                roleId: 'dgsgsdg342sdfsdf',
-                role: {
-                    id: 'dgsgsdg342sdfsdf',
-                    name: 'Admin',
-                    code: 'Admin',
-                    status: RoleStatus.Able
+            })
+        }
+    }, [showDialog])
+
+
+
+    const onSave = () => {
+        if (accountAction === AccountAction.Create) {
+            let requestBody = {
+                password: `User${identify}!`,
+                email: 'namkhenh81@gmail.com',
+                phoneNumber: phoneNumber
+            }
+            setLoading(true)
+            const result = UserService.register(requestBody).then(res => {
+                if (res.success) {
+                    setAccountId(res.data.id)
+                } else {
+                    setLoading(false)
+                    closeForm()
+                    showMessageBar(`Tạo tài khoản thất bại! \n${res.message ? res.message : ''}`, true, MessageBarStatus.Error)
                 }
-            }],
-            fullName: 'Ngô Hoài Nam',
-            phone: '0123456788',
-            insurance: '012345678',
-            gender: UserGender.Male,
-            status: AccountStatus.Able,
-            used: false
-        },
-    ];
+            })
+
+            return result
+        }
+        if (accountAction === AccountAction.Edit) {
+            let requestBody = {
+                id: selection.selectedItems[0]?.id,
+                code: "",
+                fullName: fullName,
+                status: status,
+                description: "",
+                email: "namkhenh81@gmail.com",
+                userName: userName,
+                phone: phoneNumber,
+                sex: gender,
+                religion: 0,
+                provinceId: '00000000-0000-0000-0000-000000000000',
+                districtId: '00000000-0000-0000-0000-000000000000',
+                wardId: '00000000-0000-0000-0000-000000000000',
+                age: 0,
+                dateOfBirth: dateOfBirth,
+                cmnd: identify,
+                guardiasName: "",
+                guardiansPhoneNumber: "",
+                relationship: 0
+            }
+            setLoading(true)
+            const result = UserService.updateUser(requestBody).then(res => {
+                if (res.success) {
+                    setLoading(false)
+                    closeForm()
+                    showMessageBar("Cập nhật tài khoản thành công!", true, MessageBarStatus.Success)
+                    getAccount()
+                } else {
+                    setLoading(false)
+                    closeForm()
+                    showMessageBar(`Cập nhật tài khoản thất bại! \n${res.message ? res.message : ''}`, true, MessageBarStatus.Error)
+                }
+            })
+            return result
+        }
+        if (accountAction === AccountAction.Delete) {
+            setLoading(true)
+            const result = UserService.deleteUser(selection.selectedItems[0]?.id).then(res => {
+                if (res.success) {
+                    setLoading(false)
+                    closeForm()
+                    showMessageBar("Xóa tài khoản thành công!", true, MessageBarStatus.Success)
+                    getAccount()
+                } else {
+                    setLoading(false)
+                    closeForm()
+                    showMessageBar(`Xóa tài khoản thất bại! \n${res.message ? res.message : ''}`, true, MessageBarStatus.Error)
+                }
+            })
+            return result
+        }
+        if (accountAction === AccountAction.Assign) {
+            setLoading(true)
+            const result = UserService.assignRole(selection.selectedItems[0]?.id, selectedRoleId).then(res => {
+                if (res.success) {
+                    setLoading(false)
+                    closeForm()
+                    showMessageBar("Gán vai trò thành công!", true, MessageBarStatus.Success)
+                    getAccount()
+                } else {
+                    setLoading(false)
+                    closeForm()
+                    showMessageBar(`Gán vai trò thất bại! \n${res.message ? res.message : ''}`, true, MessageBarStatus.Error)
+                }
+            })
+            return result
+        }
+
+        return new Promise((res) => { })
+    }
+
+    const closeForm = () => {
+        setShowDialog(false)
+        setUserName('')
+        setFullName('')
+        setIdentify('')
+        setPhoneNumber('')
+        setDateOfBirth(new Date())
+        setGender(0)
+        setStatus(true)
+        setLoadingForm(false)
+        setAcountAction(undefined)
+    }
 
     const renderTitleForm = () => {
         switch (accountAction) {
@@ -173,7 +334,7 @@ function AccountManagerPage() {
                 return ''
         }
     }
-
+    const [selectedRoleId, setSelectedRoleId] = useState<string[]>()
     const renderBodyForm = () => {
         switch (accountAction) {
             case AccountAction.Create:
@@ -186,7 +347,7 @@ function AccountManagerPage() {
             case AccountAction.Able:
                 return renderBodyDeleteForm()
             case AccountAction.Assign:
-                return <AssignRoleForm/>
+                return <AssignRoleForm onChangeRoleSelect={(role: string[]) => { setSelectedRoleId(role) }} />
             default:
                 break;
         }
@@ -195,77 +356,95 @@ function AccountManagerPage() {
     const renderBodyCreateForm = () => {
         return (
             <div className="account-create-form">
-                <div className="account-create-field">
-                    <TextField
-                        label='Tên đăng nhập'
-                        placeholder='--'
-                        required={true}
-                    // value={currentPatientProfile.patientName}
-                    // onChange={(_, value) => { onChangeOneFieldForm(PatientProfileModelProperty.patientName, value) }}
-                    // errorMessage={errorMessageFormString.patientName}
-                    />
-                </div>
-                <div className="account-create-field">
-                    <TextField
-                        label='Họ và tên'
-                        placeholder='--'
-                        required={true}
-                    // value={currentPatientProfile.patientName}
-                    // onChange={(_, value) => { onChangeOneFieldForm(PatientProfileModelProperty.patientName, value) }}
-                    // errorMessage={errorMessageFormString.patientName}
-                    />
-                </div>
-                <div className="account-create-field">
-                    <TextField
-                        label='CMND'
-                        placeholder='--'
-                        required={true}
-                    // value={currentPatientProfile.patientName}
-                    // onChange={(_, value) => { onChangeOneFieldForm(PatientProfileModelProperty.patientName, value) }}
-                    // errorMessage={errorMessageFormString.patientName}
-                    />
-                </div>
-                <div className="account-create-field">
-                    <TextField
-                        label='Số điện thoại'
-                        placeholder='--'
-                        required={true}
-                    // value={currentPatientProfile.patientName}
-                    // onChange={(_, value) => { onChangeOneFieldForm(PatientProfileModelProperty.patientName, value) }}
-                    // errorMessage={errorMessageFormString.patientName}
-                    />
-                </div>
-                <div className="account-create-field">
-                    <DatePicker
-                        placeholder="Chọn một giá trị"
-                        ariaLabel="Chọn một giá trị"
-                        label='Ngày sinh'
-                        isRequired={true}
-                        // strings={defaultDatePickerStrings}
-                        onSelectDate={(date) => { }}
-                        value={new Date()}
-                        // parseDateFromString={()}'
-                        maxDate={new Date()}
-                    />
-                </div>
-                <div className="account-create-field">
-                    <Label required>Giới tính</Label>
-                    <RadioGroup
-                        row
-                        aria-labelledby="demo-row-radio-buttons-group-label"
-                        name="row-radio-buttons-group"
-                    >
-                        <FormControlLabel value="male" control={<Radio />} label="Nam" />
-                        <FormControlLabel value="female" control={<Radio />} label="Nữ" />
-                    </RadioGroup>
-                </div>
-                <div className="account-create-field display-flex">
-                    <Label required>Trạng thái</Label>
-                    <Switch
-                        checked
-                        onChange={() => {}}
-                    />
-                </div>
+                {loadingForm ? (
+                    <div className="account-create-wrap">
+                        <Skeleton variant="rounded" height={40} className='account-create-field' />
+                        <Skeleton variant="rounded" height={40} className='account-create-field' />
+                        <Skeleton variant="rounded" height={40} className='account-create-field' />
+                        <Skeleton variant="rounded" height={40} className='account-create-field' />
+                        <Skeleton variant="rounded" height={40} className='account-create-field' />
+                        <Skeleton variant="rounded" height={40} className='account-create-field' />
+                        <Skeleton variant="rounded" height={40} className='account-create-field' />
+                    </div>
+
+                ) :
+                    <div className="account-create-wrap">
+                        <div className="account-create-field">
+                            <TextField
+                                label='Tên đăng nhập'
+                                placeholder='--'
+                                required={true}
+                                value={userName}
+                                onChange={(_, value) => { setUserName(value) }}
+                                disabled={accountAction === AccountAction.Edit}
+                            />
+                        </div>
+                        <div className="account-create-field">
+                            <TextField
+                                label='Họ và tên'
+                                placeholder='--'
+                                required={true}
+                                value={fullName}
+                                onChange={(_, value) => { setFullName(value) }}
+                            />
+                        </div>
+                        <div className="account-create-field">
+                            <TextField
+                                label='CMND'
+                                placeholder='--'
+                                required={true}
+                                value={identify}
+                                onChange={(_, value) => { setIdentify(value) }}
+                                disabled={accountAction === AccountAction.Edit}
+                            />
+                        </div>
+                        <div className="account-create-field">
+                            <TextField
+                                label='Số điện thoại'
+                                placeholder='--'
+                                required={true}
+                                value={phoneNumber}
+                                onChange={(_, value) => { setPhoneNumber(value) }}
+                                disabled={accountAction === AccountAction.Edit}
+                            />
+                        </div>
+                        <div className="account-create-field">
+                            <DatePicker
+                                placeholder="Chọn một giá trị"
+                                ariaLabel="Chọn một giá trị"
+                                label='Ngày sinh'
+                                isRequired={true}
+                                // strings={defaultDatePickerStrings}
+                                onSelectDate={(date) => { setDateOfBirth(date!) }}
+                                value={new Date(dateOfBirth)}
+                                // parseDateFromString={()}'
+                                maxDate={new Date()}
+                            />
+                        </div>
+                        <div className="account-create-field">
+                            <Label required>Giới tính</Label>
+                            <RadioGroup
+                                row
+                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                name="row-radio-buttons-group"
+                                onChange={(_, value) => { setGender(Number(value)) }}
+                                value={gender}
+                            >
+                                <FormControlLabel value={UserGender.Male} control={<Radio />} label="Nam" />
+                                <FormControlLabel value={UserGender.Female} control={<Radio />} label="Nữ" />
+                            </RadioGroup>
+                        </div>
+                        <div className="account-create-field display-flex">
+                            <Label required>Trạng thái</Label>
+                            <Switch
+                                checked={status}
+                                onChange={(_, checked) => { setStatus(checked) }}
+                            />
+                        </div>
+                    </div>
+
+                }
+
                 {/* <div className="account-create-field">
                     <Label required>Phân quyền</Label>
                     <FormGroup row>
@@ -314,32 +493,9 @@ function AccountManagerPage() {
     const renderBodyDeleteForm = () => {
         return (
             <div className="account-create-form">
-                {accountAction === AccountAction.Enable ? <div className=''>Bạn có chắc chắn muốn khóa tài khoản <strong>ngo_hoai_nam1</strong></div> : (accountAction === AccountAction.Able ? <div className=''>Bạn có chắc chắn muốn mở khóa tài khoản <strong>ngo_hoai_nam1</strong></div> : <div className=''>Bạn có chắc chắn muốn xóa tài khoản <strong>ngo_hoai_nam1</strong><br />Thao tác này không thể khôi phục!</div>)}
+                <div className=''>Bạn có chắc chắn muốn xóa tài khoản <strong>{selection.selectedItems[0]?.fullName}</strong><br />Thao tác này không thể khôi phục!</div>
             </div>
         )
-    }
-
-    const [, dispatch] = useStateValue()
-    const showMessageBar = (message: string, isOpen: boolean, status: MessageBarStatus) => {
-        dispatch({ type: actionType.SET_MESSAGE_BAR, messageBar: { isOpen: isOpen, text: message, status: status } })
-    }
-
-    const onSave = () => {
-        let requestBody = {
-
-        }
-        const result = new Promise((resolve) => {
-            setLoading(true)
-            setTimeout(() => {
-                setLoading(false)
-                showMessageBar("Cập nhật thông tin thành công", true, MessageBarStatus.Success)
-                resolve('success')
-            }, 4000);
-        }).then(() => {/*  */
-
-        })
-
-        return result
     }
 
     return (
@@ -353,7 +509,8 @@ function AccountManagerPage() {
             <div className="accountmanager-page-search">
                 <SearchBoxView
                     placeholder='User Name/ Họ và tên/ CMND'
-                    onSearch={() => { }}
+                    onSearch={(newValue) => { setSearchTerm(newValue) }}
+                    onClear={() => setSearchTerm('')}
                 />
             </div>
             <div className='line' style={{ width: '100%', height: '1px', backgroundColor: '#cccccc' }}></div>
@@ -364,10 +521,11 @@ function AccountManagerPage() {
                     rowData={rows}
                     dataTotal={datas}
                     hasCheckBox
-                    page={currentPage}
+                    hasTablePaging
+                    page={currentPage - 1}
                     handleChangePage={(page) => { setCurrentPage(page) }}
-                    total={10}
-                    isLoading={false}
+                    total={totalItems}
+                    isLoading={loadingAccount}
                 />
             </div>
             <DialogView
@@ -379,7 +537,7 @@ function AccountManagerPage() {
                 confirmButtonText={'Lưu'}
                 confirmWithPromise={onSave}
                 closeButtonText='Hủy bỏ'
-                close={() => { setShowDialog(false) }}
+                close={closeForm}
                 loading={loadingButton}
             />
         </div>

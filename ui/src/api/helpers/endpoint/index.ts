@@ -5,9 +5,14 @@ export default class Endpoint {
     }
 
 
-    //auth
+    //user
     static get authentication(): string { return Endpoint.baseUrl + Endpoint._authentication }
     static get register(): string { return Endpoint.baseUrl + Endpoint._register }
+    static get get_user_paging(): string { return Endpoint.baseUrl + Endpoint._get_user_paging }
+    static get get_user_by_Id(): string { return Endpoint.baseUrl + Endpoint._get_user_by_Id }
+    static get update_user(): string { return Endpoint.baseUrl + Endpoint._update_user }
+    static get delete_user(): string { return Endpoint.baseUrl + Endpoint._delete_user }
+    static get assign_role(): string { return Endpoint.baseUrl + Endpoint._assign_role }
 
     //menu
     static get get_menu(): string { return Endpoint.baseUrl + Endpoint._get_menu }
@@ -47,9 +52,6 @@ export default class Endpoint {
 
 
 
-    //auth
-    private static _authentication = "/User/rpc/Portal/user/authentication"
-    private static _register = "/User/rpc/Portal/user/register"
 
     //menu
     private static _get_menu = "/Menu/rpc/Portal/menu/get"
@@ -80,4 +82,13 @@ export default class Endpoint {
     private static _update_role = "/Role/rpc/Portal/role/update"
     private static _delete_role = "/Role/rpc/Portal/role/delete"
     private static _delete_list_role = "/Role/rpc/Portal/role/delete-list-role"
+
+    //user
+    private static _authentication = "/User/rpc/Portal/user/authentication"
+    private static _register = "/User/rpc/Portal/user/register"
+    private static _get_user_paging = "/User/rpc/Portal/user/get-user-paging"
+    private static _get_user_by_Id = "/User/rpc/Portal/user/get-user-by-id"
+    private static _update_user = "/User/rpc/Portal/user/update"
+    private static _delete_user = "/User/rpc/Portal/user/delete"
+    private static _assign_role = "/Role/rpc/Portal/role/assign-roles-to-user"
 }

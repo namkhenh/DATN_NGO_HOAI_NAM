@@ -4,9 +4,7 @@ import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
 import { TextField } from '../../../common/textField/TextField'
 import { DatePicker } from '../../../common/datePicker/DatePicker'
 import {
-    ActionManagerTableColumns,
     ActionTableDatas,
-    MenuTableDatas,
     PermissionManagerTableColumns,
     PermissionManagerTableDatas,
     TableType
@@ -31,10 +29,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import ContentPasteOffOutlinedIcon from "@mui/icons-material/ContentPasteOffOutlined";
-import { RoleAction, RoleStatus } from '../roleManagerPage/RoleManagerPage'
+import { RoleAction } from '../roleManagerPage/RoleManagerPage'
 import Button from '@mui/material/Button'
 import { ButtonColorType, ButtonVariantType, LoadingPosition } from '../../../model/enum/buttonEnum'
-import Autocomplete from '@mui/material/Autocomplete'
 import { ActionService, MenuService, PermissionActionService, PermissionService, RoleService } from '../../../api/apiPage/apiPage'
 import { IDropdownOption } from '@fluentui/react'
 import Skeleton from '@mui/material/Skeleton'
@@ -66,7 +63,6 @@ function AddRolePage(props: AddRolePageProps) {
     const [roleStartTime, setRoleStart] = useState<Date>(new Date())
     const [roleEndTime, setRoleEnd] = useState<Date>(new Date())
 
-    const [permissionId, setPermissionId] = useState<string>()
     const [permissionName, setPermissionName] = useState<string>()
     const [permissionCode, setPermissionCode] = useState<string>()
     const [permissionStatus, setPermissionStatus] = useState<boolean>(true)
@@ -116,19 +112,15 @@ function AddRolePage(props: AddRolePageProps) {
     }
 
     useEffect(() => {
-        
         if (props.actionType === RoleAction.Edit) {
             setRoleId(roleIdFromProps!)
             setLoadingPermission(true)
             setLoadingRoleDetail(true)
         }
-    }, [])
-
-    useEffect(() => {
         MenuService.getMenu().then(res => {
             let menuOption: IDropdownOption[] = []
             if (res.success) {
-                res.data.forEach((element: any) => {
+                res.data?.forEach((element: any) => {
                     menuOption.push({
                         key: element.id,
                         text: element.name,
@@ -146,7 +138,7 @@ function AddRolePage(props: AddRolePageProps) {
                 let actionOption: ActionTableDatas[] = []
                 if (res.success) {
                     setLoadingAction(false)
-                    res.data.forEach((element: any) => {
+                    res.data?.forEach((element: any) => {
                         actionOption.push({
                             id: element.id,
                             code: element.code,
@@ -164,16 +156,14 @@ function AddRolePage(props: AddRolePageProps) {
     useEffect(() => {
         if (roleId) {
             if (loadingRoleDetail) {
-                console.log("?");
-                
                 RoleService.getRoleDetail(roleId).then(res => {
                     if (res.success) {
-                        setRoleCode(res.data.code)
-                        setRoleName(res.data.name)
-                        setRoleDescription(res.data.description ? res.data.description : '')
-                        setRoleStatus(res.data.status)
-                        setRoleStart(res.data.startDate)
-                        setRoleEnd(res.data.endDate)
+                        setRoleCode(res.data?.code)
+                        setRoleName(res.data?.name)
+                        setRoleDescription(res.data?.description ? res.data?.description : '')
+                        setRoleStatus(res.data?.status)
+                        setRoleStart(res.data?.startDate)
+                        setRoleEnd(res.data?.endDate)
                         setLoadingRoleDetail(false)
                     } else {
                         setLoadingRoleDetail(false)
@@ -192,12 +182,11 @@ function AddRolePage(props: AddRolePageProps) {
                     menuId: '',
                     status: true
                 }])
-                
                 PermissionService.getPermissionByRoleId(roleId).then(res => {
                     if (res.success) {
                         let rows: PermissionManagerTableColumns[] = []
                         let datas: PermissionManagerTableDatas[] = []
-                        !!res.data && res.data.forEach((e: any) => {
+                        !!res.data && res.data?.forEach((e: any) => {
                             rows.push(createData(e.code, e.name, e.menu.name, e.status))
                             datas.push({
                                 id: e.id,
@@ -206,7 +195,7 @@ function AddRolePage(props: AddRolePageProps) {
                                 roleId: e.roleId,
                                 path: e.path,
                                 menuId: e.menuId,
-                                status: true
+                                status: e.status
                             })
                         })
                         setLoadingPermission(false)
@@ -239,10 +228,9 @@ function AddRolePage(props: AddRolePageProps) {
             setLoadingButtonPer(true)
             const result = PermissionService.createPermission(requestBodyCreatePermission).then(res => {
                 if (res.success) {
-                    setPermissionId(res.data.id)
                     let requestBodyPerAct = {
                         permissionActions: {
-                            key: res.data.id,
+                            key: res.data?.id,
                             value: selected
                         }
                     }
@@ -266,7 +254,6 @@ function AddRolePage(props: AddRolePageProps) {
                     showMessageBar(`Tạo quyền thất bại! \n${res.message ? res.message : ''}`, true, MessageBarStatus.Error)
                 }
             })
-
             return result
         }
         if (permissionAction === PermissionAction.Edit) {
@@ -312,7 +299,7 @@ function AddRolePage(props: AddRolePageProps) {
         if (props.actionType === RoleAction.Create) {
             const result = RoleService.createRole(requestCreateRole).then(res => {
                 if (res.success) {
-                    setRoleId(res.data.id)
+                    setRoleId(res.data?.id)
                     setLoadingRoleDetail(true)
                     setRow([])
                     setData([])
@@ -325,6 +312,8 @@ function AddRolePage(props: AddRolePageProps) {
             })
             return result
         } else {
+            console.log(requestCreateRole);
+            
             const result = RoleService.updateRole(requestCreateRole).then(res => {
                 if (res.success) {
                     setLoadingButtonRole(false)
@@ -349,7 +338,6 @@ function AddRolePage(props: AddRolePageProps) {
                     closeForm()
                     setLoadingPermission(true)
                     showMessageBar("Xóa vai trò thành công!", true, MessageBarStatus.Success)
-                    setPermissionId('')
                 } else {
                     setLoadingButtonPer(false)
                     closeForm()
@@ -367,7 +355,7 @@ function AddRolePage(props: AddRolePageProps) {
         permissionMenu: string,
         permissionStatusI?: PermissionStatus
     ): PermissionManagerTableColumns {
-        let permissionStatus: JSX.Element = permissionStatusI === PermissionStatus.Able ? <div className='status-element'><CheckCircleOutlineOutlinedIcon sx={{ color: '#2da55b86' }} />Hoạt động</div> : <div className='status-element'><NotInterestedOutlinedIcon sx={{ color: '#ff4646b4' }} />Vô hiệu hóa</div>
+        let permissionStatus: JSX.Element = permissionStatusI ? <div className='status-element'><CheckCircleOutlineOutlinedIcon sx={{ color: '#2da55b86' }} />Hoạt động</div> : <div className='status-element'><NotInterestedOutlinedIcon sx={{ color: '#ff4646b4' }} />Vô hiệu hóa</div>
         return {
             permissionCode,
             permissionName,
@@ -375,35 +363,6 @@ function AddRolePage(props: AddRolePageProps) {
             permissionStatus
         };
     }
-
-    function createActionData(
-        actionName: string,
-    ): ActionManagerTableColumns {
-        return {
-            actionName
-        };
-    }
-
-    // const actionRows: ActionManagerTableColumns[] = [
-    //     createActionData('Xem'),
-    //     createActionData('Sửa'),
-    // ];
-
-
-    // const actions: ActionTableDatas[] = [
-    //     {
-    //         id: 'weqwesjkl213123',
-    //         name: 'Xem',
-    //         menuId: 'gsdgeww324dsf',
-    //         isDeleted: false
-    //     },
-    //     {
-    //         id: 'egsfgfaser234',
-    //         name: 'Xóa',
-    //         menuId: 'gsdgeww324dsf',
-    //         isDeleted: false
-    //     },
-    // ];
 
     const renderTitleForm = () => {
         switch (permissionAction) {
@@ -433,28 +392,11 @@ function AddRolePage(props: AddRolePageProps) {
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         let newSelected: string[] = []
         if (event.target.checked) {
-            // props.rowData.forEach((row: any, i) => { return props.hasNavigate ? newSelected.push(row[Object.keys(row)[0]]?.props.children) : newSelected.push(row[Object.keys(row)[0]]) });
             actions.forEach((row: ActionTableDatas, i) => { return newSelected.push(row.id) });
             setSelected(newSelected);
-            // dispatch({
-            //     type: actionType.SET_SELECTION,
-            //     selection: {
-            //         ...selection,
-            //         selectedItems: newSelectedC,
-            //         selectedCount: newSelectedC.length,
-            //     },
-            // });
             return;
         }
         setSelected([]);
-        // dispatch({
-        //     type: actionType.SET_SELECTION,
-        //     selection: {
-        //         ...selection,
-        //         selectedItems: [],
-        //         selectedCount: 0,
-        //     },
-        // });
     };
 
     const handleClick = (event: React.MouseEvent<unknown>, rowChild: ActionTableDatas) => {
@@ -474,7 +416,6 @@ function AddRolePage(props: AddRolePageProps) {
             );
         }
         setSelected(newSelected);
-        // dispatch({ type: actionType.SET_SELECTION, selection: { ...selection, selectedItems: newSelectedC, selectedCount: newSelectedC.length } });
     };
 
     const isSelected = (rowChild: any) => {
@@ -538,6 +479,8 @@ function AddRolePage(props: AddRolePageProps) {
                                     label='Thời gian kết thúc'
                                     isRequired={true}
                                     onSelectDate={(date) => {
+                                        console.log(date);
+                                        
                                         setPermissionEnd(date!)
                                     }}
                                     value={new Date(permissionEndTime)}
@@ -551,7 +494,10 @@ function AddRolePage(props: AddRolePageProps) {
                                     options={menuOption}
                                     selectedKey={selectMenuId}
                                     required
-                                    onChange={(_, selected) => { setSelectMenu(String(selected?.key)) }}
+                                    onChange={(_, selected) => {
+                                        setSelectMenu(String(selected?.key))
+                                        setSelected([])
+                                    }}
                                     errorMessage={''}
                                 />
                             </div>
@@ -663,12 +609,13 @@ function AddRolePage(props: AddRolePageProps) {
             PermissionService.getPermissionById(selection.selectedItems[0]?.id).then(res => {
                 if (res.success) {
                     setLoadingPerDetail(false)
-                    // setPermissionId(res.data.id)
-                    setPermissionCode(res.data.code)
-                    setPermissionName(res.data.name)
-                    // setPermissionStatus(res.data.code)
-                    setSelectMenu(res.data.menuId)
-                    !!res.data.actions && res.data.actions.forEach((action: ActionTableDatas) => {
+                    setPermissionCode(res.data?.code)
+                    setPermissionName(res.data?.name)
+                    setPermissionStart(res.data?.startDate)
+                    setPermissionEnd(res.data?.endDate)
+                    setSelectMenu(res.data?.menuId)
+                    setPermissionStatus(res.data?.status)
+                    !!res.data?.actions && res.data?.actions.forEach((action: ActionTableDatas) => {
                         actionsId.push(action?.id)
                     })
                     setSelected(actionsId)

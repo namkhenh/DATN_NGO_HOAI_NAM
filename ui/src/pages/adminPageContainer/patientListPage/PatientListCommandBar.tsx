@@ -5,6 +5,7 @@ import {CommandBarView} from '../../../common/commandBar/CommandBar'
 import {useStateValue} from '../../../context/StateProvider'
 import {AccountStatus} from '../accountManagerPage/AccountManagerPage'
 import { AppointmentStatus } from '../../../model/enum/appointmentEnum'
+import { useNavigate } from 'react-router-dom'
 
 interface IPatientListCommandBar {
   tableType: TableType
@@ -28,6 +29,7 @@ interface IPatientListCommandBar {
 }
 
 function PatientListCommandBar(props: IPatientListCommandBar) {
+  const navigate = useNavigate()
   const [{ selection }] = useStateValue();
   const initActionBar = (): ICommandBarItemProps[] => {
     switch (props.tableType) {
@@ -65,11 +67,10 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
       {
         key: 'account-create',
         text: 'Tạo hồ sơ',
-        href: '/admin/tiep-don-benh-nhan/them-moi-ho-so',
         iconProps: { iconName: 'Add', style: { color: '#00794E' } },
-        // onClick: () => {
-        //   props.showAccountCreate!()
-        // }
+        onClick: () => {
+          navigate('/admin/tiep-don-benh-nhan/them-moi-ho-so')
+        }
       }
     )
 
@@ -225,11 +226,10 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
       {
         key: 'role-create',
         text: 'Tạo vai trò',
-        href: '/admin/quan-ly-vai-tro/them-moi-vai-tro',
         iconProps: { iconName: 'WorkforceManagement', style: { color: '#00794E' } },
-        // onClick: () => {
-        //   props.showRoleCreate!()
-        // }
+        onClick: () => {
+          navigate('/admin/quan-ly-vai-tro/them-moi-vai-tro')
+        }
       }
     )
     if (selection.selectedCount === 1) {
@@ -246,7 +246,9 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
           key: 'role-assign',
           text: 'Gán người dùng',
           iconProps: { iconName: 'Permissions', style: { color: '#707070' } },
-          href: `/admin/quan-ly-vai-tro/gan-nguoi-dung/${selection.selectedItems[0]?.id}`,
+          onClick: () => {
+            navigate(`/admin/quan-ly-vai-tro/gan-nguoi-dung/${selection.selectedItems[0]?.id}`)
+          }
         },
       )
     }

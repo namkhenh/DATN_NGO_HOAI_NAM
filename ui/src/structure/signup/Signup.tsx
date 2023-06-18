@@ -10,7 +10,7 @@ import { ButtonVariantType, LoadingPosition } from '../../model/enum/buttonEnum'
 import { useNavigate } from 'react-router-dom'
 import { AccountRoleEnum } from '../../model/enum/accPermissionEnum'
 import Button from '@mui/material/Button'
-import { AuthenService } from '../../api/apiPage/apiPage'
+import { UserService } from '../../api/apiPage/apiPage'
 import { useStateValue } from '../../context/StateProvider'
 import { MessageBarStatus } from '../../model/enum/messageBarEnum'
 import { actionType } from '../../context/Reducer'
@@ -47,7 +47,7 @@ function Signup() {
             password: password
         }
         setLoading(true)
-        const result = AuthenService.register(requestBody).then(res => {
+        const result = UserService.register(requestBody).then(res => {
             if (res.success) {
                 setLoading(false)
                 showMessageBar("Đăng ký thành công!", true, MessageBarStatus.Success)

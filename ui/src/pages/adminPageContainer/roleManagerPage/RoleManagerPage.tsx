@@ -28,7 +28,6 @@ export enum RoleAction {
 function RoleManagerPage() {
     const [roleSelected, setRoleSelected] = useState<RoleManagerTableDatas>()
     const [currentPage, setCurrentPage] = useState<number>(1)
-    const [roleAction, setRoleAction] = useState<RoleAction>()
     const [showDialog, setShowDialog] = useState<boolean>()
     const [loadingButton, setLoadingButton] = useState<boolean>(false)
     const [searchTerm, setSearchTerm] = useState<string>('')
@@ -53,7 +52,7 @@ function RoleManagerPage() {
                 key={'patient-list-commandbar'}
                 // {...props}
                 tableType={TableType.RoleManagerTable}
-                showRoleDelete={() => { setShowDialog(true); setRoleAction(RoleAction.Delete) }}
+                showRoleDelete={() => { setShowDialog(true) }}
             />
         ])
     }
@@ -76,7 +75,7 @@ function RoleManagerPage() {
             setLoading(false)
             let rows: RoleManagerTableColumns[] = []
             let datas: RoleManagerTableDatas[] = []
-            res.data.items.forEach((element: any) => {
+            !!res.data && res.data.items.forEach((element: any) => {
                 rows.push(createData(element.code, element.name, element.description, element.status))
                 datas.push({
                     id: element.id,
@@ -88,36 +87,11 @@ function RoleManagerPage() {
             });
             setRow(rows)
             setData(datas)
-            setTotalItems(res.data.metaData.totalCount)
+            setTotalItems(!!res.data ? res.data.metaData.totalCount : 0)
         })
     }
 
     useEffect(() => {
-        // let requestBody = {
-        //     pageIndex: currentPage,
-        //     pageSize: 10,
-        //     searchTerm: searchTerm
-        // }
-        // setLoading(true)
-        // setRow([createData('', '', '')])
-        // RoleService.getRolePaging(requestBody).then(res => {
-        //     setLoading(false)
-        //     let rows: RoleManagerTableColumns[] = []
-        //     let datas: RoleManagerTableDatas[] = []
-        //     res.data.items.forEach((element: any) => {
-        //         rows.push(createData(element.code, element.name, element.description, RoleStatus.Able))
-        //         datas.push({
-        //             id: element.id,
-        //             code: element.code,
-        //             name: element.name,
-        //             description: element.description,
-        //             status: element.status
-        //         })
-        //     });
-        //     setRow(rows)
-        //     setData(datas)
-        //     setTotalItems(res.data.metaData.totalCount)
-        // })
         getRole()
     }, [currentPage, searchTerm])
 
