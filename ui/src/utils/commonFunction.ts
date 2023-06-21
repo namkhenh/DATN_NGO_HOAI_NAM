@@ -85,3 +85,10 @@ export const isNumber = (o: any):boolean => {
 export const containsNumber = (o: any) => {
     return /[0-9]/.test(o);
 }
+
+export const onEnterKeyDownAction = (e: any, action: () => void) => {
+    e.stopPropagation();
+    if (e.key === 'Enter') {
+        action();
+    }
+}

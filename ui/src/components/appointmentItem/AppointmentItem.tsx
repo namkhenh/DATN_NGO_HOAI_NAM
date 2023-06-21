@@ -8,8 +8,8 @@ interface IAppointmentItemProps {
     index: number
     avatar?: string
     name: string
-    time: number
-    date: string
+    time: Date
+    date: Date
     status: AppointmentStatus
     selectAppointment: (index: number) => void
     isSelected?: boolean
@@ -55,7 +55,7 @@ function AppointmentItem(props: IAppointmentItemProps) {
             <Avatar alt={name} src={avatar} />
             <div className="patient-info">
                 <div className="patient-name">{name}</div>
-                <div className="patient-time">{`${getTextHour(time)} ngày ${new Date(date).getDate()}/${new Date(date).getMonth() + 1}/${new Date(date).getFullYear()}`}</div>
+                <div className="patient-time">{`${time} ngày ${new Date(date).getDate()}/${new Date(date).getMonth() + 1}/${new Date(date).getFullYear()}`}</div>
                 <div className="patient-status" style={{ color: getColorStatus(status) }}>{getTextStatus(status)}</div>
             </div>
             {isSelected && <ArrowForwardIosIcon sx={{ fontSize: '32px', color: '#00A2FF' }} />}

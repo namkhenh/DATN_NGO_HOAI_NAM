@@ -43,20 +43,29 @@ function UserOtherInfo(props: IUserOtherInfoProps) {
     const [state, setState] = useState<IUserOtherInfoState>({
         userOtherInfo: {
             id: props.userOtherInfo?.id,
-            userAvatar: props.userOtherInfo?.userAvatar,
+            code: props.userOtherInfo?.code,
             userName: props.userOtherInfo?.userName,
-            userSex: props.userOtherInfo?.userSex,
-            userDateBirth: props.userOtherInfo?.userDateBirth,
-            userPhoneNumber: props.userOtherInfo?.userPhoneNumber,
-            userIdentityNumber: props.userOtherInfo?.userIdentityNumber,
-            userAddress: props.userOtherInfo?.userAddress,
-            userNational: props.userOtherInfo?.userNational,
-            userInsuranceNumber: props.userOtherInfo?.userInsuranceNumber,
-            // userEthnic: props.userOtherInfo?.userEthnic,
-            userReligion: props.userOtherInfo?.userReligion,
-            userJob: props.userOtherInfo?.userJob,
-            userCardPeriodFrom: props.userOtherInfo?.userCardPeriodFrom,
-            userCardPeriodTo: props.userOtherInfo?.userCardPeriodTo
+            status: props.userOtherInfo?.status,
+            phoneNumber: props.userOtherInfo?.phoneNumber,
+            fullName: props.userOtherInfo?.fullName,
+            email: props.userOtherInfo?.email,
+            cmnd: props.userOtherInfo?.cmnd,
+            dateOfBirth: props.userOtherInfo?.dateOfBirth,
+            sex: props.userOtherInfo?.sex,
+            provinceId: props.userOtherInfo?.provinceId,
+            districtId: props.userOtherInfo?.districtId,
+            wardId: props.userOtherInfo?.wardId,
+            province: props.userOtherInfo?.province,
+            district: props.userOtherInfo?.district,
+            ward: props.userOtherInfo?.ward,
+            address: '',
+            guardianName: '',
+            guardianPhone: '',
+            guardianRelation: '',  
+            roles: props.userOtherInfo?.roles,
+            deleteAt: props.userOtherInfo?.deleteAt,
+            createdDate: props.userOtherInfo?.createdDate,
+            lastModifiedDate: props.userOtherInfo?.lastModifiedDate,
         },
         errorMessageString: {
             userInsuranceNumber: '',
@@ -100,30 +109,30 @@ function UserOtherInfo(props: IUserOtherInfoProps) {
         return countriesOptions.sort((a, b) => a.text.localeCompare(b.text))
     }
 
-    const onChangeOneField = (key: keyof IUserInfoViewModel, value: any) => {
-        setState({
-            ...state,
-            userOtherInfo: {
-                ...state.userOtherInfo,
-                [key]: value
-            },
-            errorMessageString: {
-                ...state.errorMessageString,
-                [key]: validateField(key, value)
-            }
-        })
-    }
+    // const onChangeOneField = (key: keyof IUserInfoViewModel, value: any) => {
+    //     setState({
+    //         ...state,
+    //         userOtherInfo: {
+    //             ...state.userOtherInfo,
+    //             [key]: value
+    //         },
+    //         errorMessageString: {
+    //             ...state.errorMessageString,
+    //             [key]: validateField(key, value)
+    //         }
+    //     })
+    // }
 
-    const validateField = (key: keyof IUserInfoViewModel, value: any) => {
-        switch (key) {
-            case UserInfoModelProperty.userReligion:
-            case UserInfoModelProperty.userJob:
-                return validateRequireLimitCharacter(value)
-            case UserInfoModelProperty.userInsuranceNumber:
-                return validateNumberField(value, 10)
-            default:
-        }
-    }
+    // const validateField = (key: keyof IUserInfoViewModel, value: any) => {
+    //     switch (key) {
+    //         case UserInfoModelProperty.:
+    //         case UserInfoModelProperty.userJob:
+    //             return validateRequireLimitCharacter(value)
+    //         case UserInfoModelProperty.userInsuranceNumber:
+    //             return validateNumberField(value, 10)
+    //         default:
+    //     }
+    // }
 
     const validateFunction = () => {
         let passedVerify = true;
@@ -175,9 +184,9 @@ function UserOtherInfo(props: IUserOtherInfoProps) {
                 <div className="user-main-container" style={{display: 'flex', flexWrap: 'wrap'}}>
                     {Array.from({length: 3}).map((item, index) => (
                         <>
-                            <Skeleton key={index} variant="rounded" width={300} height={72}
+                            <Skeleton variant="rounded" width={300} height={72}
                                       style={{opacity: 1 - 0.15 * index}}/>
-                            <Skeleton key={index} variant="rounded" width={300} height={72}
+                            <Skeleton variant="rounded" width={300} height={72}
                                       style={{opacity: 1 - 0.15 * index}}/>
                         </>
                     ))}
@@ -187,9 +196,9 @@ function UserOtherInfo(props: IUserOtherInfoProps) {
                         <TextField
                             label='Sổ thẻ BHYT'
                             placeholder='--'
-                            value={userOtherInfo.userInsuranceNumber}
+                            // value={userOtherInfo.userInsuranceNumber}
                             onChange={(_, value) => {
-                                onChangeOneField(UserInfoModelProperty.userInsuranceNumber, value)
+                                // onChangeOneField(UserInfoModelProperty.userInsuranceNumber, value)
                             }}
                             errorMessage={errorMessageString.userInsuranceNumber}
                         />
@@ -199,9 +208,9 @@ function UserOtherInfo(props: IUserOtherInfoProps) {
                             placeholder="Chọn một giá trị"
                             label="Quốc tịch"
                             options={countriesOptions}
-                            selectedKey={userOtherInfo.userNational.flag}
+                            // selectedKey={userOtherInfo.userNational.flag}
                             onChange={(_, selected) => {
-                                onChangeOneField(UserInfoModelProperty.userNational, selected?.key)
+                                // onChangeOneField(UserInfoModelProperty.userNational, selected?.key)
                             }}
                             errorMessage={errorMessageString.userNational}
                         />
@@ -213,9 +222,9 @@ function UserOtherInfo(props: IUserOtherInfoProps) {
                             label='Thời hạn thẻ - Từ ngày'
                             // strings={defaultDatePickerStrings}
                             onSelectDate={(date) => {
-                                onChangeOneField(UserInfoModelProperty.userCardPeriodFrom, `${date?.getMonth()}/${date?.getDay()}/${date?.getFullYear()}`)
+                                // onChangeOneField(UserInfoModelProperty.userCardPeriodFrom, `${date?.getMonth()}/${date?.getDay()}/${date?.getFullYear()}`)
                             }}
-                            value={new Date(userOtherInfo.userCardPeriodFrom)}
+                            // value={new Date(userOtherInfo.userCardPeriodFrom)}
                             // parseDateFromString={()}'
                             maxDate={new Date()}
                         />
@@ -227,12 +236,12 @@ function UserOtherInfo(props: IUserOtherInfoProps) {
                             label='Thời hạn thẻ - Đến ngày'
                             // strings={defaultDatePickerStrings}
                             onSelectDate={(date) => {
-                                onChangeOneField(UserInfoModelProperty.userCardPeriodTo, `${date?.getMonth()}/${date?.getDay()}/${date?.getFullYear()}`)
+                                // onChangeOneField(UserInfoModelProperty.userCardPeriodTo, `${date?.getMonth()}/${date?.getDay()}/${date?.getFullYear()}`)
                             }}
-                            value={new Date(userOtherInfo.userCardPeriodTo)}
+                            // value={new Date(userOtherInfo.userCardPeriodTo)}
                             // parseDateFromString={()}'
                             // maxDate={new Date()}
-                            minDate={userOtherInfo.userCardPeriodFrom ? new Date(userOtherInfo.userCardPeriodFrom) : new Date()}
+                            // minDate={userOtherInfo.userCardPeriodFrom ? new Date(userOtherInfo.userCardPeriodFrom) : new Date()}
 
                         />
                     </div>
@@ -249,9 +258,9 @@ function UserOtherInfo(props: IUserOtherInfoProps) {
                         <TextField
                             label='Tôn giáo'
                             placeholder='--'
-                            value={userOtherInfo.userReligion}
+                            // value={userOtherInfo.userReligion}
                             onChange={(_, value) => {
-                                onChangeOneField(UserInfoModelProperty.userReligion, value)
+                                // onChangeOneField(UserInfoModelProperty.userReligion, value)
                             }}
                             errorMessage={errorMessageString.userReligion}
                         />
@@ -260,9 +269,9 @@ function UserOtherInfo(props: IUserOtherInfoProps) {
                         <TextField
                             label='Nghề nghiệp'
                             placeholder='--'
-                            value={userOtherInfo.userJob}
+                            // value={userOtherInfo.userJob}
                             onChange={(_, value) => {
-                                onChangeOneField(UserInfoModelProperty.userJob, value)
+                                // onChangeOneField(UserInfoModelProperty.userJob, value)
                             }}
                             errorMessage={errorMessageString.userJob}
                         />

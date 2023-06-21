@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Login.scss'
 import doctor from '../../base/image/doctor.png'
 import user from '../../base/image/user.png'
@@ -10,13 +10,23 @@ import {ButtonVariantType, LoadingPosition} from '../../model/enum/buttonEnum'
 import { useNavigate } from 'react-router-dom'
 import { UserService } from '../../api/apiPage/apiPage'
 import Cookies from 'js-cookie';
+import jwt from 'jwt-decode'
+import { useStateValue } from '../../context/StateProvider'
+import { MessageBarStatus } from '../../model/enum/messageBarEnum'
+import { actionType } from '../../context/Reducer'
+import { onEnterKeyDownAction } from '../../utils/commonFunction'
 function Login() {
     const [loadingButton, setLoading] = useState<boolean>()
     const [phoneNumber, setPhoneNumber] = useState<string>()
     const [password, setPassword] = useState<string>()
     const [rememberPass, setRemmemberPass] = useState<boolean>()
-
+    const [userId, setUserId] = useState<string>('')
     
+    const [{ auth }, dispatch] = useStateValue()
+    const showMessageBar = (message: string, isOpen: boolean, status: MessageBarStatus) => {
+        dispatch({ type: actionType.SET_MESSAGE_BAR, messageBar: { isOpen: isOpen, text: message, status: status } })
+    }
+
     const navigate = useNavigate()
     const handleLogin = () => {
         let requestBody = {
@@ -28,11 +38,20 @@ function Login() {
         const result = UserService.login(requestBody).then(res => {
             if (res.success) {
                 Cookies.set("Token", res.data?.accessToken, {
-                    expires: 7,
+                    expires: 0.1,
+                });
+                // const user: any = jwt(res.data?.accessToken)
+                dispatch({
+                    type: actionType.SET_AUTH_VALUE,
+                    auth: {
+                        ...auth,
+                        token: res.data?.accessToken
+                    },
                 });
                 setLoading(false)
                 navigate('/trang-chu')
             } else {
+                showMessageBar(`Đăng nhập thất bại! \n ${res?.message ? res?.message : ''}`, true, MessageBarStatus.Error)
                 setLoading(false)
             }
         })
@@ -71,6 +90,7 @@ function Login() {
                             revealPasswordAriaLabel="Show password"
                             onChange={(_, value) => { setPassword(value) }}
                             errorMessage={''}
+                            onKeyDown={(e) => { onEnterKeyDownAction(e, () => handleLogin()) }}
                         />
                     </div>
                     <div className="sign-up">

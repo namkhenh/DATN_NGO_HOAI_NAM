@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import './Header.scss'
 import logo from '../../base/image/Riordan_Clinic_logo.png'
-import {Button} from '@mui/material';
-import {Link, NavLink} from 'react-router-dom';
+import { Button } from '@mui/material';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import team1 from '../../base/image/lading-team.jpg'
@@ -15,8 +15,10 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import HelpIcon from '@mui/icons-material/Help';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DialogView from '../../common/dialog/Dialog';
-import {ButtonVariantType} from '../../model/enum/buttonEnum';
-
+import { ButtonVariantType } from '../../model/enum/buttonEnum';
+import { useStateValue } from '../../context/StateProvider';
+import { actionType } from '../../context/Reducer';
+import Cookies from 'js-cookie';
 interface INavData {
     content: string;
     link: string
@@ -35,92 +37,84 @@ interface NavState {
 //     isLogin: boolean
 // }
 
-export default class Header extends React.Component<any, NavState> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            navContent: [],
-            isExpandAccountSetting: false,
-            showPopup: false,
-            isLogined: false,
-            isOpenDialog: false,
-            isLoading: false
-        }
+export function Header() {
+    const [navContent, setnavContent] = useState<INavData[]>([
+        { content: 'Trang chủ', link: '/trang-chu' },
+        { content: 'Về chúng tôi', link: '/ve-chung-toi' },
+        { content: 'Dịch vụ', link: '/dich-vu' },
+        { content: 'Đội ngũ', link: '/doi-ngu' },
+        { content: 'Liên hệ', link: '/lien-he' },
+    ])
+    const [isExpandAccountSetting, setisExpandAccountSetting] = useState<boolean>(false)
+    const [showPopup, setshowPopup] = useState<boolean>(false)
+    const [isOpenDialog, setisOpenDialog] = useState<boolean>(false)
+    const [isLoading, setisLoading] = useState<boolean>(false)
+    const [{ auth }, dispatch] = useStateValue()
+    const navigate = useNavigate()
+
+    const expandAccountSetting = () => {
+        setisExpandAccountSetting(!isExpandAccountSetting)
     }
 
-    componentDidMount(): void {
-        this.setState({
-            navContent: [
-                { content: 'Trang chủ', link:'/trang-chu' },
-                { content: 'Về chúng tôi', link: '/ve-chung-toi' },
-                { content: 'Dịch vụ', link: '/dich-vu' },
-                { content: 'Đội ngũ', link: '/doi-ngu' },
-                { content: 'Liên hệ', link: '/lien-he' },
-            ],
-        })
+    const handleShowPopup = () => {
+        setshowPopup(!showPopup)
     }
 
-    expandAccountSetting() {
-        let isExpandAccountSetting = !this.state.isExpandAccountSetting
-        this.setState({ isExpandAccountSetting: isExpandAccountSetting })
+    const handlecClosePopup = () => {
+        setisOpenDialog(false)
     }
-
-    handleShowPopup() {
-        let showPopup = !this.state.showPopup
-        this.setState({ showPopup: showPopup, isOpenDialog: false })
+    
+    const handleLogout = () => {
+        Cookies.remove("Token")
+        dispatch({
+            type: actionType.SET_AUTH_VALUE,
+            auth: {
+                ...auth,
+                isLogined: false,
+                isLogout: false,
+                role: '',
+                userId: '',
+                userName: '',
+                email: ''
+            },
+        });
+        setisOpenDialog(false)
+        navigate('/trang-chu')
     }
+    
 
-    handlecClosePopup() {
-        this.setState({ isOpenDialog: false })
-    }
-
-    onLogoutAction() {
-        const result = new Promise((resolve) => {
-            this.setState({ isLoading : true})
-            setTimeout(() => {
-                this.setState({ isLoading: false })
-                resolve('success')
-            }, 4000);
-        }).then(() => {
-            this.setState({showPopup: false})
-        })
-        return result
-    }
-
-    render() {
-        const { isExpandAccountSetting, showPopup, navContent, isLogined, isOpenDialog, isLoading } = this.state
-        return (
-            <div id="header" className="header">
-                <div className="top-header">
-                    <span>Giờ làm việc: Thứ Hai - Thứ Sáu: 8:00 - 17:30/ Thứ Bảy: 8:00 - 11:30</span>
-                    <div className="social-icons">
-                        <FacebookOutlinedIcon className="social-icon"></FacebookOutlinedIcon>
-                        <FacebookOutlinedIcon className="social-icon"></FacebookOutlinedIcon>
-                        <FacebookOutlinedIcon className="social-icon"></FacebookOutlinedIcon>
-                    </div>
+    return (
+        <div id="header" className="header">
+            <div className="top-header">
+                <span>Giờ làm việc: Thứ Hai - Thứ Sáu: 8:00 - 17:30/ Thứ Bảy: 8:00 - 11:30</span>
+                <div className="social-icons">
+                    <FacebookOutlinedIcon className="social-icon"></FacebookOutlinedIcon>
+                    <FacebookOutlinedIcon className="social-icon"></FacebookOutlinedIcon>
+                    <FacebookOutlinedIcon className="social-icon"></FacebookOutlinedIcon>
                 </div>
-                <div className="bot-header">
-                    <Link id="logo" className="logo" to={'/'}>
-                        <img src={logo} alt="/" />
-                    </Link>
-                    <div className="navbar">
-                        <div className="navbar-options">
-                            {navContent?.map((item) => {
-                                return <NavLink to={item.link} className={({ isActive }) => (isActive ? 'navbar-item-active' : 'navbar-item')}>{ item.content }</NavLink>
-                            })}
-                        </div>
-                        <div className="booking-button">
-                            <Button variant={ButtonVariantType.Contained} sx={{ textTransform: 'none' }} size="large" href={'/quan-ly/dat-lich-kham'} startIcon={<EventAvailableIcon/>}>Đặt lịch khám</Button>
-                        </div>
-                        {isLogined ?
+            </div>
+            <div className="bot-header">
+                <Link id="logo" className="logo" to={'/'}>
+                    <img src={logo} alt="/" />
+                </Link>
+                <div className="navbar">
+                    <div className="navbar-options">
+                        {navContent?.map((item) => {
+                            return <NavLink to={item.link} className={({ isActive }) => (isActive ? 'navbar-item-active' : 'navbar-item')}>{item.content}</NavLink>
+                        })}
+                    </div>
+                    <div className="booking-button">
+                        <Button variant={ButtonVariantType.Contained} sx={{ textTransform: 'none' }} size="large" onClick={() => { auth.isLogined ? navigate('/quan-ly/dat-lich-kham') : navigate('/dang-nhap')}} startIcon={<EventAvailableIcon />}>Đặt lịch khám</Button>
+                    </div>
+                    {auth.isLogined ?
                         <div className="user-avatar">
-                            <img src={team1} alt="" onClick={this.handleShowPopup.bind(this)}/>
+                            <img src={team1} alt="" onClick={handleShowPopup} />
                             {showPopup && <div className="popup-container">
                                 <div className="popup-content">
                                     <div className="popup-header">
                                         <div className="popup-avatar"><img src={team1} alt="" /></div>
-                                            <Link to={'/quan-ly/ho-so'} className="popup-header-content">
-                                            <div className="popup-name">Ngô Hoài Nam</div>
+                                        <Link to={'/quan-ly/ho-so'} className="popup-header-content">
+                                            <div className="popup-name">{auth.fullName}</div>
                                             <div className="popup-view-profile">Xem hồ sơ của tôi<ArrowForwardIosIcon sx={{ fontSize: '12px', color: '#595959', marginLeft: '12px' }} /></div>
                                         </Link>
                                     </div>
@@ -129,7 +123,7 @@ export default class Header extends React.Component<any, NavState> {
                                         Thành viên
                                     </div>
                                     <div className="popup-management">
-                                            <Link to={'/quan-ly/suc-khoe'} className="popup-management-item">
+                                        <Link to={'/quan-ly/suc-khoe'} className="popup-management-item">
                                             <FavoriteSharpIcon sx={{ color: '#ff2727d7' }} />
                                             <div className='item-text'>Sức khỏe</div>
                                         </Link>
@@ -139,23 +133,23 @@ export default class Header extends React.Component<any, NavState> {
                                         </Link>
                                     </div>
                                     <div className="popup-options">
-                                        <div className="popup-option" onClick={this.expandAccountSetting.bind(this)}>
+                                        <div className="popup-option" onClick={expandAccountSetting}>
                                             <div className="account-setting">
                                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                                     <SettingsIcon sx={{ marginRight: '12px' }} /> Thiết lập tài khoản
                                                 </div>
                                                 {isExpandAccountSetting ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                                             </div>
-                                                <div className="account-setting-menu" aria-expanded={isExpandAccountSetting} >
-                                                    <Link to={'/quan-ly/mat-khau'} className="account-setting-item">
+                                            <div className="account-setting-menu" aria-expanded={isExpandAccountSetting} >
+                                                <Link to={'/quan-ly/mat-khau'} className="account-setting-item">
                                                     Đổi mật khẩu
                                                 </Link>
-                                                    <Link to={'/quan-ly/vo-hieu-hoa'} className="account-setting-item">
+                                                <Link to={'/quan-ly/vo-hieu-hoa'} className="account-setting-item">
                                                     Vô hiệu hóa tài khoản
                                                 </Link>
                                             </div>
                                         </div>
-                                            <Link to={'/quan-ly/tro-giup'} className="popup-option">
+                                        <Link to={'/quan-ly/tro-giup'} className="popup-option">
                                             <div className="account-setting">
                                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                                     <HelpIcon sx={{ marginRight: '12px' }} /> Trợ giúp
@@ -163,29 +157,30 @@ export default class Header extends React.Component<any, NavState> {
                                             </div>
                                         </Link>
                                     </div>
-                                        <div className="logout-button" onClick={() => { this.setState({ isOpenDialog: true, showPopup: false }) }}>
-                                        <Button startIcon={<LogoutIcon/>}>Đăng xuất</Button>
+                                    <div className="logout-button" onClick={() => {
+                                        setisOpenDialog(true)
+                                        setshowPopup(false)
+                                    }}>
+                                        <Button startIcon={<LogoutIcon />}>Đăng xuất</Button>
                                     </div>
                                 </div>
                             </div>}
                         </div> :
-                            <div className="login-button" onClick={() => { this.setState({ isLogined: true }) }}>
-                            <Button variant='outlined' size="large" sx={{ textTransform: 'none' }}  startIcon={<AccountCircleIcon />}>Đăng nhập</Button>
-                        </div>}                   
-                    </div>
+                        <div className="login-button" onClick={() => { }}>
+                            <Button variant='outlined' size="large" sx={{ textTransform: 'none' }} startIcon={<AccountCircleIcon />} onClick={() => { navigate('/dang-nhap') }}>Đăng nhập</Button>
+                        </div>}
                 </div>
-                <DialogView
-                    title='Đăng xuất khỏi Riordan Clinic?'
-                    hidden={!isOpenDialog}
-                    message='Bạn có chắc chắn muốn đăng xuất?'
-                    closeButtonText='Đăng xuất'
-                    closeWithPromise={this.onLogoutAction.bind(this)}
-                    confirm={this.handlecClosePopup.bind(this)}
-                    confirmButtonText={'Hủy'}
-                    close={this.handlecClosePopup.bind(this)}
-                    loading={isLoading}
-                />
             </div>
-        );
-    }
+            <DialogView
+                title='Đăng xuất khỏi Riordan Clinic?'
+                hidden={!isOpenDialog}
+                message='Bạn có chắc chắn muốn đăng xuất?'
+                closeButtonText='Hủy'
+                confirm={handleLogout}
+                confirmButtonText={'Đăng xuất'}
+                close={handlecClosePopup}
+                loading={isLoading}
+            />
+        </div>
+    );
 }

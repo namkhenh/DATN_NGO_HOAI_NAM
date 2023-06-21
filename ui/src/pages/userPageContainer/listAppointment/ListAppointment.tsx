@@ -13,6 +13,7 @@ import avatar1 from '../../../base/image/anh-la-co-viet-nam-dep-1.png'
 import {IAppointmenViewModel} from '../../../model/apimodel/appointmentInfo';
 import AppointmentDetail from '../../../components/appointmentDetail/AppointmentDetail';
 import InfoIcon from '@mui/icons-material/Info';
+import { CommuneDefault, DistricDefault, ProvinceDefault } from '../../../model/apimodel/userInfo';
 
 
 interface ListAppointmentState {
@@ -25,25 +26,16 @@ const ListAppointment = (props: any) => {
         appointment: [{
             patientAvatar: avatar1,
             patientName: "nguyễn văn A",
-            patientBirth: "05/18/2001",
+            patientBirth: new Date(),
             patientSex: 0,
             patientPhoneNumber: "0123456789",
             patientAddress: {
-                province: {
-                    key: 1,
-                    text: 'Thành phố Hà Nội'
-                },
-                district: {
-                    key: 1,
-                    text: 'Quận Ba Đình'
-                },
-                commune: {
-                    key: 4,
-                    text: 'Phường Trúc Bạch'
-                }
+                province: ProvinceDefault,
+                district: DistricDefault,
+                commune: CommuneDefault
             },
-            appointmentDate: "06/12/2003",
-            appointmentTime: 0,
+            appointmentDate: new Date(),
+            appointmentTime: new Date(),
             appointmentReason: "đau đầu ù tai",
             appointmentStatus: AppointmentStatus.Success,
             appointmentId: "DK123456",
@@ -52,25 +44,16 @@ const ListAppointment = (props: any) => {
             {
                 patientAvatar: avatar1,
                 patientName: "nguyễn văn X",
-                patientBirth: "05/18/2001",
+                patientBirth: new Date(),
                 patientSex: 1,
                 patientPhoneNumber: "0123456789",
                 patientAddress: {
-                    province: {
-                        key: 1,
-                        text: 'Thành phố Hà Nội'
-                    },
-                    district: {
-                        key: 1,
-                        text: 'Quận Ba Đình'
-                    },
-                    commune: {
-                        key: 4,
-                        text: 'Phường Trúc Bạch'
-                    }
+                    province: ProvinceDefault,
+                    district: DistricDefault,
+                    commune: CommuneDefault
                 },
-                appointmentDate: "06/12/2003",
-                appointmentTime: 2,
+                appointmentDate: new Date(),
+                appointmentTime: new Date(),
                 appointmentReason: "đau đầu ù tai",
                 appointmentStatus: AppointmentStatus.Waiting,
                 appointmentId: "DK123456",

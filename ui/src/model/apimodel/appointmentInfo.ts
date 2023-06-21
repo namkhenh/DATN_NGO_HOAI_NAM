@@ -5,13 +5,13 @@ export interface IAppointmenViewModel {
     patientId?: string;
     patientAvatar?: string;
     patientName: string;
-    patientBirth: string;
+    patientBirth: Date;
     patientSex: number;
     patientPhoneNumber?: string
     patientIdentityNumber?: string
     patientAddress: IUserAddress
-    appointmentDate: string
-    appointmentTime: number
+    appointmentDate: Date
+    appointmentTime: Date
     appointmentReason: string
     appointmentStatus?: AppointmentStatus
     appointmentId?: string
@@ -99,8 +99,8 @@ export const PatientProfileDefaultView = {
 
 
 export interface IAppointmentInfo {
-    appointmentDate: string
-    appointmentTime: number
+    appointmentDate: Date
+    appointmentTime: Date
     appointmentReason: string
 }
 

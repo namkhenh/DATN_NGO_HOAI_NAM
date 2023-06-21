@@ -39,7 +39,7 @@ function AppointmentDetail(props: IAppointmentDetailProps) {
 
     const convertAddressToString = (inputAddress: IUserAddress) => {
         const addressString = inputAddress.address ? inputAddress.address + ', ' : ""
-        const outputAddress: string = addressString + inputAddress.commune.text + ', ' + inputAddress.district.text + ', ' + inputAddress.province.text
+        const outputAddress: string = addressString + inputAddress.commune?.name + ', ' + inputAddress.district?.name + ', ' + inputAddress.province?.name
         return outputAddress
     }
 
@@ -68,7 +68,7 @@ function AppointmentDetail(props: IAppointmentDetailProps) {
                             Khung giờ khám:
                         </div>
                         <div className="item-content">
-                            {getTextHour(appointment.appointmentTime)}
+                            {`${appointment.appointmentTime}`}
                         </div>
                     </div>
                     <div className="appointment-detail-item">

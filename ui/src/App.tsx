@@ -1,7 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import LandingPage from "./pages/userPageContainer/landingPage/LandingPage";
 import ManagementPage from "./pages/userPageContainer/managementPage/ManagementPage";
-import UserInfo from "./pages/userPageContainer/userInfo/UserInfo";
 import ListAppointment from "./pages/userPageContainer/listAppointment/ListAppointment";
 import BookingAppointment from "./pages/userPageContainer/bookingAppointment/BookingAppointment";
 import AboutUsPage from "./pages/userPageContainer/aboutUsPage/AboutUsPage";
@@ -33,8 +31,52 @@ import AppointmentReceptionPage from "./pages/adminPageContainer/appointmentRece
 import Signup from "./structure/signup/Signup";
 import ErrorPage from "./structure/error/ErrorPage";
 import MessageBar from "./common/messageBar/MessageBar";
+import { LandingPage } from "./pages/userPageContainer/landingPage/LandingPage";
+import { useStateValue } from "./context/StateProvider";
+import { UserInfo } from "./pages/userPageContainer/userInfo/UserInfo";
+import { actionType } from "./context/Reducer";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import jwt from 'jwt-decode'
 
 function App() {
+  const [{ auth }, dispatch] = useStateValue()
+  const [token, setToken] = useState<string>()
+  useEffect(() => {
+    const tokenNew = Cookies.get("Token")
+    if (!!tokenNew) {
+      const user: any = jwt(tokenNew)
+      setToken(tokenNew)
+      dispatch({
+        type: actionType.SET_AUTH_VALUE,
+        auth: {
+          ...auth,
+          isLogined: true,
+          isLogout: false,
+          role: user?.roles,
+          userId: user?.userId,
+          userName: user?.userName,
+          email: user?.email,
+          fullName: user?.fullName
+        },
+      });
+    } else {
+      dispatch({
+        type: actionType.SET_AUTH_VALUE,
+        auth: {
+          fullName: '',
+          isAdmin: false,
+          isLogined: false,
+          isLogout: false,
+          role: [],
+          userId: '',
+          userName: '',
+          email: '',
+        },
+      });
+    }
+  }, [auth.token])
+  
   return (
     <div className="App">
       <Routes>
@@ -51,12 +93,13 @@ function App() {
           <Route path="doi-ngu" element={<DoctorPage></DoctorPage>}></Route>
           <Route path="lien-he" element={<ContactPage></ContactPage>}></Route>
           {/* </Route> */}
-          <Route
+          {/* <Route
             path="/quan-ly"
             element={
               <ProtectedRoutes roleRequired={AccountRoleEnum.User} />
             }
-          >
+          > */}
+          {!!token &&
             <Route path="/quan-ly" element={<ManagementPage></ManagementPage>}>
               <Route
                 path="/quan-ly/ho-so"
@@ -66,17 +109,17 @@ function App() {
                 path="/quan-ly/danh-sach-lich-kham"
                 element={<ListAppointment></ListAppointment>}
               ></Route>
-              <Route
+              {/* <Route
                 path="/quan-ly/dat-lich-kham"
                 element={
                   <ProtectedRoutes roleRequired={AccountRoleEnum.User} />
                 }
-              >
-                <Route
-                  path="/quan-ly/dat-lich-kham"
-                  element={<BookingAppointment></BookingAppointment>}
-                ></Route>
-              </Route>
+              > */}
+              <Route
+                path="/quan-ly/dat-lich-kham"
+                element={<BookingAppointment></BookingAppointment>}
+              ></Route>
+              {/* </Route> */}
               <Route
                 path="/quan-ly/suc-khoe"
                 element={<MyHealthPage></MyHealthPage>}
@@ -94,14 +137,15 @@ function App() {
                 element={<HelperPage></HelperPage>}
               ></Route>
             </Route>
+          }
           </Route>
-        </Route>
-        <Route
+        {/* </Route> */}
+        {/* <Route
           path="/admin"
           element={
             <ProtectedRoutes roleRequired={AccountRoleEnum.Admin} />
           }
-        >
+        > */}
           <Route path="/admin" element={<Navigate replace to="dashboard" />}></Route>
           <Route path="/admin" element={<AdminLayout></AdminLayout>}>
             <Route path="/admin/dashboard" element={<div>Dash</div>}></Route>
@@ -127,7 +171,7 @@ function App() {
             <Route path="/admin/kham-chua-benh/danh-sach-benh-nhan" element={<HealthCarePage />}></Route>
             <Route path="/admin/kham-chua-benh/chi-tiet-kham-benh/:id" element={<HealthCareDetail />}></Route>
           </Route>
-        </Route>
+        {/* </Route> */}
 
         {/* </Route> */}
         <Route path="/dang-nhap" element={<Login></Login>}></Route>

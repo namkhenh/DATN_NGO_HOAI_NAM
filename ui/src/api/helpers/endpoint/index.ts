@@ -44,7 +44,10 @@ export default class Endpoint {
     static get delete_role(): string { return Endpoint.baseUrl + Endpoint._delete_role }
     static get delete_list_role(): string { return Endpoint.baseUrl + Endpoint._delete_list_role }
 
-
+    //address
+    static get province(): string { return Endpoint.baseUrl + Endpoint._province }
+    static get district(): string { return Endpoint.baseUrl + Endpoint._district }
+    static get commune(): string { return Endpoint.baseUrl + Endpoint._commune }
 
 
 
@@ -91,4 +94,9 @@ export default class Endpoint {
     private static _update_user = "/User/rpc/Portal/user/update"
     private static _delete_user = "/User/rpc/Portal/user/delete"
     private static _assign_role = "/Role/rpc/Portal/role/assign-roles-to-user"
+
+    //address
+    private static _province = "/Province/rpc/Portal/province/get"
+    private static _district = "/Province/rpc/Portal/province/get-district-by-provinceId"
+    private static _commune = "/Province/rpc/Portal/province/get-ward-by-districtId"
 }

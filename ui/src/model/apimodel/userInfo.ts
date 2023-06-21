@@ -1,36 +1,64 @@
 import {IDropdownOption} from "@fluentui/react";
+import { RoleManagerTableDatas } from "../enum/tableTypeEnum";
 
 export interface IUserAddress {
-    province: IDropdownOption;
-    district: IDropdownOption;
-    commune: IDropdownOption;
+    province: IProvince;
+    district: IDistrict;
+    commune: ICommune;
     address?: string;
 }
 
 export interface IProvince {
-    name: string
+    id: string
     code: number
-    divisonType: string
+    name: string
     codeName: string
+    divisonType: string
     phoneCode: number
-    districts: IDistrict[]
+}
+
+export const ProvinceDefault = {
+    id:  "",
+    code:  0,
+    name:  "",
+    codeName:  "",
+    divisonType:  "",
+    phoneCode:  0,
 }
 
 export interface IDistrict {
-    name: string
+    id: string
     code: number
-    divisonType: string
+    name: string
     codeName: string
-    provinceCode: number
-    wards: ICommune[]
+    divisonType: string
+    provinceId: number
 }
 
+export const DistricDefault = {
+    id:  "",
+    code:  0,
+    name:  "",
+    codeName:  "",
+    divisonType:  "",
+    provinceId:  0,
+}
 export interface ICommune {
+    id: string
     name: string
     code: number
-    divisonType: string
     codeName: string
-    districtCode: number
+    divisonType: string
+    districtId: number
+}
+
+export const CommuneDefault = {
+    id:  "",
+    code:  0,
+    name:  "",
+    codeName:  "",
+    divisonType:  "",
+    districtId:  0,
 }
 
 export interface ICountry {
@@ -45,60 +73,82 @@ export interface IEthnic {
 
 export interface IUserInfoViewModel {
     id: string;
-    userAvatar: string;
+    code: string;
     userName: string;
-    userSex: number;
-    userDateBirth: string;
-    userPhoneNumber: string
-    userIdentityNumber: string;
-    userAddress: IUserAddress;
-    userNational: ICountry;
-    userInsuranceNumber: string;
-    // userEthnic: IEthnic;
-    userReligion: string;
-    userJob: string;
-    userCardPeriodFrom: string
-    userCardPeriodTo: string
+    status: boolean,
+    phoneNumber: string;
+    fullName: string;
+    email: string;
+    cmnd: string;
+    dateOfBirth: Date;
+    sex: number,
+    provinceId: string;
+    districtId: string;
+    wardId: string;
+    province: IProvince;
+    district: IDistrict;
+    ward: ICommune;
+    address: string;
+    roles: RoleManagerTableDatas[],
+    guardianName: string,
+    guardianPhone: string,
+    guardianRelation: string,
+    deleteAt: Date;
+    createdDate: Date;
+    lastModifiedDate: Date;
 }
 
 export const UserInfoDefaultView = {
-    id: "",
-    userAvatar: "",
-    userName: "",
-    userSex: 0,
-    userDateBirth: "",
-    userPhoneNumber: "",
-    userIdentityNumber: "",
-    userAddress: {
-        province: "",
-        district: "",
-        commune: "",
-        address: ""
-    },
-    userNational: "",
-    userInsuranceNumber: "",
-    // userEthnic: "",
-    userReligion: "",
-    userJob: "",
-    userCardPeriodFrom: "",
-    userCardPeriodTo: "",
+    id: '',
+    code: '',
+    userName: '',
+    status: true,
+    phoneNumber: '',
+    fullName: '',
+    email: '',
+    cmnd: '',
+    dateOfBirth:  new Date(),
+    sex: 0,
+    provinceId: '',
+    districtId: '',
+    wardId: '',
+    province: ProvinceDefault,
+    district: DistricDefault,
+    ward: CommuneDefault,
+    address: '',
+    roles: [],
+    guardianName: '',
+    guardianPhone: '',
+    guardianRelation: '',
+    deleteAt: new Date(),
+    createdDate: new Date(),
+    lastModifiedDate: new Date()
 }
 
 export enum UserInfoModelProperty {
-    userAvatar = "userAvatar",
-    userName = "userName",
-    userSex = "userSex",
-    userDateBirth = "userDateBirth",
-    userPhoneNumber = "userPhoneNumber",
-    userIdentityNumber = "userIdentityNumber",
-    userAddress = "userAddress",
-    userNational = "userNational",
-    userInsuranceNumber = "userInsuranceNumber",
-    // userEthnic = "userEthnic",
-    userReligion = "userReligion",
-    userJob = "userJob",
-    userCardPeriodFrom = "userCardPeriodFrom",
-    userCardPeriodTo = "userCardPeriodTo",
+    id = 'id',
+    code = 'code',
+    userName = 'userName',
+    status = 'status',
+    phoneNumber = 'phoneNumber',
+    fullName = 'fullName',
+    email = 'email',
+    cmnd = 'cmnd',
+    dateOfBirth = 'dateOfBirth',
+    sex = 'sex',
+    provinceId = 'provinceId',
+    districtId = 'districtId',
+    wardId = 'wardId',
+    province = 'province',
+    district = 'district',
+    ward = 'ward',
+    roles = 'roles',
+    guardianName = 'guardianName',
+    guardianPhone = 'guardianPhone',
+    guardianRelation = 'guardianRelation',
+    deleteAt = 'deleteAt',
+    createdDate = 'createdDate',
+    lastModifiedDate = 'lastModifiedDate'
 }
 
 export enum UserAddressModelProperty {

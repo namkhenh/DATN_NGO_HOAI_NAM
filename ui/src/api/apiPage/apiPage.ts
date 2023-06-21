@@ -95,3 +95,15 @@ export class PermissionService {
         return send(`${api.delete_permission}?Id=${id}`, 'DELETE')
     }
 }
+
+export class AddressService {
+    public static getProvince = () => {
+        return send(`${api.province}`, 'GET')
+    }
+    public static getDistrict = (id: string) => {
+        return send(`${api.district}?Id=${id}`, 'GET')
+    }
+    public static getCommune = (id: string) => {
+        return send(`${api.commune}?Id=${id}`, 'GET')
+    }
+}

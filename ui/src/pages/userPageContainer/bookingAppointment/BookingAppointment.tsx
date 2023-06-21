@@ -27,6 +27,11 @@ import {useStateValue} from '../../../context/StateProvider';
 import {actionType} from '../../../context/Reducer';
 import {isStringEmpty, validateRequire} from '../../../utils/commonFunction';
 import AcceptBookingForm from '../../../components/acceptBookingForm/AcceptBookingForm';
+import { UserService } from '../../../api/apiPage/apiPage';
+import { Backdrop, CircularProgress } from '@mui/material';
+import { IUserInfoViewModel, UserInfoDefaultView } from '../../../model/apimodel/userInfo';
+import { TimePickerView } from '../../../common/timePicker/TimePicker';
+import { time } from 'console';
 
 interface BookingAppointmentState {
     patientProfile: IPatientProfileViewModel[]
@@ -69,104 +74,72 @@ interface IUserMainInfoErrorMessage {
 }
 
 const BookingAppointment = (props: any) => {
-    const [isLoading, setLoading] = useState<boolean>(true)
+    const [isLoading, setLoading] = useState<boolean>(false)
+    const [loadingButton, setloadingButton] = useState<boolean>(false)
+    const [{ auth }, dispatch] = useStateValue()
+    const showMessageBar = (message: string, isOpen: boolean, status: MessageBarStatus) => {
+        dispatch({ type: actionType.SET_MESSAGE_BAR, messageBar: { isOpen: isOpen, text: message, status: status } })
+    }
     const [openForm, setOpenForm] = useState<boolean>(false)
     const [openDelete, setOpenDelete] = useState<boolean>(false)
     const [openAccept, setOpenAccept] = useState<boolean>(false)
     const [isEdited, setIsEdited] = useState<boolean>(false)
+    const [currentSelection, setcurrentSelection] = useState<number>(0)
+    const [currentPatientProfile, setcurrentPatientProfile] = useState<IUserInfoViewModel>(UserInfoDefaultView)
+    const [profileAction, setprofileAction] = useState <ProfileAction>()
     const [appointmentInfo, setAppointment] = useState<IAppointmentInfo>({
-        appointmentDate: new Date().toString(),
+        appointmentDate: new Date(),
         appointmentReason: '',
-        appointmentTime: 0
+        appointmentTime: new Date()
     })
     const [errorMessageString, setErrorMessage] = useState<IBookingInfoErrorMessage>({
         appointmentDate: "",
         appointmentTime: "",
         appointmentReason: ""
     })
-    const [state, setState] = useState<BookingAppointmentState>({
-        userProfile: {
-            patientId: "BN123456",
-            patientName: "Ngô Hoài Nam",
-            patientDateBirth: "05/18/2001",
-            patientSex: 0,
-            patientAddress: {
-                province: {
-                    key: 1,
-                    text: 'Thành phố Hà Nội'
-                },
-                district: {
-                    key: 1,
-                    text: 'Quận Ba Đình'
-                },
-                commune: {
-                    key: 4,
-                    text: 'Phường Trúc Bạch'
-                },
-                address: ''
-            },
-            patientPhoneNumber: '0123456789'
-        },
-        currentPatientProfile: PatientProfileDefaultView,
-        patientProfile: [{
-            patientId: "BN123456",
-            patientName: "nguyễn văn 2",
-            patientDateBirth: "05/18/2001",
-            patientSex: 0,
-            patientAddress: {
-                province: {
-                    key: 1,
-                    text: 'Thành phố Hà Nội'
-                },
-                district: {
-                    key: 1,
-                    text: 'Quận Ba Đình'
-                },
-                commune: {
-                    key: 4,
-                    text: 'Phường Trúc Bạch'
-                },
-                address: ''
-            },
-            patientPhoneNumber: '0123456789'
-        },
-            {
-                patientId: "BN123456",
-                patientName: "nguyễn văn 3",
-                patientDateBirth: "05/18/2001",
-                patientSex: 0,
-                patientAddress: {
-                    province: {
-                        key: 1,
-                        text: 'Thành phố Hà Nội'
-                    },
-                    district: {
-                        key: 1,
-                        text: 'Quận Ba Đình'
-                    },
-                    commune: {
-                        key: 4,
-                        text: 'Phường Trúc Bạch'
-                    },
-                    address: ''
-                },
-                patientPhoneNumber: ''
-            }],
-        currentSelection: 0,
+    const [userInfo, setUserInfo] = useState<IUserInfoViewModel>(UserInfoDefaultView)
+    const [patientProfile, setPatientProfile] = useState<IUserInfoViewModel[]>([])
+    useEffect(() => {
+        setLoading(true)
+        if (!!auth.userId) {
+            UserService.getUserById(auth.userId).then(res => {
+                if (res.success) {
+                    setLoading(false)
+                    setUserInfo({
+                        id: res.data?.id,
+                        code: res.data?.code,
+                        userName: res.data?.userName,
+                        status: res.data?.status,
+                        phoneNumber: res.data?.phoneNumber,
+                        fullName: res.data?.fullName,
+                        email: res.data?.email,
+                        cmnd: res.data?.cmnd,
+                        dateOfBirth: res.data?.dateOfBirth,
+                        sex: res.data?.sex,
+                        provinceId: res.data?.provinceId,
+                        districtId: res.data?.districtId,
+                        wardId: res.data?.wardId,
+                        province: res.data?.province,
+                        district: res.data?.district,
+                        ward: res.data?.ward,
+                        address: '',
+                        guardianName: '',
+                        guardianPhone: '',
+                        guardianRelation: '', 
+                        roles: res.data?.roles,
+                        deleteAt: res.data?.deleteAt,
+                        createdDate: res.data?.createdDate,
+                        lastModifiedDate: res.data?.lastModifiedDate,
+                    })
+                } else {
+                    setLoading(false)
+                    showMessageBar(`Đã có lỗi xảy ra! \n ${res?.message ? res?.message : ''}`, true, MessageBarStatus.Error)
+                }
+            })
+        }
+    }, [])
 
-        addressOptions: {
-            province: [{key: -1, text: 'Vui lòng đợi...', disabled: true}],
-            district: [{key: -1, text: 'Vui lòng đợi...', disabled: true}],
-            commune: [{key: -1, text: 'Vui lòng đợi...', disabled: true}]
-        },
-        canEditDistrict: false,
-        canEditCommune: false,
-        loadingButton: false,
-        showMessage: false
-    })
-
-    const {userProfile, patientProfile, currentSelection, currentPatientProfile, loadingButton} = state
-    let allProfile = [userProfile].concat(patientProfile)
+    let allProfile = [userInfo].concat(patientProfile)
 
     const onChangeOneField = (key: keyof IAppointmentInfo, value: any) => {
         setAppointment({
@@ -208,37 +181,26 @@ const BookingAppointment = (props: any) => {
 
     const cancelBooking = () => {
         setAppointment({
-            appointmentDate: new Date().toString(),
+            appointmentDate: new Date(),
             appointmentReason: '',
-            appointmentTime: 0
+            appointmentTime: new Date()
         })
     }
 
     const handleClickProfile = (index: number) => {
-        setState({
-            ...state,
-            currentSelection: index,
-        });
+        setcurrentSelection(index)
     }
 
     const handleActionPatientProfile = (action: string, index: number) => {
         if (action === "Add") {
-            setState({
-                ...state,
-                currentPatientProfile: PatientProfileDefaultView,
-                profileAction: ProfileAction.Create,
-            })
+            setcurrentPatientProfile(UserInfoDefaultView)
+            setprofileAction(ProfileAction.Create)
             setOpenForm(true)
         }
         if (action === "Edit") {
-            setState({
-                ...state,
-                currentPatientProfile: allProfile[index],
-                profileAction: ProfileAction.Edit,
-                canEditCommune: true,
-                canEditDistrict: true,
-                currentSelection: index,
-            })
+            setcurrentPatientProfile(allProfile[index])
+            setprofileAction(ProfileAction.Edit)
+            setcurrentSelection(index)
             setOpenForm(true)
         }
         if (action === "Delete") {
@@ -250,17 +212,10 @@ const BookingAppointment = (props: any) => {
         setOpenForm(false)
     }
 
-    const [, dispatch] = useStateValue()
-    const showMessageBar = (message: string, isOpen: boolean, status: MessageBarStatus) => {
-        dispatch({type: actionType.SET_MESSAGE_BAR, messageBar: {isOpen: isOpen, text: message, status: status}})
-    }
-
     const handleDeleteProfile = () => {
         let requestBody = {}
         const result = new Promise((resolve) => {
-            setState({...state, loadingButton: true})
             setTimeout(() => {
-                setState({...state, loadingButton: false, showMessage: true})
                 showMessageBar("Xóa hồ sơ người bệnh thành công", true, MessageBarStatus.Success)
                 setOpenDelete(false)
             }, 4000);
@@ -278,17 +233,23 @@ const BookingAppointment = (props: any) => {
         setOpenAccept(false)
     }
 
-    const checkEdited = () => {
-        const isEdited = !(`${new Date(appointmentInfo.appointmentDate).getDate()}/${new Date(appointmentInfo.appointmentDate).getMonth() + 1}/${new Date(appointmentInfo.appointmentDate).getFullYear()}` === `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}` && appointmentInfo.appointmentTime === 0 && appointmentInfo.appointmentReason === '')
-        setIsEdited(isEdited)
-    }
+    // const checkEdited = () => {
+    //     const isEdited = !(`${new Date(appointmentInfo.appointmentDate).getDate()}/${new Date(appointmentInfo.appointmentDate).getMonth() + 1}/${new Date(appointmentInfo.appointmentDate).getFullYear()}` === `${new Date().getDate()}/${new Date().getMonth() + 1}/${new Date().getFullYear()}` && appointmentInfo.appointmentTime === 0 && appointmentInfo.appointmentReason === '')
+    //     setIsEdited(isEdited)
+    // }
 
-    useEffect(() => {
-        checkEdited()
-    }, [appointmentInfo])
+    // useEffect(() => {
+    //     checkEdited()
+    // }, [appointmentInfo])
 
     return (
         <div id='booking-appointment' className='booking-appointment'>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={isLoading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <HeaderPage icon={<EventAvailableIcon/>} text='Quản lý lịch khám' textChild='Đặt lịch khám'/>
             <div className="booking-appointment-container">
                 <div className="booking-appointment">
@@ -307,10 +268,10 @@ const BookingAppointment = (props: any) => {
                         {allProfile?.map((item, index) => {
                             return <BookingPatientItem
                                 index={index}
-                                name={item.patientName}
-                                dateBirth={item.patientDateBirth}
-                                sex={item.patientSex}
-                                phone={item.patientPhoneNumber}
+                                name={item.fullName}
+                                dateBirth={item.dateOfBirth}
+                                sex={item.sex}
+                                phone={item.phoneNumber}
                                 selectProfile={handleClickProfile}
                                 editProfile={handleActionPatientProfile}
                                 isSelected={currentSelection === index}
@@ -346,15 +307,15 @@ const BookingAppointment = (props: any) => {
                                     isRequired={true}
                                     // strings={defaultDatePickerStrings}
                                     onSelectDate={(date) => {
-                                        onChangeOneField(AppointmentInfoModelProperty.appointmentDate, `${date!.getMonth() + 1}/${date!.getDate()}/${date!.getFullYear()}`)
+                                        onChangeOneField(AppointmentInfoModelProperty.appointmentDate, date)
                                     }}
-                                    value={new Date(appointmentInfo.appointmentDate)}
+                                    value={appointmentInfo.appointmentDate}
                                     // parseDateFromString={()}'
                                     minDate={new Date()}
                                 />
                             </div>
                             <div className="booking-appointment-item">
-                                <Dropdown
+                                {/* <Dropdown
                                     placeholder="Chọn một giá trị"
                                     label="Khung giờ khám"
                                     options={HourBooking}
@@ -364,6 +325,13 @@ const BookingAppointment = (props: any) => {
                                         onChangeOneField(AppointmentInfoModelProperty.appointmentTime, Number(selected?.key))
                                     }}
                                     errorMessage={errorMessageString.appointmentTime}
+                                /> */}
+                                <TimePickerView
+                                    placeholder='Chọn một giá trị'
+                                    label='Khung giờ khám'
+                                    timeRange={{ start: 8, end: 17 }}
+                                    dateAnchor={appointmentInfo.appointmentDate}
+                                    onChange={(_, time) => onChangeOneField(AppointmentInfoModelProperty.appointmentTime, time)}
                                 />
                             </div>
                             <div className="booking-appointment-item">
@@ -396,13 +364,13 @@ const BookingAppointment = (props: any) => {
                 openForm={openForm}
                 closeForm={closeForm}
                 currentPatientProfile={currentPatientProfile}
-                profileAction={state.profileAction}
+                profileAction={profileAction}
             />
             <DialogView
                 title={'Xác nhận xóa'}
                 hidden={!openDelete}
                 customContent={
-                    <span>Bạn có chắc chắn muốn xóa hồ sơ bệnh nhân <strong>{currentSelection !== -1 ? allProfile[currentSelection].patientName : ''}</strong></span>}
+                    <span>Bạn có chắc chắn muốn xóa hồ sơ bệnh nhân <strong>{currentSelection !== -1 ? allProfile[currentSelection].fullName : ''}</strong></span>}
                 // closeWithPromise={this.onLogoutAction.bind(this)}
                 // confirm={this.handlecClosePopup.bind(this)}
                 confirmButtonText={'Xóa'}
@@ -417,12 +385,12 @@ const BookingAppointment = (props: any) => {
                 appointmentDate: appointmentInfo.appointmentDate,
                 appointmentTime: appointmentInfo.appointmentTime,
                 appointmentReason: appointmentInfo.appointmentReason,
-                patientName: allProfile[currentSelection].patientName,
-                patientBirth: allProfile[currentSelection].patientDateBirth,
-                patientSex: allProfile[currentSelection].patientSex,
-                patientPhoneNumber: allProfile[currentSelection].patientPhoneNumber!,
-                patientAddress: allProfile[currentSelection].patientAddress,
-                patientId: allProfile[currentSelection].patientId
+                patientName: allProfile[currentSelection].fullName,
+                patientBirth: allProfile[currentSelection].dateOfBirth,
+                patientSex: allProfile[currentSelection].sex,
+                patientPhoneNumber: allProfile[currentSelection].phoneNumber!,
+                    patientAddress: { province: allProfile[currentSelection].province, district: allProfile[currentSelection].district, commune: allProfile[currentSelection].ward, address: allProfile[currentSelection].address },
+                patientId: allProfile[currentSelection].id
                 }}
                 openAccept={openAccept}
             />

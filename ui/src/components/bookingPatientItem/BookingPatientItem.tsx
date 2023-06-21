@@ -8,7 +8,7 @@ import {ButtonVariantType} from '../../model/enum/buttonEnum';
 interface IBookingPatientItemProps {
     index: number
     name: string
-    dateBirth: string
+    dateBirth: Date
     sex: number
     phone?: string
     selectProfile: (index: number) => void
@@ -18,8 +18,6 @@ interface IBookingPatientItemProps {
 
 function BookingPatientItem(props: IBookingPatientItemProps) {
     const { index, name, dateBirth, sex, phone, selectProfile, editProfile, isSelected } = props
-
-
     return (
         <div className='booking-patient-item' style={{ border: isSelected ? '1px solid #00A2FF' : '1px solid #ffffff' }} onClick={() => {
             selectProfile(index);;
@@ -27,7 +25,7 @@ function BookingPatientItem(props: IBookingPatientItemProps) {
             <Checkbox checked={isSelected} />
             <div className="booking-patient-info">
                 <div className="booking-patient-name">{name}</div>
-                <div className="booking-patient-time">{`Ngày sinh: ${new Date(dateBirth).getDate()}/${new Date(dateBirth).getMonth() + 1}/${new Date(dateBirth).getFullYear()} - ${sex === 0 ? 'Nam' : 'Nữ'}`}</div>
+                <div className="booking-patient-time">{new Date().getTime() !== new Date(dateBirth).getTime() && `Ngày sinh: ${new Date(dateBirth).getDate()}/${new Date(dateBirth).getMonth() + 1}/${new Date(dateBirth).getFullYear()} - ${sex === 0 ? 'Nam' : 'Nữ'}`}</div>
                 {phone && <div className="booking-patient-phone">{`SĐT: ${phone}`}</div>}
             </div>
             {isSelected && !!index && <Button variant={ButtonVariantType.Text} onClick={(e) => {

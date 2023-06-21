@@ -252,15 +252,12 @@ export interface RoleManagerTableColumns {
 }
 export interface RoleManagerTableDatas {
     id: string
-    // appUserRoleMappings?: IAppUserRole[]
     code: string
     name: string
     description: string
     startDate?: Date
     endDate?: Date
-    // permission?: PermissionManagerTableDatas[]
     status: boolean
-    // used?: boolean
 }
 
 export interface MenuTableDatas {

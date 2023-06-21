@@ -35,6 +35,9 @@ function AcceptBookingForm(props: BookingFormProps) {
 
         }
         const result = new Promise((resolve) => {
+            console.log(props.currentBookingAppointment);
+            console.log(new Date(props.currentBookingAppointment.appointmentTime));
+            
             setLoading(true)
             setTimeout(() => {
                 setLoading(false)
