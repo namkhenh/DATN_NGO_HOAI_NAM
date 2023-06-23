@@ -32,6 +32,7 @@ import {
 } from '../../../../utils/commonFunction';
 import { AddressService, MenuService } from '../../../../api/apiPage/apiPage';
 import { Autocomplete, TextField as TextFieldView } from '@mui/material';
+import { Label } from '@fluentui/react';
 
 initializeIcons();
 
@@ -374,6 +375,7 @@ function UserMainInfo(props: IUserMainInfoProps) {
                     />
                 </div>
                 <div className="user-main-detail">
+                    <Label required>Tỉnh/ Thành phố</Label>
                     <Autocomplete
                         disablePortal
                         id="assignrole-box-select"
@@ -391,6 +393,7 @@ function UserMainInfo(props: IUserMainInfoProps) {
                     />
                 </div>
                 <div className="user-main-detail">
+                    <Label required>Huyện/ Quận</Label>
                     <Autocomplete
                         disablePortal
                         id="assignrole-box-select"
@@ -409,6 +412,7 @@ function UserMainInfo(props: IUserMainInfoProps) {
                     />
                 </div>
                 <div className="user-main-detail">
+                    <Label required>Xã/ Phường</Label>
                     <Autocomplete
                         disablePortal
                         id="assignrole-box-select"

@@ -66,6 +66,7 @@ export function Header() {
     
     const handleLogout = () => {
         Cookies.remove("Token")
+        localStorage.removeItem("previousUrl")
         dispatch({
             type: actionType.SET_AUTH_VALUE,
             auth: {
@@ -167,7 +168,10 @@ export function Header() {
                             </div>}
                         </div> :
                         <div className="login-button" onClick={() => { }}>
-                            <Button variant='outlined' size="large" sx={{ textTransform: 'none' }} startIcon={<AccountCircleIcon />} onClick={() => { navigate('/dang-nhap') }}>Đăng nhập</Button>
+                            <Button variant='outlined' size="large" sx={{ textTransform: 'none' }} startIcon={<AccountCircleIcon />} onClick={() => {
+                                localStorage.setItem("previousUrl", window.location.pathname)
+                                navigate(`/dang-nhap/?returnUrl=${window.location.href}`)
+                            }}>Đăng nhập</Button>
                         </div>}
                 </div>
             </div>

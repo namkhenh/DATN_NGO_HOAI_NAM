@@ -49,7 +49,8 @@ function Login() {
                     },
                 });
                 setLoading(false)
-                navigate('/trang-chu')
+                const preURL = localStorage.getItem("previousUrl")?.toString()
+                navigate(preURL || '/')
             } else {
                 showMessageBar(`Đăng nhập thất bại! \n ${res?.message ? res?.message : ''}`, true, MessageBarStatus.Error)
                 setLoading(false)

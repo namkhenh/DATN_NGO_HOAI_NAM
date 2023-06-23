@@ -315,23 +315,13 @@ const BookingAppointment = (props: any) => {
                                 />
                             </div>
                             <div className="booking-appointment-item">
-                                {/* <Dropdown
-                                    placeholder="Chọn một giá trị"
-                                    label="Khung giờ khám"
-                                    options={HourBooking}
-                                    selectedKey={appointmentInfo.appointmentTime}
-                                    required
-                                    onChange={(_, selected) => {
-                                        onChangeOneField(AppointmentInfoModelProperty.appointmentTime, Number(selected?.key))
-                                    }}
-                                    errorMessage={errorMessageString.appointmentTime}
-                                /> */}
                                 <TimePickerView
                                     placeholder='Chọn một giá trị'
                                     label='Khung giờ khám'
                                     timeRange={{ start: 8, end: 17 }}
                                     dateAnchor={appointmentInfo.appointmentDate}
                                     onChange={(_, time) => onChangeOneField(AppointmentInfoModelProperty.appointmentTime, time)}
+                                    increments={15}
                                 />
                             </div>
                             <div className="booking-appointment-item">
@@ -389,8 +379,14 @@ const BookingAppointment = (props: any) => {
                 patientBirth: allProfile[currentSelection].dateOfBirth,
                 patientSex: allProfile[currentSelection].sex,
                 patientPhoneNumber: allProfile[currentSelection].phoneNumber!,
-                    patientAddress: { province: allProfile[currentSelection].province, district: allProfile[currentSelection].district, commune: allProfile[currentSelection].ward, address: allProfile[currentSelection].address },
-                patientId: allProfile[currentSelection].id
+                    patientAddress: {
+                        province: allProfile[currentSelection].province,
+                        district: allProfile[currentSelection].district,
+                        commune: allProfile[currentSelection].ward,
+                        address: allProfile[currentSelection].address
+                    },
+                patientId: allProfile[currentSelection].id,
+                patientCode: allProfile[currentSelection].code
                 }}
                 openAccept={openAccept}
             />

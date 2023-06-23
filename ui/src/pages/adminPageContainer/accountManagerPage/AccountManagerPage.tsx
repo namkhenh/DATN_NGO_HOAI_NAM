@@ -128,7 +128,7 @@ function AccountManagerPage() {
             setLoadingAccount(false)
             let rows: AccountManagerTableColumns[] = []
             let datas: AccountManagerTableDatas[] = []
-            !!res.data.items && res.data.items.forEach((element: any) => {
+            !!res.data?.items && res.data.items.forEach((element: any) => {
                 rows.push(createData(element.userName, element.roles, element.fullName, element.phoneNumber, element.cmnd, element.sex, element.status))
                 datas.push({
                     id: element.id,
@@ -140,7 +140,7 @@ function AccountManagerPage() {
             })
             setRow(rows)
             setData(datas)
-            setTotalItems(!!res.data.metaData ? res.data.metaData.totalCount : 0)
+            setTotalItems(!!res.data?.metaData ? res.data.metaData.totalCount : 0)
         })
     }
 

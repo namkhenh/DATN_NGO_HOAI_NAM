@@ -39,7 +39,7 @@ function AppointmentDetail(props: IAppointmentDetailProps) {
 
     const convertAddressToString = (inputAddress: IUserAddress) => {
         const addressString = inputAddress.address ? inputAddress.address + ', ' : ""
-        const outputAddress: string = addressString + inputAddress.commune?.name + ', ' + inputAddress.district?.name + ', ' + inputAddress.province?.name
+        const outputAddress: string = addressString + (inputAddress.commune?.name ? inputAddress.commune?.name : '...') + ', ' + (inputAddress.district?.name ? inputAddress.district?.name : '...') + ', ' + (inputAddress.province?.name ? inputAddress.province?.name : '')
         return outputAddress
     }
 
@@ -68,7 +68,7 @@ function AppointmentDetail(props: IAppointmentDetailProps) {
                             Khung giờ khám:
                         </div>
                         <div className="item-content">
-                            {`${appointment.appointmentTime}`}
+                            {`${new Date(appointment.appointmentTime).getHours()}:${new Date(appointment.appointmentTime).getMinutes()}`}
                         </div>
                     </div>
                     <div className="appointment-detail-item">
@@ -151,13 +151,13 @@ function AppointmentDetail(props: IAppointmentDetailProps) {
                             <div className='item-content'>{convertAddressToString(appointment.patientAddress)}</div>
                         </Tooltip>
                     </div>
-                    {appointment.patientId &&
+                    {appointment.patientCode &&
                         <div className="appointment-detail-item">
                             <div className="item-field">
                                 Mã người bệnh:
                             </div>
                             <div className="item-content">
-                                {appointment.patientId}
+                                {appointment.patientCode}
                             </div>
                         </div>}
                 </div>

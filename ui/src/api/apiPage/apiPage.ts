@@ -107,3 +107,72 @@ export class AddressService {
         return send(`${api.commune}?Id=${id}`, 'GET')
     }
 }
+
+export class ExaminationScheduleService {
+    public static createSchedule = (object: any) => {
+        return send(`${api.create_medicalexaminationschedule}`, 'POST', object)
+    }
+    public static updateSchedule = (object: any) => {
+        return send(`${api.update_medicalexaminationschedule}`, 'POST', object)
+    }
+    public static deleteSchedule = (id: string) => {
+        return send(`${api.delete_medicalexaminationschedule}?Id=${id}`, 'DELETE')
+    }
+    public static deleteListSchedule = (object: any) => {
+        return send(`${api.delete_list_medicalexaminationschedule}`, 'POST', object)
+    }
+    public static getPagingSchedule = (object: any) => {
+        return send(`${api.get_medicalexaminationschedule_paging}`, 'POST', object)
+    }
+    public static getAllSchedule = () => {
+        return send(`${api.get_all_medicalexaminationschedule}`, 'GET')
+    }
+}
+
+export class ExaminationSchedulePatientRecordService {
+    public static createSchedulePatientRecord = (object: any) => {
+        return send(`${api.create_patientrecordservice}`, 'POST', object)
+    }
+    public static createListSchedulePatientRecord = (object: any) => {
+        return send(`${api.create_list_patientrecordservice}`, 'POST', object)
+    }
+    // public static updateSchedulePatientRecord = (object: any) => {
+    //     return send(`${api.update_medicalexaminationschedule}`, 'POST', object)
+    // }
+    public static deleteSchedulePatientRecord = (id: string) => {
+        return send(`${api.delete_patientrecordservice}?Id=${id}`, 'DELETE')
+    }
+    public static deleteListSchedulePatientRecord = (object: any) => {
+        return send(`${api.delete_list_patientrecordservice}`, 'POST', object)
+    }
+    public static getPagingSchedulePatientRecord = (object: any) => {
+        return send(`${api.get_patientrecordservice_paging}`, 'POST', object)
+    }
+    public static getAllSchedulePatientRecord = () => {
+        return send(`${api.get_all_patientrecordservice}`, 'GET')
+    }
+}
+
+export class PatientRecordService {
+    public static createPatientRecord = (object: any) => {
+        return send(`${api.create_patientrecord}`, 'POST', object)
+    }
+    public static createPatientRecordBySchedule = (object: any) => {
+        return send(`${api.create_patientrecord_by_schedule}`, 'POST', object)
+    }
+    public static updatePatientRecord = (object: any) => {
+        return send(`${api.update_patientrecord}`, 'POST', object)
+    }
+    public static deletePatientRecord = (id: string) => {
+        return send(`${api.delete_patientrecord}?Id=${id}`, 'DELETE')
+    }
+    public static getPagingPatientRecord = (object: any) => {
+        return send(`${api.get_patientrecord_paging}`, 'POST', object)
+    }
+    public static getAllPatientRecord = () => {
+        return send(`${api.get_all_patientrecord}`, 'GET')
+    }
+    public static getDetailPatientRecord = (id: string) => {
+        return send(`${api.get_detail_patientrecord}?Id=${id}`, 'GET')
+    }
+}

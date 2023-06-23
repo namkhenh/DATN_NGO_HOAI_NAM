@@ -32,24 +32,16 @@ function AcceptBookingForm(props: BookingFormProps) {
 
     const onSave = () => {
         let requestBody = {
-
+            id: "",
+            code: "",
+            name: "",
+            dayOfExamination: props.currentBookingAppointment?.appointmentDate,
+            timeOfExamination: props.currentBookingAppointment?.appointmentTime,
+            reason: props.currentBookingAppointment?.appointmentReason,
+            appUserId: props.currentBookingAppointment?.patientId,
+            patientReceptionStatus: 1
         }
-        const result = new Promise((resolve) => {
-            console.log(props.currentBookingAppointment);
-            console.log(new Date(props.currentBookingAppointment.appointmentTime));
-            
-            setLoading(true)
-            setTimeout(() => {
-                setLoading(false)
-                setMessage(true)
-                showMessageBar("Đặt khám thành công!", true, MessageBarStatus.Success)
-                resolve('success')
-            }, 4000);
-        }).then(() => {/*  */
-
-        })
-
-        return result
+        return new Promise(res => {})
     }
     return (
         <DialogView

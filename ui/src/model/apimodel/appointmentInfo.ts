@@ -3,6 +3,7 @@ import {IUserAddress} from "./userInfo";
 
 export interface IAppointmenViewModel {
     patientId?: string;
+    patientCode?: string;
     patientAvatar?: string;
     patientName: string;
     patientBirth: Date;

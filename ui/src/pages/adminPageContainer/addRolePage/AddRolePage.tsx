@@ -312,7 +312,8 @@ function AddRolePage(props: AddRolePageProps) {
             })
             return result
         } else {
-            console.log(requestCreateRole);
+            console.log(requestCreateRole.endDate);
+            console.log(roleEndTime);
             
             const result = RoleService.updateRole(requestCreateRole).then(res => {
                 if (res.success) {
@@ -479,8 +480,6 @@ function AddRolePage(props: AddRolePageProps) {
                                     label='Thời gian kết thúc'
                                     isRequired={true}
                                     onSelectDate={(date) => {
-                                        console.log(date);
-                                        
                                         setPermissionEnd(date!)
                                     }}
                                     value={new Date(permissionEndTime)}
