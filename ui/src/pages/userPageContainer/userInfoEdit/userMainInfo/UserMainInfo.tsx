@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 // import {TextField} from '../../../common/textField/TextField';
 import './UserMainInfo.scss'
 import {
+    CommuneDefault,
+    DistricDefault,
     ICommune,
     IDistrict,
     IProvince,
     IUserAddress,
     IUserInfoViewModel,
+    ProvinceDefault,
     UserAddressModelProperty,
     UserInfoDefaultView,
     UserInfoModelProperty,
@@ -25,12 +28,13 @@ import { MessageBarStatus } from '../../../../model/enum/messageBarEnum';
 import { useStateValue } from '../../../../context/StateProvider';
 import { actionType } from '../../../../context/Reducer';
 import {
+    convertTZ,
     isStringEmpty,
     validateNumberField,
     validateRequire,
     validateRequireLimitCharacter
 } from '../../../../utils/commonFunction';
-import { AddressService, MenuService } from '../../../../api/apiPage/apiPage';
+import { AddressService, MenuService, UserService } from '../../../../api/apiPage/apiPage';
 import { Autocomplete, TextField as TextFieldView } from '@mui/material';
 import { Label } from '@fluentui/react';
 
@@ -43,6 +47,7 @@ interface IUserMainInfoState {
 
 interface IUserMainInfoProps {
     userMainInfo: IUserInfoViewModel
+    update: () => void
 }
 interface IAddressErrorMessage {
     province: string
@@ -65,9 +70,9 @@ function UserMainInfo(props: IUserMainInfoProps) {
     const [listProvince, setListProvince] = useState<IProvince[]>()
     const [listDistrict, setListDistrict] = useState<IDistrict[]>()
     const [listWard, setListWard] = useState<ICommune[]>()
-    const [provinceSelect, setProvinceSelect] = useState<IProvince>()
-    const [districtSelect, setDistrictSelect] = useState<IDistrict>()
-    const [wardSelect, setWardSelect] = useState<ICommune>()
+    const [provinceSelect, setProvinceSelect] = useState<IProvince>(ProvinceDefault)
+    const [districtSelect, setDistrictSelect] = useState<IDistrict>(DistricDefault)
+    const [wardSelect, setWardSelect] = useState<ICommune>(CommuneDefault)
     const [loadingDistrict, setloadingDis] = useState<boolean>(false)
     const [loadingCommune, setloadingCom] = useState<boolean>(false)
     const [state, setState] = useState<IUserMainInfoState>({
@@ -111,14 +116,12 @@ function UserMainInfo(props: IUserMainInfoProps) {
                     province: props.userMainInfo?.province,
                     district: props.userMainInfo?.district,
                     ward: props.userMainInfo?.ward,
-                    address: '',
-                    guardianName: '',
-                    guardianPhone: '',
-                    guardianRelation: '', 
+                    address: props.userMainInfo?.address,
+                    religion: props.userMainInfo?.religion,
+                    guardianName: props.userMainInfo?.guardianName,
+                    guardianPhone: props.userMainInfo?.guardianPhone,
+                    guardianRelation: props.userMainInfo?.guardianRelation,
                     roles: props.userMainInfo?.roles,
-                    deleteAt: props.userMainInfo?.deleteAt,
-                    createdDate: props.userMainInfo?.createdDate,
-                    lastModifiedDate: props.userMainInfo?.lastModifiedDate,
                 },
                 errorMessageString: {
                     userName: '',
@@ -133,9 +136,12 @@ function UserMainInfo(props: IUserMainInfoProps) {
                     },
                 },
             })
+            setProvinceSelect(props.userMainInfo?.province)
+            setDistrictSelect(props.userMainInfo?.district)
+            setWardSelect(props.userMainInfo?.ward)
         }
     }, [props.userMainInfo?.id])
-
+    
     useEffect(() => {
         AddressService.getProvince().then(res => {
             if (res.success) {
@@ -156,7 +162,7 @@ function UserMainInfo(props: IUserMainInfoProps) {
     }, [])
 
     useEffect(() => {
-        if (!!provinceSelect) {
+        if (!!provinceSelect?.code) {
             setloadingDis(true)
             setListDistrict([])
             AddressService.getDistrict(provinceSelect.id).then(res => {
@@ -179,8 +185,6 @@ function UserMainInfo(props: IUserMainInfoProps) {
                 }
             })
         } else {
-            setDistrictSelect(undefined)
-            setWardSelect(undefined)
             setListDistrict([])
             setListWard([])
         }
@@ -188,7 +192,7 @@ function UserMainInfo(props: IUserMainInfoProps) {
     }, [provinceSelect])
 
     useEffect(() => {
-        if (!!districtSelect) {
+        if (!!districtSelect?.code) {
             setloadingCom(true)
             setListWard([])
             AddressService.getCommune(districtSelect.id).then(res => {
@@ -216,13 +220,12 @@ function UserMainInfo(props: IUserMainInfoProps) {
 
     const handleUpdateInfo = () => {
         const canUpdate = validateFunction()
-        console.log(canUpdate);
-        
         if (canUpdate) {
             let requestBody = {
                 id: state.userMainInfo?.id,
                 code: state.userMainInfo?.code,
                 fullName: state.userMainInfo?.fullName,
+                adress: state.userMainInfo?.address,
                 status: state.userMainInfo?.status,
                 description: "",
                 email: state.userMainInfo?.email,
@@ -234,27 +237,26 @@ function UserMainInfo(props: IUserMainInfoProps) {
                 districtId: districtSelect?.id,
                 wardId: wardSelect?.id,
                 age: 0,
-                dateOfBirth: state.userMainInfo?.dateOfBirth,
+                dateOfBirth: convertTZ(state.userMainInfo?.dateOfBirth),
                 cmnd: state.userMainInfo?.cmnd,
                 guardiasName: '',
                 guardiansPhoneNumber: '',
-                relationship: ''
+                relationship: 0
             }
-            console.log(requestBody);
-            
-            const result = new Promise((resolve) => {
-                setTimeout(() => {
-                    showMessageBar("Cập nhật thông tin thành công", true, MessageBarStatus.Success)
-                    resolve('success')
-                }, 4000);
-            }).then(() => {/*  */
-
+            setLoadingButton(true)
+            const result = UserService.updateUser(requestBody).then(res => {
+                if (res.success) {
+                    setLoadingButton(false)
+                    showMessageBar("Cập nhật thông tin thành công!", true, MessageBarStatus.Success)
+                    props.update()
+                } else {
+                    setLoadingButton(false)
+                    showMessageBar("Cập nhật thông tin thất bại!", true, MessageBarStatus.Error)
+                }
             })
-
             return result
-        }
-        return new Promise((res) => {
-        })
+        } 
+        return new Promise(res => { })
     }
 
     const onChangeOneField = (key: keyof IUserInfoViewModel, value: any) => {
@@ -299,7 +301,7 @@ function UserMainInfo(props: IUserMainInfoProps) {
         })
         return passedVerify
     }
-
+    
     return (
         <div className='user-main'>
 
@@ -337,7 +339,7 @@ function UserMainInfo(props: IUserMainInfoProps) {
                         isRequired={true}
                         // strings={defaultDatePickerStrings}
                         onSelectDate={(date) => {
-                            onChangeOneField(UserInfoModelProperty.dateOfBirth, `${date?.getMonth()}/${date?.getDay()}/${date?.getFullYear()}`)
+                            onChangeOneField(UserInfoModelProperty.dateOfBirth, date)
                         }}
                         value={!!state.userMainInfo.dateOfBirth ? new Date(state.userMainInfo.dateOfBirth) : new Date()}
                         // parseDateFromString={()}'
@@ -380,13 +382,15 @@ function UserMainInfo(props: IUserMainInfoProps) {
                         disablePortal
                         id="assignrole-box-select"
                         options={!!listProvince ? listProvince : []}
+                        value={!!provinceSelect?.code ? provinceSelect : ProvinceDefault}
                         noOptionsText={'Không có lựa chọn'}
-                        isOptionEqualToValue={(option, value) => option.id === value.id}
+                        isOptionEqualToValue={(option, value) => option?.id === value?.id}
                         getOptionLabel={(option) => option.name}
                         sx={{}}
                         renderInput={(params) => <TextFieldView {...params} label="" placeholder='Chọn tỉnh' />}
                         onChange={(_, selected) => {
                             setProvinceSelect(selected!)
+                            setDistrictSelect(DistricDefault)
                         }}
                         loading={listProvince?.length === 0}
                         loadingText={<>Vui lòng đợi...</>}
@@ -398,17 +402,19 @@ function UserMainInfo(props: IUserMainInfoProps) {
                         disablePortal
                         id="assignrole-box-select"
                         options={!!listDistrict ? listDistrict : []}
+                        value={!!districtSelect?.code ? districtSelect : DistricDefault}
                         noOptionsText={'Không có lựa chọn'}
-                        isOptionEqualToValue={(option, value) => option.id === value.id}
+                        isOptionEqualToValue={(option, value) => option?.id === value?.id}
                         getOptionLabel={(option) => option.name}
                         sx={{}}
                         renderInput={(params) => <TextFieldView {...params} label="" placeholder='Chọn huyện' />}
                         onChange={(_, selected) => {
                             setDistrictSelect(selected!)
+                            setWardSelect(CommuneDefault)
                         }}
                         loading={loadingDistrict}
                         loadingText={<>Vui lòng đợi...</>}
-                        disabled={!provinceSelect}
+                        disabled={!provinceSelect?.id}
                     />
                 </div>
                 <div className="user-main-detail">
@@ -417,8 +423,9 @@ function UserMainInfo(props: IUserMainInfoProps) {
                         disablePortal
                         id="assignrole-box-select"
                         options={!!listWard ? listWard : []}
+                        value={!!wardSelect?.code ? wardSelect : CommuneDefault}
                         noOptionsText={'Không có lựa chọn'}
-                        isOptionEqualToValue={(option, value) => option.id === value.id}
+                        isOptionEqualToValue={(option, value) => option?.id === value?.id}
                         getOptionLabel={(option) => option.name}
                         sx={{}}
                         renderInput={(params) => <TextFieldView {...params} label="" placeholder='Chọn xã' />}
@@ -427,20 +434,20 @@ function UserMainInfo(props: IUserMainInfoProps) {
                         }}
                         loading={loadingCommune}
                         loadingText={<>Vui lòng đợi...</>}
-                        disabled={!districtSelect}
+                        disabled={!districtSelect?.id}
                     />
                 </div>
-                {/* <div className="user-main-detail">
-                        <TextField
-                            label='Địa chỉ'
-                            placeholder='--'
-                            value={state.userMainInfo.userAddress.address}
-                            onChange={(_, selected) => {
-                                onChangeAddress(UserAddressModelProperty.address, selected)
-                            }}
-                            // errorMessage={state.errorMessageString.userAddress.address}
-                        />
-                    </div> */}
+                <div className="user-main-detail">
+                    <TextField
+                        label='Địa chỉ'
+                        placeholder='--'
+                        value={state.userMainInfo.address}
+                        onChange={(_, value) => {
+                            onChangeOneField(UserInfoModelProperty.address, value)
+                        }}
+                        // errorMessage={state.errorMessageString.userAddress.address}
+                    />
+                </div>
             </div>
             <div className="update-button">
                 <SubmitButton

@@ -69,7 +69,7 @@ const accountManagerStaticColumn: () => HeadCell[] = () => [
 
 const roleManagerStaticColumn: () => HeadCell[] = () => [
     {
-        id: 'roleId',
+        id: 'roleCode',
         label: 'Mã vai trò',
     },
     {
@@ -269,7 +269,7 @@ const healthCareStaticColumn: () => HeadCell[] = () => [
         label: 'Tên dịch vụ',
     },
     {
-        id: 'healthcareStatus',
+        id: 'healthCareStatus',
         label: 'Trạng thái',
     },
     {
@@ -353,11 +353,7 @@ const appointmentReceptionStaticColumn: () => HeadCell[] = () => [
     {
         id: 'patientIdentify',
         label: 'CMND',
-    },
-    {
-        id: 'patientAddress',
-        label: 'Địa chỉ',
-    },
+    }
 ]
 
 export const getColumnWithType: (tableType: TableType) => HeadCell[] = (tableType) => {

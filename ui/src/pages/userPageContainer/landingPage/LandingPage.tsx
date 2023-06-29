@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
@@ -136,6 +136,10 @@ export function LandingPage() {
         },
     ],) 
 
+    useEffect(() => {
+        document.title = "Trang chủ"
+    })
+    
     const [{ auth },] = useStateValue()
     const navigate = useNavigate()
 

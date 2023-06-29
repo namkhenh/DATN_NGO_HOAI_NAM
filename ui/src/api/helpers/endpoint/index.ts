@@ -13,6 +13,9 @@ export default class Endpoint {
     static get update_user(): string { return Endpoint.baseUrl + Endpoint._update_user }
     static get delete_user(): string { return Endpoint.baseUrl + Endpoint._delete_user }
     static get assign_role(): string { return Endpoint.baseUrl + Endpoint._assign_role }
+    static get check_user_role(): string { return Endpoint.baseUrl + Endpoint._check_user_role }
+    static get change_password(): string { return Endpoint.baseUrl + Endpoint._change_password }
+    static get reset_password(): string { return Endpoint.baseUrl + Endpoint._reset_password }
 
     //menu
     static get get_menu(): string { return Endpoint.baseUrl + Endpoint._get_menu }
@@ -43,6 +46,7 @@ export default class Endpoint {
     static get update_role(): string { return Endpoint.baseUrl + Endpoint._update_role }
     static get delete_role(): string { return Endpoint.baseUrl + Endpoint._delete_role }
     static get delete_list_role(): string { return Endpoint.baseUrl + Endpoint._delete_list_role }
+    static get assign_user(): string { return Endpoint.baseUrl + Endpoint._assign_user }
 
     //address
     static get province(): string { return Endpoint.baseUrl + Endpoint._province }
@@ -72,6 +76,7 @@ export default class Endpoint {
     static get delete_list_medicalexaminationschedule(): string { return Endpoint.baseUrl + Endpoint._delete_list_medicalexaminationschedule }
     static get get_medicalexaminationschedule_paging(): string { return Endpoint.baseUrl + Endpoint._get_medicalexaminationschedule_paging }
     static get get_all_medicalexaminationschedule(): string { return Endpoint.baseUrl + Endpoint._get_all_medicalexaminationschedule }
+    static get get_medicalexaminationschedule_by_user(): string { return Endpoint.baseUrl + Endpoint._get_medicalexaminationschedule_by_user }
 
     //examination schedule patient record
     static get create_patientrecordservice(): string { return Endpoint.baseUrl + Endpoint._create_patientrecordservice }
@@ -125,6 +130,7 @@ export default class Endpoint {
     private static _update_role = "/Role/rpc/Portal/role/update"
     private static _delete_role = "/Role/rpc/Portal/role/delete"
     private static _delete_list_role = "/Role/rpc/Portal/role/delete-list-role"
+    private static _assign_user = "/Role/rpc/Portal/role/assign-users-to-role"
 
     //user
     private static _authentication = "/User/rpc/Portal/user/authentication"
@@ -134,6 +140,9 @@ export default class Endpoint {
     private static _update_user = "/User/rpc/Portal/user/update"
     private static _delete_user = "/User/rpc/Portal/user/delete"
     private static _assign_role = "/Role/rpc/Portal/role/assign-roles-to-user"
+    private static _check_user_role = "/User/rpc/Portal/user/checkuser-by-userId"
+    private static _reset_password = "/User/rpc/Portal/user/resetpassword"
+    private static _change_password = "/User/rpc/Portal/user/changepassword"
 
     //address
     private static _province = "/Province/rpc/Portal/province/get"
@@ -163,6 +172,7 @@ export default class Endpoint {
     private static _delete_list_medicalexaminationschedule = "/MedicalExaminationSchedule/rpc/Portal/medicalexaminationschedule/delete-list"
     private static _get_medicalexaminationschedule_paging = "/MedicalExaminationSchedule/rpc/Portal/medicalexaminationschedule/get-paging"
     private static _get_all_medicalexaminationschedule = "/MedicalExaminationSchedule/rpc/Portal/medicalexaminationschedule/get"
+    private static _get_medicalexaminationschedule_by_user = "/MedicalExaminationSchedule/rpc/Portal/medicalexaminationschedule/get-paging-by-userId"
 
     //examination schedule patient record
     private static _create_patientrecordservice = "/MedicalExaminationSchedulePatientRecord/rpc/Portal/patientrecordservice/create"

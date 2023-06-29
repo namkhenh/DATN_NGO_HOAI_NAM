@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import { HttpAuthHeaderBuilder } from "..";
 import { ApiResultStatus } from "../../../model/IResponse";
 import { errorPage, loadingPage } from "../../../structure/logout/Logout";
@@ -8,16 +9,19 @@ type ISendRequest = (
     method: string,
     body?: any,
     options?: any,
-    contentType?: string) => Promise<any>;
+    token?: string) => Promise<any>;
 
 const send: ISendRequest = (
     path,
     method,
     body,
     options,
-    contentType) => {
+    token) => {
     let requestOptions: any = {
-        headers: { "Content-Type": contentType || "application/json" },
+        headers: {
+            "Content-Type": "application/json",
+            "Token": Cookies.get("Token")
+        },
         // credentials: 'include',
         method,
     };
@@ -148,8 +152,7 @@ function commonFileRequestOptions(file: File) {
 
 function handleUnAuthorized(): void {
     Context.clear();
-    // window.location.href = ${Context.app.aos}/forwardto/target?product=SaaSManagementPlatform;
-    // window.location.href = ${Context.app.ssoUrl}/oauth/authorize?client_id=${Context.app.smpClientId}&redirect_uri=${encodeURIComponent(Context.app.vCloudRedirect)}&state=${encodeURIComponent(window.location.href)}&client_request_id=${CookieManager.setSSONonceCookie()}
+    // window.open("/not-permission", "_self")
 }
 
 function handleErrorPage(errorCode: number): void {

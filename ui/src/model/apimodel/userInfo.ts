@@ -89,13 +89,11 @@ export interface IUserInfoViewModel {
     district: IDistrict;
     ward: ICommune;
     address: string;
+    religion: number
     roles: RoleManagerTableDatas[],
     guardianName: string,
     guardianPhone: string,
     guardianRelation: string,
-    deleteAt: Date;
-    createdDate: Date;
-    lastModifiedDate: Date;
 }
 
 export const UserInfoDefaultView = {
@@ -116,13 +114,11 @@ export const UserInfoDefaultView = {
     district: DistricDefault,
     ward: CommuneDefault,
     address: '',
+    religion: 0,
     roles: [],
     guardianName: '',
     guardianPhone: '',
     guardianRelation: '',
-    deleteAt: new Date(),
-    createdDate: new Date(),
-    lastModifiedDate: new Date()
 }
 
 export enum UserInfoModelProperty {
@@ -142,13 +138,12 @@ export enum UserInfoModelProperty {
     province = 'province',
     district = 'district',
     ward = 'ward',
+    address = 'address',
+    religion = 'religion',
     roles = 'roles',
     guardianName = 'guardianName',
     guardianPhone = 'guardianPhone',
     guardianRelation = 'guardianRelation',
-    deleteAt = 'deleteAt',
-    createdDate = 'createdDate',
-    lastModifiedDate = 'lastModifiedDate'
 }
 
 export enum UserAddressModelProperty {

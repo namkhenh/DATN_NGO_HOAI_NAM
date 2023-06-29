@@ -25,6 +25,7 @@ interface RoleTableColumns {
 
 interface AssignRoleFormProps {
   onChangeRoleSelect?: (role: string[]) => void
+  roleListSelectFromProps?: RoleManagerTableDatas[]
 }
 
 
@@ -35,6 +36,9 @@ function AssignRoleForm(props: AssignRoleFormProps) {
   const [roleListSelect, setRoleListSelect] = useState<RoleManagerTableDatas[]>([])
   const [selected, setSelected] = useState<RoleManagerTableDatas>()
   const [rows, setRow] = useState<RoleTableColumns[]>([])
+
+console.log(props.roleListSelectFromProps);
+
 
   useEffect(() => {
     setLoadingRoleList(true)
@@ -58,10 +62,13 @@ function AssignRoleForm(props: AssignRoleFormProps) {
         setLoadingRoleList(false)
       }
     })
+    setRoleListSelect(props.roleListSelectFromProps || [])
   }, [])
 
+  console.log(roleListSelect);
+  
+  
   useEffect(() => {
-    if (!!selected) {
       setRow(roleListSelect.map((e: RoleManagerTableDatas) => {
         return {
           roleCode: e.code, roleName: e.name, roleTask: <IconButton aria-label="delete" size="small" onClick={() => { removeRole(e.id) }}>
@@ -74,7 +81,6 @@ function AssignRoleForm(props: AssignRoleFormProps) {
         roleIdList.push(role.id)
       })
       props.onChangeRoleSelect!(roleIdList)
-    }
   }, [roleListSelect])
 
   const removeRole = (idDel: string) => {

@@ -11,7 +11,6 @@ export interface IAppointmenViewModel {
     patientPhoneNumber?: string
     patientIdentityNumber?: string
     patientAddress: IUserAddress
-    appointmentDate: Date
     appointmentTime: Date
     appointmentReason: string
     appointmentStatus?: AppointmentStatus

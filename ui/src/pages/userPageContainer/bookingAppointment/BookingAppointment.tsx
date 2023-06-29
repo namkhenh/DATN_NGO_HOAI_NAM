@@ -106,7 +106,7 @@ const BookingAppointment = (props: any) => {
                 if (res.success) {
                     setLoading(false)
                     setUserInfo({
-                        id: res.data?.id,
+                        id: auth.userId,
                         code: res.data?.code,
                         userName: res.data?.userName,
                         status: res.data?.status,
@@ -114,7 +114,7 @@ const BookingAppointment = (props: any) => {
                         fullName: res.data?.fullName,
                         email: res.data?.email,
                         cmnd: res.data?.cmnd,
-                        dateOfBirth: res.data?.dateOfBirth,
+                        dateOfBirth: res.data?.dateOfBird,
                         sex: res.data?.sex,
                         provinceId: res.data?.provinceId,
                         districtId: res.data?.districtId,
@@ -123,13 +123,11 @@ const BookingAppointment = (props: any) => {
                         district: res.data?.district,
                         ward: res.data?.ward,
                         address: '',
+                        religion: res.data?.religion,
                         guardianName: '',
                         guardianPhone: '',
                         guardianRelation: '', 
                         roles: res.data?.roles,
-                        deleteAt: res.data?.deleteAt,
-                        createdDate: res.data?.createdDate,
-                        lastModifiedDate: res.data?.lastModifiedDate,
                     })
                 } else {
                     setLoading(false)
@@ -372,7 +370,6 @@ const BookingAppointment = (props: any) => {
             <AcceptBookingForm
                 closeAccept={closeAccept}
                 currentBookingAppointment={{
-                appointmentDate: appointmentInfo.appointmentDate,
                 appointmentTime: appointmentInfo.appointmentTime,
                 appointmentReason: appointmentInfo.appointmentReason,
                 patientName: allProfile[currentSelection].fullName,

@@ -60,7 +60,7 @@ function AppointmentDetail(props: IAppointmentDetailProps) {
                             Ngày khám:
                         </div>
                         <div className="item-content">
-                            {`${new Date(appointment.appointmentDate).getDate()}/${new Date(appointment.appointmentDate).getMonth() + 1}/${new Date(appointment.appointmentDate).getFullYear()}`}
+                            {`${new Date(appointment.appointmentTime).getDate()}/${new Date(appointment.appointmentTime).getMonth() + 1}/${new Date(appointment.appointmentTime).getFullYear()}`}
                         </div>
                     </div>
                     <div className="appointment-detail-item">

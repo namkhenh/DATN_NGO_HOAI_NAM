@@ -92,3 +92,7 @@ export const onEnterKeyDownAction = (e: any, action: () => void) => {
         action();
     }
 }
+
+export const convertTZ = (date: string | Date) => {
+    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", { timeZone: "Asia/Bangkok"}));
+}

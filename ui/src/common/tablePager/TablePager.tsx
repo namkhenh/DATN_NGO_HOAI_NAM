@@ -40,8 +40,8 @@ function getComparator<Key extends keyof any>(
   order: Order,
   orderBy: Key
 ): (
-  a: { [key in Key]: number | string },
-  b: { [key in Key]: number | string }
+  a:any,
+  b:any,
 ) => number {
   return order === "desc"
     ? (a, b) => descendingComparator(a, b, orderBy)
@@ -96,6 +96,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   } = props;
   const createSortHandler =
     (property: string) => (event: React.MouseEvent<unknown>) => {
+      console.log(property);
+      
       onRequestSort(event, property);
     };
   const manageColumnOptions = getColumnWithType(tableType);
@@ -213,12 +215,12 @@ interface TablePagerProps<T, D> {
 
 export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
   const [order, setOrder] = React.useState<Order>("asc");
-  const [orderBy, setOrderBy] = React.useState<string>("appointmentId");
+  const [orderBy, setOrderBy] = React.useState<string>("");
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [selectedC, setSelectedC] = React.useState<readonly D[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [isLoading, setLoading] = React.useState<boolean>(props.isLoading)
   const [{ selection }, dispatch] = useStateValue();
   const handleRequestSort = (
@@ -307,22 +309,24 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
   };
 
   const isSelected = (rowChild: any) => {
-    let rowChildText: string = rowChild[Object.keys(rowChild)[0]]
-    return selected.indexOf(rowChildText) !== -1;
+    if (props.hasCheckBox) {
+      let rowChildText: string = rowChild[Object.keys(rowChild)[0]]
+      return selected.indexOf(rowChildText) !== -1;
+    }
   };
 
   // Avoid a layout jump when reaching the last page with empty props.rowData.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.rowData.length) : 0;
 
-  // const visibleRows = React.useMemo(
-  //     () =>
-  //         stableSort(props.rowData, getComparator(order, orderBy)).slice(
-  //             page * rowsPerPage,
-  //             page * rowsPerPage + rowsPerPage,
-  //         ),
-  //     [order, orderBy, page, rowsPerPage],
-  // );
+  const visibleRows = React.useMemo(
+      () =>
+          stableSort(props.rowData, getComparator(order, orderBy)).slice(
+              page * rowsPerPage,
+              page * rowsPerPage + rowsPerPage,
+          ),
+      [order, orderBy, page, rowsPerPage, props.rowData],
+  );
 
   const onRenderCell = (row: any, data: any) => {
     return (
@@ -417,7 +421,7 @@ export default function TablePager<T, D>(props: TablePagerProps<T, D>) {
                   hasCheckBox={props.hasCheckBox}
                 />
                 <TableBody>
-                  {props.rowData.map((row, index) => {
+                  {visibleRows.map((row, index) => {
                     const isItemSelected = isSelected(props.dataTotal[index]);
                     const labelId = `enhanced-table-checkbox-${index}`;
                     return isLoading ? (

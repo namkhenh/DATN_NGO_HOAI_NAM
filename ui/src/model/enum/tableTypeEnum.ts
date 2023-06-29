@@ -35,24 +35,12 @@ export interface ApproveCalendarTableColumns {
 }
 
 export interface ApproveCalendarTableDatas {
-    appointmentId: string
-    appointmentCode: string
-    appointmentDate: string
-    appointmentTime: string
-    appointmentReason: string
-    appointmentStatus: number
+    id: string
+    code: string
+    time: Date
+    reason: string
     patientId: string
-    patientCode: string
-    patientName: string
-    patientAvatar?: string;
-    patientDateOfBirth: string;
-    patientGender: number;
-    patientPhoneNumber?: string;
-    patientIdentityNumber?: string;
-    patientAddress: string;
-    guardianName?: string;
-    guardianPhone?: string;
-    guardianRelation?: string
+    status: number
 }
 
 export interface AppointmentReceptionTableColumns {
@@ -64,28 +52,18 @@ export interface AppointmentReceptionTableColumns {
     patientGender: string
     patientPhoneNumber: string
     patientIdentityNumber: string
-    patientAddress: string
 }
 
 export interface AppointmentReceptionTableDatas {
     appointmentId: string
     appointmentCode: string
-    appointmentDate: string
     appointmentTime: string
-    appointmentReason: string
-    appointmentStatus: number
-    patientId: string
     patientCode: string
     patientName: string
-    patientAvatar?: string;
     patientDateOfBirth: string;
     patientGender: number;
-    patientPhoneNumber?: string;
-    patientIdentityNumber?: string;
-    patientAddress: string;
-    guardianName?: string;
-    guardianPhone?: string;
-    guardianRelation?: string
+    patientPhoneNumber: string;
+    patientIdentityNumber: string;
 }
 
 export interface PatientReceptionTableColumns {
@@ -241,6 +219,7 @@ export interface AccountManagerTableDatas {
     identify?: string
     gender?: UserGender
     status: AccountStatus
+    email?: string
     // used: boolean
 }
 
@@ -317,8 +296,4 @@ export interface UserAssignTableDatas {
     fullName: string
     phoneNumber: string
     insuranceNumber: string
-    gender: number
-    status: AccountStatus
-    address?: string
-    birthday?: string
 }

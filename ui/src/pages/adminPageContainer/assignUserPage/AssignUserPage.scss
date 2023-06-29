@@ -26,7 +26,7 @@
         .assignuser-page-wrap {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            flex-wrap: wrap;
             gap: 20px;
             margin-bottom: 20px;
 
@@ -37,7 +37,7 @@
             }
 
             .assignuser-info-item {
-                width: calc(23% - 20px);
+                width: calc(33% - 20px);
             }
 
             .assignuser-info-item:last-child {

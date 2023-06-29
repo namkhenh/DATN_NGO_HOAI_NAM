@@ -22,6 +22,15 @@ export class UserService {
     public static assignRole = (id: string, object: any) => {
         return send(`${api.assign_role}?userId=${id}`, 'POST', object)
     }
+    public static checkUserRole = (id: string) => {
+        return send(`${api.check_user_role}?userId=${id}`, 'GET')
+    }
+    public static changePassword = (object: any) => {
+        return send(`${api.change_password}`, 'POST', object)
+    }
+    public static resetPassword = (object: any) => {
+        return send(`${api.reset_password}`, 'POST', object)
+    }
 }
 
 export class MenuService {
@@ -54,6 +63,9 @@ export class RoleService {
     }
     public static deleteListRole = (id: any) => {
         return send(`${api.delete_list_role}`, 'POST', id)
+    }
+    public static assignUser = (id: string, object: any) => {
+        return send(`${api.assign_user}?roleId=${id}`, 'POST', object)
     }
 }
 
@@ -126,6 +138,9 @@ export class ExaminationScheduleService {
     }
     public static getAllSchedule = () => {
         return send(`${api.get_all_medicalexaminationschedule}`, 'GET')
+    }
+    public static getScheduleByUser = (id: string, object: any) => {
+        return send(`${api.get_medicalexaminationschedule_by_user}?userId=${id}`, 'POST', object)
     }
 }
 

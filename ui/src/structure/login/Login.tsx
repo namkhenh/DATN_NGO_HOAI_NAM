@@ -19,9 +19,9 @@ function Login() {
     const [loadingButton, setLoading] = useState<boolean>()
     const [phoneNumber, setPhoneNumber] = useState<string>()
     const [password, setPassword] = useState<string>()
-    const [rememberPass, setRemmemberPass] = useState<boolean>()
+    const [token, setToken] = useState<string>('')
     const [userId, setUserId] = useState<string>('')
-    
+    const [rememberPass, setRemmemberPass] = useState<boolean>()
     const [{ auth }, dispatch] = useStateValue()
     const showMessageBar = (message: string, isOpen: boolean, status: MessageBarStatus) => {
         dispatch({ type: actionType.SET_MESSAGE_BAR, messageBar: { isOpen: isOpen, text: message, status: status } })
@@ -37,20 +37,21 @@ function Login() {
         setLoading(true)
         const result = UserService.login(requestBody).then(res => {
             if (res.success) {
-                Cookies.set("Token", res.data?.accessToken, {
-                    expires: 0.1,
-                });
-                // const user: any = jwt(res.data?.accessToken)
-                dispatch({
-                    type: actionType.SET_AUTH_VALUE,
-                    auth: {
-                        ...auth,
-                        token: res.data?.accessToken
-                    },
-                });
-                setLoading(false)
-                const preURL = localStorage.getItem("previousUrl")?.toString()
-                navigate(preURL || '/')
+                // Cookies.set("Token", res.data?.accessToken, {
+                //     expires: 0.1,
+                // });
+                const user: any = jwt(res.data?.accessToken)
+                // dispatch({
+                //     type: actionType.SET_AUTH_VALUE,
+                //     auth: {
+                //         ...auth,
+                //         token: res.data?.accessToken
+                //     },
+                // });
+                setToken(res.data?.accessToken)
+                setUserId(user?.userId)
+                // const preURL = localStorage.getItem("previousUrl")?.toString()
+                // navigate(preURL || '/')
             } else {
                 showMessageBar(`Đăng nhập thất bại! \n ${res?.message ? res?.message : ''}`, true, MessageBarStatus.Error)
                 setLoading(false)
@@ -58,6 +59,35 @@ function Login() {
         })
         return result
     }
+
+    useEffect(() => {
+        if (!!userId) {
+            UserService.checkUserRole(userId).then(res => {
+                // if (res.success) {
+                    Cookies.set("Token", token, {
+                        expires: 0.1,
+                    });
+                    Cookies.set("Menu", !!res.data?.length ? res?.data.join(", ") : '', {
+                        expires: 0.1,
+                    });
+                    dispatch({
+                        type: actionType.SET_AUTH_VALUE,
+                        auth: {
+                            ...auth,
+                            menu: !!res.data?.length ? res?.data.join(", ") : '',
+                            token: token
+                        },
+                    });
+                    setLoading(false)
+                    const preURL = localStorage.getItem("previousUrl")?.toString()
+                    navigate(preURL || '/')
+                // } else {
+                // showMessageBar(`Đăng nhập thất bại! \n ${res?.message? res?.message: ''}`, true, MessageBarStatus.Error)
+                // setLoading(false)
+                // }
+            })
+        }
+    }, [userId])
 
     return (
         <div className='login-container'>

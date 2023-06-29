@@ -13,6 +13,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import HelpIcon from '@mui/icons-material/Help';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DialogView from '../../common/dialog/Dialog';
 import { ButtonVariantType } from '../../model/enum/buttonEnum';
@@ -66,22 +67,26 @@ export function Header() {
     
     const handleLogout = () => {
         Cookies.remove("Token")
+        Cookies.remove("Menu")
         localStorage.removeItem("previousUrl")
         dispatch({
             type: actionType.SET_AUTH_VALUE,
             auth: {
                 ...auth,
                 isLogined: false,
-                isLogout: false,
+                isLogout: true,
                 role: '',
                 userId: '',
                 userName: '',
-                email: ''
+                email: '',
+                token: '',
+                menu: ''
             },
         });
         setisOpenDialog(false)
         navigate('/trang-chu')
     }
+    console.log(auth);
     
 
     return (
@@ -114,21 +119,21 @@ export function Header() {
                                 <div className="popup-content">
                                     <div className="popup-header">
                                         <div className="popup-avatar"><img src={team1} alt="" /></div>
-                                        <Link to={'/quan-ly/ho-so'} className="popup-header-content">
+                                        <Link to={'/quan-ly/ho-so'} className="popup-header-content" onClick={() => setshowPopup(false)}>
                                             <div className="popup-name">{auth.fullName}</div>
                                             <div className="popup-view-profile">Xem hồ sơ của tôi<ArrowForwardIosIcon sx={{ fontSize: '12px', color: '#595959', marginLeft: '12px' }} /></div>
                                         </Link>
                                     </div>
                                     <div className="popup-user-rank">
                                         <AccountCircleIcon sx={{ marginRight: '8px', fontSize: '25px' }} />
-                                        Thành viên
+                                        {auth.isAdmin ? "Admin" : "Thành viên"}
                                     </div>
                                     <div className="popup-management">
-                                        <Link to={'/quan-ly/suc-khoe'} className="popup-management-item">
+                                        <Link to={'/quan-ly/suc-khoe'} className="popup-management-item" onClick={() => setshowPopup(false)}>
                                             <FavoriteSharpIcon sx={{ color: '#ff2727d7' }} />
                                             <div className='item-text'>Sức khỏe</div>
                                         </Link>
-                                        <Link to={'/quan-ly/danh-sach-lich-kham'} className="popup-management-item">
+                                        <Link to={'/quan-ly/danh-sach-lich-kham'} className="popup-management-item" onClick={() => setshowPopup(false)}>
                                             <EventAvailableIcon sx={{ color: '#0067A2' }} />
                                             <div className='item-text'>Lịch sử đặt khám</div>
                                         </Link>
@@ -142,15 +147,15 @@ export function Header() {
                                                 {isExpandAccountSetting ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                                             </div>
                                             <div className="account-setting-menu" aria-expanded={isExpandAccountSetting} >
-                                                <Link to={'/quan-ly/mat-khau'} className="account-setting-item">
+                                                <Link to={'/quan-ly/mat-khau'} className="account-setting-item" onClick={() => setshowPopup(false)}>
                                                     Đổi mật khẩu
                                                 </Link>
-                                                <Link to={'/quan-ly/vo-hieu-hoa'} className="account-setting-item">
+                                                <Link to={'/quan-ly/vo-hieu-hoa'} className="account-setting-item" onClick={() => setshowPopup(false)}>
                                                     Vô hiệu hóa tài khoản
                                                 </Link>
                                             </div>
                                         </div>
-                                        <Link to={'/quan-ly/tro-giup'} className="popup-option">
+                                        <Link to={'/quan-ly/tro-giup'} className="popup-option" onClick={()=> setshowPopup(false)}>
                                             <div className="account-setting">
                                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                                     <HelpIcon sx={{ marginRight: '12px' }} /> Trợ giúp
@@ -158,6 +163,12 @@ export function Header() {
                                             </div>
                                         </Link>
                                     </div>
+                                    {auth.isAdmin && <div className="logout-button" onClick={() => {
+                                        navigate('/admin')
+                                        setshowPopup(false)
+                                    }}>
+                                        <Button startIcon={<AdminPanelSettingsIcon />}>Đi tới Trang Admin</Button>
+                                    </div>}
                                     <div className="logout-button" onClick={() => {
                                         setisOpenDialog(true)
                                         setshowPopup(false)

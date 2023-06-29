@@ -9,14 +9,13 @@ interface IAppointmentItemProps {
     avatar?: string
     name: string
     time: Date
-    date: Date
     status: AppointmentStatus
     selectAppointment: (index: number) => void
     isSelected?: boolean
 }
 
 function AppointmentItem(props: IAppointmentItemProps) {
-    const { index, avatar, name, time, date, status, selectAppointment, isSelected } = props
+    const { index, avatar, name, time, status, selectAppointment, isSelected } = props
     const getColorStatus = (status: AppointmentStatus) => {
         switch (status) {
             case AppointmentStatus.Success:
@@ -43,11 +42,6 @@ function AppointmentItem(props: IAppointmentItemProps) {
         }
     }
 
-    const getTextHour = (time: number) => {
-        const hour = HourBooking.filter(item => item.key === time)
-        return hour[0]!.text
-    }
-
     return (
         <div className='appointment-item' style={{ border: isSelected ? '1px solid #00A2FF' : '1px solid #ffffff'}} onClick={() => {
             selectAppointment(index); ;
@@ -55,7 +49,7 @@ function AppointmentItem(props: IAppointmentItemProps) {
             <Avatar alt={name} src={avatar} />
             <div className="patient-info">
                 <div className="patient-name">{name}</div>
-                <div className="patient-time">{`${time} ngày ${new Date(date).getDate()}/${new Date(date).getMonth() + 1}/${new Date(date).getFullYear()}`}</div>
+                <div className="patient-time">{`${new Date(time).getHours()}h:${new Date(time).getMinutes()} -- ngày ${new Date(time).getDate()}/${new Date(time).getMonth() + 1}/${new Date(time).getFullYear()}`}</div>
                 <div className="patient-status" style={{ color: getColorStatus(status) }}>{getTextStatus(status)}</div>
             </div>
             {isSelected && <ArrowForwardIosIcon sx={{ fontSize: '32px', color: '#00A2FF' }} />}

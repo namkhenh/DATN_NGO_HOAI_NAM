@@ -14,68 +14,65 @@ import {IAppointmenViewModel} from '../../../model/apimodel/appointmentInfo';
 import AppointmentDetail from '../../../components/appointmentDetail/AppointmentDetail';
 import InfoIcon from '@mui/icons-material/Info';
 import { CommuneDefault, DistricDefault, ProvinceDefault } from '../../../model/apimodel/userInfo';
-
-
-interface ListAppointmentState {
-    appointment: IAppointmenViewModel[]
-    currentSelection: number
-}
+import { ExaminationScheduleService } from '../../../api/apiPage/apiPage';
+import { useStateValue } from '../../../context/StateProvider';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 const ListAppointment = (props: any) => {
-    const [state, setState] = useState<ListAppointmentState>({
-        appointment: [{
-            patientAvatar: avatar1,
-            patientName: "nguyễn văn A",
-            patientBirth: new Date(),
-            patientSex: 0,
-            patientPhoneNumber: "0123456789",
-            patientAddress: {
-                province: ProvinceDefault,
-                district: DistricDefault,
-                commune: CommuneDefault
-            },
-            appointmentDate: new Date(),
-            appointmentTime: new Date(),
-            appointmentReason: "đau đầu ù tai",
-            appointmentStatus: AppointmentStatus.Success,
-            appointmentId: "DK123456",
-            appointmentNumber: 3
-        },
-            {
-                patientAvatar: avatar1,
-                patientName: "nguyễn văn X",
-                patientBirth: new Date(),
-                patientSex: 1,
-                patientPhoneNumber: "0123456789",
-                patientAddress: {
-                    province: ProvinceDefault,
-                    district: DistricDefault,
-                    commune: CommuneDefault
-                },
-                appointmentDate: new Date(),
-                appointmentTime: new Date(),
-                appointmentReason: "đau đầu ù tai",
-                appointmentStatus: AppointmentStatus.Waiting,
-                appointmentId: "DK123456",
-                appointmentNumber: 3
-            }],
-        currentSelection: -1
-    })
+    const [{ auth },] = useStateValue()
+    const [isLoading, setLoading] = useState<boolean>(false)
+    const [appointment, setappointment] = useState<IAppointmenViewModel[]>([])
+    const [currentSelection, setcurrentSelection] = useState<number>(-1)
 
-    const {appointment, currentSelection} = state
     useEffect(() => {
-
+        let requestBody = {
+            pageIndex: 1,
+            pageSize: 1000,
+            searchTerm: '',
+        }
+        setLoading(true)
+        ExaminationScheduleService.getScheduleByUser(auth.userId, requestBody).then(res => {
+            if (res.success) {
+                setLoading(false)
+                let schedule: IAppointmenViewModel[] = []
+                !!res?.data?.items && res?.data?.items.forEach((sch: any) => {
+                    schedule.push({
+                        patientAvatar: avatar1,
+                        patientName: sch?.user?.fullName,
+                        patientBirth: sch?.user?.dateOfBird,
+                        patientSex: sch?.user?.sex,
+                        patientPhoneNumber: sch?.user?.phoneNumber,
+                        patientAddress: {
+                            province: sch?.user?.province || ProvinceDefault,
+                            district: sch?.user?.district || DistricDefault,
+                            commune: sch?.user?.ward || CommuneDefault
+                        },
+                        appointmentTime: sch?.timeOfExamination,
+                        appointmentReason: sch?.reason,
+                        appointmentStatus: sch?.patientReceptionStatus,
+                        appointmentId: sch?.code,
+                        appointmentNumber: 3
+                    })
+                })
+                setappointment(schedule)
+            } else {
+                setLoading(false)
+            }
+        })
     }, [])
 
     const handleClickAppointment = (index: number) => {
-        setState({
-            ...state,
-            currentSelection: index
-        });
+        setcurrentSelection(index)
     }
 
     return (
         <div id='user-appointment' className='user-appointment'>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={isLoading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <HeaderPage icon={<EventAvailableIcon/>} text='Quản lý lịch khám' textChild='Danh sách lịch khám'/>
             <div className="appointment-container">
                 <div className="list-appointment">
@@ -97,7 +94,6 @@ const ListAppointment = (props: any) => {
                                 avatar={item.patientAvatar}
                                 name={item.patientName}
                                 time={item.appointmentTime}
-                                date={item.appointmentDate}
                                 status={item.appointmentStatus!}
                                 selectAppointment={handleClickAppointment}
                                 isSelected={currentSelection === index}

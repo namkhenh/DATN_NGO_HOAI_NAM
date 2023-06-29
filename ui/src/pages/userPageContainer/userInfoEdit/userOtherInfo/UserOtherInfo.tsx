@@ -28,6 +28,7 @@ interface IUserOtherInfoState {
 
 interface IUserOtherInfoProps {
     userOtherInfo: IUserInfoViewModel
+    update: () => void
 }
 
 interface IUserOtherInfoErrorMessage {
@@ -58,14 +59,12 @@ function UserOtherInfo(props: IUserOtherInfoProps) {
             province: props.userOtherInfo?.province,
             district: props.userOtherInfo?.district,
             ward: props.userOtherInfo?.ward,
-            address: '',
+            address: props.userOtherInfo?.address,
+            religion: props.userOtherInfo?.religion,
             guardianName: '',
             guardianPhone: '',
             guardianRelation: '',  
             roles: props.userOtherInfo?.roles,
-            deleteAt: props.userOtherInfo?.deleteAt,
-            createdDate: props.userOtherInfo?.createdDate,
-            lastModifiedDate: props.userOtherInfo?.lastModifiedDate,
         },
         errorMessageString: {
             userInsuranceNumber: '',

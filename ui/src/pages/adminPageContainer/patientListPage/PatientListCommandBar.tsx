@@ -61,7 +61,7 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
   // useEffect(()=>{}, [selection])
   const patientReceptionListActions = (): ICommandBarItemProps[] => {
     let commandBarItems: ICommandBarItemProps[] = []
-    // if (selected.selectedCount === 1 && selected.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
+    // if (selected.selectedCount === 1 && selected.selectedItems[0]?.status === AppointmentStatus.Waiting) {
     
     commandBarItems.push(
       {
@@ -88,9 +88,9 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
 
   const approveCalendarListActions = (): ICommandBarItemProps[] => {
     let commandBarItems: ICommandBarItemProps[] = []
-    // if (selected.selectedCount === 1 && selected.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
+    // if (selected.selectedCount === 1 && selected.selectedItems[0]?.status === AppointmentStatus.Waiting) {
     
-    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
+    if (selection.selectedCount === 1 && selection.selectedItems[0]?.status === AppointmentStatus.Waiting) {
       commandBarItems.push({
         key: "patient-list-accept",
         text: "Đồng ý",
@@ -103,7 +103,7 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
         },
       });
     }
-    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === AppointmentStatus.Waiting) {
+    if (selection.selectedCount === 1 && selection.selectedItems[0]?.status === AppointmentStatus.Waiting) {
       commandBarItems.push({
         key: "patient-list-decline",
         text: "Từ chối",
@@ -116,7 +116,7 @@ function PatientListCommandBar(props: IPatientListCommandBar) {
         },
       });
     }
-    if (selection.selectedCount === 1 && selection.selectedItems[0]?.appointmentStatus === AppointmentStatus.Success) {
+    if (selection.selectedCount === 1 && selection.selectedItems[0]?.status === AppointmentStatus.Success) {
       commandBarItems.push({
         key: "patient-list-cancel",
         text: "Hủy lịch",

@@ -30,6 +30,7 @@ import Switch from '@mui/material/Switch'
 import { RoleStatus } from '../roleManagerPage/RoleManagerPage'
 import { UserService } from '../../../api/apiPage/apiPage'
 import Skeleton from '@mui/material/Skeleton'
+import { convertTZ } from '../../../utils/commonFunction'
 
 export enum AccountAction {
     Create,
@@ -51,13 +52,24 @@ function AccountManagerPage() {
     const [loadingButton, setLoading] = useState<boolean>(false)
     const [accountAction, setAcountAction] = useState<AccountAction>()
     const [accountId, setAccountId] = useState<string>()
-    const [userName, setUserName] = useState<string>()
+    const [code, setCode] = useState<string>()
     const [fullName, setFullName] = useState<string>()
-    const [identify, setIdentify] = useState<string>()
-    const [phoneNumber, setPhoneNumber] = useState<string>()
-    const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date())
-    const [gender, setGender] = useState<number>(0)
+    const [address, setAddress] = useState<string>()
     const [status, setStatus] = useState<boolean>(true)
+    const [userName, setUserName] = useState<string>()
+    const [phoneNumber, setPhoneNumber] = useState<string>()
+    const [sex, setSex] = useState<number>(0)
+    const [religion, setReligion] = useState<number>(0)
+    const [provinceId, setProvinceId] = useState<string>()
+    const [districtId, setDistrictId] = useState<string>()
+    const [wardId, setWardId] = useState<string>()
+    const [dateOfBirth, setDateOfBirth] = useState<Date>(new Date())
+    const [identify, setIdentify] = useState<string>()
+    const [guardiasName, setGuardiasName] = useState<string>()
+    const [guardiansPhoneNumber, setGuardiansPhoneNumber] = useState<string>()
+    const [relationship, setRelationship] = useState<string>()
+    const [password, setpassword] = useState<string>()
+    const [repassword, setrepassword] = useState<string>()
     const [loadingAccount, setLoadingAccount] = useState<boolean>(false)
     const [loadingForm, setLoadingForm] = useState<boolean>(false)
     const [searchTerm, setSearchTerm] = useState<string>('')
@@ -129,13 +141,14 @@ function AccountManagerPage() {
             let rows: AccountManagerTableColumns[] = []
             let datas: AccountManagerTableDatas[] = []
             !!res.data?.items && res.data.items.forEach((element: any) => {
-                rows.push(createData(element.userName, element.roles, element.fullName, element.phoneNumber, element.cmnd, element.sex, element.status))
+                rows.push(createData(element?.userName, element?.roles, element?.fullName, element?.phoneNumber, element?.cmnd, element?.sex, element?.status))
                 datas.push({
-                    id: element.id,
-                    userName: element.userName,
-                    roles: element.roles,
-                    fullName: element.fullName,
-                    status: element.status
+                    id: element?.id,
+                    userName: element?.userName,
+                    roles: element?.roles,
+                    fullName: element?.fullName,
+                    status: element?.status,
+                    email: element?.email
                 })
             })
             setRow(rows)
@@ -152,20 +165,20 @@ function AccountManagerPage() {
         if (accountAction === AccountAction.Create) {
             let requestBody = {
                 id: accountId,
-                code: "",
+                code: code,
                 fullName: fullName,
                 status: status,
                 description: "",
                 email: "namkhenh81@gmail.com",
                 userName: userName,
                 phone: phoneNumber,
-                sex: gender,
+                sex: sex,
                 religion: 0,
                 provinceId: '00000000-0000-0000-0000-000000000000',
                 districtId: '00000000-0000-0000-0000-000000000000',
                 wardId: '00000000-0000-0000-0000-000000000000',
                 age: 0,
-                dateOfBirth: dateOfBirth,
+                dateOfBirth: convertTZ(dateOfBirth),
                 cmnd: identify,
                 guardiasName: "",
                 guardiansPhoneNumber: "",
@@ -193,13 +206,22 @@ function AccountManagerPage() {
             setLoadingForm(true)
             UserService.getUserById(selection.selectedItems[0]?.id).then(res => {
                 if (res.success) {
-                    setUserName(res.data.userName)
-                    setFullName(res.data.fullName)
-                    setIdentify(res.data.cmnd)
-                    setPhoneNumber(res.data.phoneNumber)
-                    setDateOfBirth(res.data.dateOfBirth)
-                    setGender(res.data.sex)
-                    setStatus(res.data.status)
+                    setCode(res.data?.code)
+                    setFullName(res.data?.fullName)
+                    setStatus(res.data?.status)
+                    setUserName(res.data?.userName)
+                    setPhoneNumber(res.data?.phoneNumber)
+                    setSex(res.data?.sex)
+                    setReligion(res.data?.religion)
+                    setProvinceId(res.data?.provinceId)
+                    setDistrictId(res.data?.districtId)
+                    setWardId(res.data?.wardId)
+                    setAddress(res.data?.adress)
+                    setDateOfBirth(res.data?.dateOfBird)
+                    setIdentify(res.data?.cmnd)
+                    setGuardiasName(res.data?.guardiasName)
+                    setGuardiansPhoneNumber(res.data?.guardiansPhoneNumber)
+                    setRelationship(res.data?.relationship)
                     setLoadingForm(false)
                 }
             })
@@ -218,7 +240,8 @@ function AccountManagerPage() {
             setLoading(true)
             const result = UserService.register(requestBody).then(res => {
                 if (res.success) {
-                    setAccountId(res.data.id)
+                    setAccountId(res.data?.id)
+                    setCode(res.data?.code)
                 } else {
                     setLoading(false)
                     closeForm()
@@ -231,30 +254,39 @@ function AccountManagerPage() {
         if (accountAction === AccountAction.Edit) {
             let requestBody = {
                 id: selection.selectedItems[0]?.id,
-                code: "",
+                code: code,
                 fullName: fullName,
                 status: status,
                 description: "",
                 email: "namkhenh81@gmail.com",
                 userName: userName,
                 phone: phoneNumber,
-                sex: gender,
-                religion: 0,
-                provinceId: '00000000-0000-0000-0000-000000000000',
-                districtId: '00000000-0000-0000-0000-000000000000',
-                wardId: '00000000-0000-0000-0000-000000000000',
+                sex: sex,
+                religion: religion,
+                provinceId: provinceId,
+                districtId: districtId,
+                wardId: wardId,
+                address: address,
                 age: 0,
-                dateOfBirth: dateOfBirth,
+                dateOfBirth: convertTZ(dateOfBirth),
                 cmnd: identify,
-                guardiasName: "",
-                guardiansPhoneNumber: "",
-                relationship: 0
+                guardiasName: guardiasName,
+                guardiansPhoneNumber: guardiansPhoneNumber,
+                relationship: relationship
             }
             setLoading(true)
             const result = UserService.updateUser(requestBody).then(res => {
                 if (res.success) {
                     setLoading(false)
                     closeForm()
+                    setRow([createData('', [], '', '', '', 0, 0)])
+                    setData([{
+                        id: '',
+                        userName: '',
+                        roles: [],
+                        fullName: '',
+                        status: AccountStatus.Able
+                    }])
                     showMessageBar("Cập nhật tài khoản thành công!", true, MessageBarStatus.Success)
                     getAccount()
                 } else {
@@ -271,6 +303,14 @@ function AccountManagerPage() {
                 if (res.success) {
                     setLoading(false)
                     closeForm()
+                    setRow([createData('', [], '', '', '', 0, 0)])
+                    setData([{
+                        id: '',
+                        userName: '',
+                        roles: [],
+                        fullName: '',
+                        status: AccountStatus.Able
+                    }])
                     showMessageBar("Xóa tài khoản thành công!", true, MessageBarStatus.Success)
                     getAccount()
                 } else {
@@ -287,12 +327,49 @@ function AccountManagerPage() {
                 if (res.success) {
                     setLoading(false)
                     closeForm()
+                    setRow([createData('', [], '', '', '', 0, 0)])
+                    setData([{
+                        id: '',
+                        userName: '',
+                        roles: [],
+                        fullName: '',
+                        status: AccountStatus.Able
+                    }])
                     showMessageBar("Gán vai trò thành công!", true, MessageBarStatus.Success)
                     getAccount()
                 } else {
                     setLoading(false)
                     closeForm()
                     showMessageBar(`Gán vai trò thất bại! \n${res.message ? res.message : ''}`, true, MessageBarStatus.Error)
+                }
+            })
+            return result
+        }
+        if (accountAction === AccountAction.ChangePass) {
+            setLoading(true)
+            console.log(selection.selectedItems[0]);
+            let requestBody = {
+                email: selection.selectedItems[0]?.email,
+                password: password
+            }
+            const result = UserService.resetPassword(requestBody).then(res => {
+                if (res.success) {
+                    setLoading(false)
+                    closeForm()
+                    setRow([createData('', [], '', '', '', 0, 0)])
+                    setData([{
+                        id: '',
+                        userName: '',
+                        roles: [],
+                        fullName: '',
+                        status: AccountStatus.Able
+                    }])
+                    showMessageBar("Đổi mật khẩu thành công!", true, MessageBarStatus.Success)
+                    getAccount()
+                } else {
+                    setLoading(false)
+                    closeForm()
+                    showMessageBar(`Đổi mật khẩu thất bại! \n${res.message ? res.message : ''}`, true, MessageBarStatus.Error)
                 }
             })
             return result
@@ -308,8 +385,10 @@ function AccountManagerPage() {
         setIdentify('')
         setPhoneNumber('')
         setDateOfBirth(new Date())
-        setGender(0)
+        setSex(0)
         setStatus(true)
+        setpassword('')
+        setrepassword('')
         setLoadingForm(false)
         setAcountAction(undefined)
     }
@@ -347,7 +426,7 @@ function AccountManagerPage() {
             case AccountAction.Able:
                 return renderBodyDeleteForm()
             case AccountAction.Assign:
-                return <AssignRoleForm onChangeRoleSelect={(role: string[]) => { setSelectedRoleId(role) }} />
+                return <AssignRoleForm onChangeRoleSelect={(role: string[]) => { setSelectedRoleId(role) }} roleListSelectFromProps={selection.selectedItems[0]?.roles} />
             default:
                 break;
         }
@@ -376,7 +455,6 @@ function AccountManagerPage() {
                                 required={true}
                                 value={userName}
                                 onChange={(_, value) => { setUserName(value) }}
-                                disabled={accountAction === AccountAction.Edit}
                             />
                         </div>
                         <div className="account-create-field">
@@ -395,7 +473,6 @@ function AccountManagerPage() {
                                 required={true}
                                 value={identify}
                                 onChange={(_, value) => { setIdentify(value) }}
-                                disabled={accountAction === AccountAction.Edit}
                             />
                         </div>
                         <div className="account-create-field">
@@ -416,7 +493,7 @@ function AccountManagerPage() {
                                 isRequired={true}
                                 // strings={defaultDatePickerStrings}
                                 onSelectDate={(date) => { setDateOfBirth(date!) }}
-                                value={new Date(dateOfBirth)}
+                                value={!!dateOfBirth && new Date(dateOfBirth)}
                                 // parseDateFromString={()}'
                                 maxDate={new Date()}
                             />
@@ -427,8 +504,8 @@ function AccountManagerPage() {
                                 row
                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                 name="row-radio-buttons-group"
-                                onChange={(_, value) => { setGender(Number(value)) }}
-                                value={gender}
+                                onChange={(_, value) => { setSex(Number(value)) }}
+                                value={sex}
                             >
                                 <FormControlLabel value={UserGender.Male} control={<Radio />} label="Nam" />
                                 <FormControlLabel value={UserGender.Female} control={<Radio />} label="Nữ" />
@@ -444,14 +521,6 @@ function AccountManagerPage() {
                     </div>
 
                 }
-
-                {/* <div className="account-create-field">
-                    <Label required>Phân quyền</Label>
-                    <FormGroup row>
-                        <FormControlLabel value={'admin'} control={<Checkbox />} label="Admin" />
-                        <FormControlLabel value={'doctor'} control={<Checkbox />} label="Bác sĩ" /><FormControlLabel value={'care'} control={<Checkbox />} label="CSKH" /><FormControlLabel value={'user'} control={<Checkbox />} label="Người bệnh" />
-                    </FormGroup>
-                </div> */}
             </div>
         )
     }
@@ -467,10 +536,8 @@ function AccountManagerPage() {
                         type="password"
                         canRevealPassword
                         revealPasswordAriaLabel="Show password"
-
-                    // value={currentPatientProfile.patientName}
-                    // onChange={(_, value) => { onChangeOneFieldForm(PatientProfileModelProperty.patientName, value) }}
-                    // errorMessage={errorMessageFormString.patientName}
+                        value={password}
+                        onChange={(_, newValue) => setpassword(newValue)}
                     />
                 </div>
                 <div className="account-create-field">
@@ -481,9 +548,8 @@ function AccountManagerPage() {
                         type="password"
                         canRevealPassword
                         revealPasswordAriaLabel="Show password"
-                    // value={currentPatientProfile.patientName}
-                    // onChange={(_, value) => { onChangeOneFieldForm(PatientProfileModelProperty.patientName, value) }}
-                    // errorMessage={errorMessageFormString.patientName}
+                        value={repassword}
+                        onChange={(_, newValue) => setrepassword(newValue)}
                     />
                 </div>
             </div>

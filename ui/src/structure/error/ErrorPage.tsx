@@ -6,17 +6,22 @@ export enum ErrorCode {
     ValidationFailed = 2,
     ServiceError = 500,
     NotFound = 404,
+    NotPermission = 401,
 }
 
-function ErrorPage() {
+interface ErrorPageProps {
+  errorCode: ErrorCode
+}
+
+function ErrorPage(props: ErrorPageProps) {
   return (
     <div id='not-found'>
       <div className="not-found">
         <div className="not-found-404">
-          <h1>404</h1>
+          <h1>{props.errorCode === ErrorCode.NotFound ? '404' : '401'}</h1>
         </div>
-        <h2>Xin lỗi, Trang không tìm thấy!</h2>
-        <p>Trang bạn đang tìm kiếm có thể đã bị xóa do đổi tên hoặc tạm thời không có.</p>
+        <h2>{props.errorCode === ErrorCode.NotFound ? 'Xin lỗi, Trang không tìm thấy!' : 'Xin lỗi, Bạn không có quyền truy cập thao tác này!'}</h2>
+        <p>Vui lòng liên hệ hotline để nhận sự trợ giúp.</p>
         <a href="/trang-chu">Trở về Trang Chủ</a>
       </div>
     </div>

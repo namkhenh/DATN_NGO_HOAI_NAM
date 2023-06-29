@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './AppointmentReceptionPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
 import { Label } from '@fluentui/react/lib/Label'
@@ -6,23 +6,39 @@ import { DatePicker } from '../../../common/datePicker/DatePicker'
 import { SearchBoxView } from '../../../common/searchBox/SearchBox'
 import TablePager from '../../../common/tablePager/TablePager'
 import { AppointmentReceptionTableColumns, AppointmentReceptionTableDatas, TableType, UserGender } from '../../../model/enum/tableTypeEnum'
+import { ExaminationScheduleService } from '../../../api/apiPage/apiPage'
 function AppointmentReceptionPage() {
-    const [currentPage, setCurrentPage] = useState<number>(0)
+    const [currentPage, setCurrentPage] = useState<number>(1)
+    const [totalItems, setTotalItems] = useState<number>(0)
+    const [row, setRow] = useState<AppointmentReceptionTableColumns[]>([createData('', new Date(), '', '', new Date(), 0, '', '')])
+    const [data, setData] = useState<AppointmentReceptionTableDatas[]>([{
+        appointmentId: '',
+        appointmentCode: '',
+        appointmentTime: '',
+        patientCode: '',
+        patientName: '',
+        patientDateOfBirth: '',
+        patientGender: 0,
+        patientPhoneNumber: '',
+        patientIdentityNumber: '',
+    }])
+    const [loading, setLoading] = useState<boolean>(false)
+    const [searchTerm, setSearchTerm] = useState<string>('')
 
+    
     function createData(
         appointmentCode: string,
-        appointmentDateI: string,
-        appointmentTimeI: string,
+        appointmentTimeI: Date,
         patientCode: string,
         patientName: string,
-        patientDateOfBirth: string,
+        patientDateOfBirthI: Date,
         patientGenderI: number,
         patientPhoneNumber: string,
         patientIdentityNumber: string,
-        patientAddress: string,
     ): AppointmentReceptionTableColumns {
-        let appointmentTime: string = appointmentDateI + ' ' + appointmentTimeI
+        let appointmentTime: string = `${new Date(appointmentTimeI).getDate()}/${new Date(appointmentTimeI).getMonth() + 1}/${new Date(appointmentTimeI).getFullYear()} --  ${new Date(appointmentTimeI).getHours()}h:${new Date(appointmentTimeI).getMinutes()}`
         let patientGender: string = patientGenderI === UserGender.Male ? 'Nam' : 'Nữ'
+        let patientDateOfBirth: string = `${new Date(patientDateOfBirthI).getDate()}/${new Date(patientDateOfBirthI).getMonth() + 1}/${new Date(patientDateOfBirthI).getFullYear()}`
         return {
             appointmentCode,
             appointmentTime,
@@ -32,134 +48,49 @@ function AppointmentReceptionPage() {
             patientGender,
             patientPhoneNumber,
             patientIdentityNumber,
-            patientAddress,
         };
     }
 
-    const rows: AppointmentReceptionTableColumns[][] = [
-        [
-            createData(
-                'DL12345',
-                '20/03/2023',
-                '09:45',
-                'BN23456',
-                'Ngô Hoài Nam',
-                '23/05/2001',
-                0,
-                '0123456789',
-                '01234567',
-                'Tân Triều'
-            ),
-            createData(
-                'DL12346',
-                '20/03/2023',
-                '09:45',
-                'BN23456',
-                'Ngô Hoài Nam',
-                '23/05/2001',
-                0,
-                '0123456789',
-                '01234567',
-                'Tân Triều'
-            ),
-            createData(
-                'DL123475',
-                '20/03/2023',
-                '09:45',
-                'BN23456',
-                'Ngô Hoài Nam',
-                '23/05/2001',
-                0,
-                '0123456789',
-                '01234567',
-                'Tân Triều'
-            ),
-        ], [
-            createData(
-                'DL123475',
-                '20/03/2023',
-                '09:45',
-                'BN23456',
-                'Ngô Hoài Nam',
-                '23/05/2001',
-                0,
-                '0123456789',
-                '01234567',
-                'Tân Triều'
-            )
-        ]
-    ];
+    const getSchedule = () => {
+        let requestBody = {
+            pageIndex: currentPage,
+            pageSize: 10,
+            searchTerm: searchTerm,
+        }
+        setLoading(true)
+        ExaminationScheduleService.getPagingSchedule(requestBody).then(res => {
+            if (res.success) {
+                setLoading(false)
+                let rows: AppointmentReceptionTableColumns[] = []
+                let datas: AppointmentReceptionTableDatas[] = []
+                !!res.data?.items && res.data.items.forEach((element: any) => {
+                    rows.push(createData(element?.code, element?.timeOfExamination, element?.user?.code, element?.user?.fullName, element?.user?.dateOfBird, element?.user?.sex, element?.user?.phoneNumber, element?.user?.cmnd))
+                    datas.push({
+                        appointmentId: element?.id,
+                        appointmentCode: element?.code,
+                        appointmentTime: element?.timeOfExamination,
+                        patientCode: element?.user?.code,
+                        patientName: element?.user?.fullName,
+                        patientDateOfBirth: element?.user?.dateOfBird,
+                        patientGender: element?.user?.sex,
+                        patientPhoneNumber: element?.user?.phoneNumber,
+                        patientIdentityNumber: element?.user?.cmnd,
+                    })
+                })
+                setRow(rows)
+                setData(datas)
+                setTotalItems(!!res.data?.metaData ? res.data.metaData.totalCount : 0)
+            } else {
+                setLoading(false)
+                setRow([])
+            }
+        })
+    }
 
-    const datas: AppointmentReceptionTableDatas[][] = [
-        [
-            {
-                appointmentId: 'sdklghsdhjfjk34234',
-                appointmentCode: 'HS12345',
-                appointmentDate: '22/03/2003',
-                appointmentTime: '09:45',
-                appointmentReason: 'đau đầu',
-                patientId: 'asdawds2312edawsd',
-                patientCode: 'BN23458',
-                patientName: 'Ngô Hoài Nam',
-                appointmentStatus: 0,
-                patientDateOfBirth: '22/03/2002',
-                patientGender: 0,
-                patientPhoneNumber: '0123456789',
-                patientIdentityNumber: '0123456712312',
-                patientAddress: 'ngõ 118, Tân Triều',
-            },
-            {
-                appointmentId: 'kasdfhkahsfjk22',
-                appointmentCode: 'HS12345',
-                appointmentDate: '22/03/2003',
-                appointmentTime: '09:45',
-                appointmentReason: 'đau đầu',
-                patientId: 'asdawds2312edawsd',
-                patientCode: 'BN23458',
-                patientName: 'Ngô Hoài Nam',
-                appointmentStatus: 0,
-                patientDateOfBirth: '22/03/2002',
-                patientGender: 0,
-                patientPhoneNumber: '0123456789',
-                patientIdentityNumber: '0123456712312',
-                patientAddress: 'ngõ 118, Tân Triều',
-            },
-            {
-                appointmentId: 'klsdhfjshdfkj3423j43',
-                appointmentCode: 'HS12345',
-                appointmentDate: '22/03/2003',
-                appointmentTime: '09:45',
-                appointmentReason: 'đau đầu',
-                patientId: 'asdawds2312edawsd',
-                patientCode: 'BN23458',
-                patientName: 'Ngô Hoài Nam',
-                appointmentStatus: 0,
-                patientDateOfBirth: '22/03/2002',
-                patientGender: 0,
-                patientPhoneNumber: '0123456789',
-                patientIdentityNumber: '0123456712312',
-                patientAddress: 'ngõ 118, Tân Triều',
-            },
-        ],
-        [
-            {
-                appointmentId: 'asdasdjkjh213h123j',
-                appointmentCode: 'HS12345',
-                appointmentDate: '22/03/2003',
-                appointmentTime: '09:45',
-                appointmentReason: 'đau đầu',
-                patientId: 'asdawds2312edawsd',
-                patientCode: 'BN23458',
-                patientName: 'Ngô Hoài Nam',
-                appointmentStatus: 0,
-                patientDateOfBirth: '22/03/2002',
-                patientGender: 0,
-                patientPhoneNumber: '0123456789',
-                patientIdentityNumber: '0123456712312',
-                patientAddress: 'ngõ 118, Tân Triều',
-            },
-        ]
-    ];
+    useEffect(() => {
+        getSchedule()
+    }, [])
+
     return (
         <div className='patientlist-page'>
             <BreadCrumb
@@ -212,16 +143,16 @@ function AppointmentReceptionPage() {
             <div className="patient-list-table">
                 <TablePager<AppointmentReceptionTableColumns, AppointmentReceptionTableDatas>
                     tableType={TableType.AppointmentReceptionTable}
-                    rowData={rows[currentPage]}
-                    dataTotal={datas[currentPage]}
+                    rowData={row}
+                    dataTotal={data}
                     hasCheckBox={false}
                     hasTablePaging
-                    page={currentPage}
+                    page={currentPage - 1}
                     handleChangePage={(page) => { setCurrentPage(page) }}
-                    total={15}
+                    total={totalItems}
                     hasNavigate
                     navigateLink={"/admin/tiep-don-dat-kham/chi-tiet-dat-kham/"}
-                    isLoading={false}
+                    isLoading={loading}
 
                 />
             </div>

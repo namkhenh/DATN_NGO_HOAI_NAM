@@ -6,6 +6,9 @@ import AppointmentDetail from '../appointmentDetail/AppointmentDetail'
 import {useStateValue} from '../../context/StateProvider'
 import {actionType} from '../../context/Reducer'
 import {MessageBarStatus} from '../../model/enum/messageBarEnum'
+import { ExaminationScheduleService } from '../../api/apiPage/apiPage'
+import { convertTZ } from '../../utils/commonFunction'
+import { AppointmentStatus } from '../../model/enum/appointmentEnum'
 
 interface BookingFormProps {
     currentBookingAppointment: IAppointmenViewModel
@@ -29,19 +32,30 @@ function AcceptBookingForm(props: BookingFormProps) {
     const showMessageBar = (message: string, isOpen: boolean, status: MessageBarStatus) => {
         dispatch({ type: actionType.SET_MESSAGE_BAR, messageBar: { isOpen: isOpen, text: message, status: status } })
     }
-
+    
     const onSave = () => {
+        console.log(props.currentBookingAppointment?.patientId);
         let requestBody = {
-            id: "",
-            code: "",
-            name: "",
-            dayOfExamination: props.currentBookingAppointment?.appointmentDate,
-            timeOfExamination: props.currentBookingAppointment?.appointmentTime,
+            id: "00000000-0000-0000-0000-000000000000",
+            timeOfExamination: convertTZ(props.currentBookingAppointment?.appointmentTime),
             reason: props.currentBookingAppointment?.appointmentReason,
             appUserId: props.currentBookingAppointment?.patientId,
-            patientReceptionStatus: 1
+            patientReceptionStatus: AppointmentStatus.Waiting
         }
-        return new Promise(res => {})
+        setLoading(true)
+        const result = ExaminationScheduleService.createSchedule(requestBody).then(res => {
+            setLoading(false)
+            if (res.success) {
+                handlecClose()
+                setLoading(false)
+                showMessageBar("Đặt khám thành công!", true, MessageBarStatus.Success)
+            } else {
+                handlecClose()
+                setLoading(false)
+                showMessageBar("Đặt khám thất bại!", true, MessageBarStatus.Error)
+            }
+        })
+        return result
     }
     return (
         <DialogView

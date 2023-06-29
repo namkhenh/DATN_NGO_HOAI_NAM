@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './ApproveCalendarPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb';
 import { SearchBoxView } from '../../../common/searchBox/SearchBox';
@@ -20,17 +20,31 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import PatientListCommandBar from '../patientListPage/PatientListCommandBar';
+import { ExaminationScheduleService } from '../../../api/apiPage/apiPage';
 
 
 
 function ApproveCalendarPage() {
     const [showDialog, setShowDialog] = useState<boolean>(false)
-    const [loadingButton, setLoading] = useState<boolean>(false)
-    const [currentPage, setCurrentPage] = useState<number>(0)
+    const [loading, setLoading] = useState<boolean>(false)
+    const [loadingButton, setLoadingButton] = useState<boolean>(false)
+    const [currentPage, setCurrentPage] = useState<number>(1)
+    const [totalItems, setTotalItems] = useState<number>(0)
+    const [searchTerm, setSearchTerm] = useState<string>('')
     const [appointmentAction, setAppointmentAction] = useState<ApproveCalendarAction>()
-    const onSearch = (newValue: string) => {
-        console.log(newValue);
+    const [row, setRow] = useState<ApproveCalendarTableColumns[]>([createData("", 0, new Date(), "", "", "", 0, "")])
+    const [data, setData] = useState<ApproveCalendarTableDatas[]>([{
+        id: '',
+        time: new Date(),
+        reason: '',
+        patientId: '',
+        code: '',
+        status: AppointmentStatus.Waiting
+    }])
+    const [{ selection }, dispatch] = useStateValue()
 
+    const onSearch = (newValue: string) => {
+        setSearchTerm(newValue)
     }
 
     const onRenderActionButtons = (): JSX.Element[] => {
@@ -46,35 +60,64 @@ function ApproveCalendarPage() {
         ])
     }
 
-    const [, dispatch] = useStateValue()
     const showMessageBar = (message: string, isOpen: boolean, status: MessageBarStatus) => {
         dispatch({ type: actionType.SET_MESSAGE_BAR, messageBar: { isOpen: isOpen, text: message, status: status } })
     }
 
     const onSave = () => {
-        let requestBody = {
-
+        if (appointmentAction === ApproveCalendarAction.Accept) {
+            let requestBody = {
+                id: selection.selectedItems[0]?.id,
+                timeOfExamination: selection.selectedItems[0]?.time,
+                reason: selection.selectedItems[0]?.reason,
+                appUserId: selection.selectedItems[0]?.patientId,
+                patientReceptionStatus: AppointmentStatus.Success
+            }
+            setLoadingButton(true)
+            const result = ExaminationScheduleService.updateSchedule(requestBody).then(res => {
+                if (res.success) {
+                    setLoadingButton(false)
+                    setShowDialog(false)
+                    showMessageBar("Duyệt lịch thành công!", true, MessageBarStatus.Success)
+                    getSchedule()
+                } else {
+                    setLoadingButton(false)
+                    setShowDialog(false)
+                    showMessageBar("Duyệt lịch thất bại!", true, MessageBarStatus.Error)
+                }
+            })
+            return result
         }
-        const result = new Promise((resolve) => {
-            setLoading(true)
-            setTimeout(() => {
-                setLoading(false)
-                setShowDialog(false)
-                showMessageBar("Cập nhật thông tin thành công", true, MessageBarStatus.Success)
-                resolve('success')
-            }, 4000);
-        }).then(() => {/*  */
-
-        })
-
-        return result
+        if (appointmentAction === ApproveCalendarAction.Refuse || appointmentAction === ApproveCalendarAction.Cancel) {
+            let requestBody = {
+                id: selection.selectedItems[0]?.id,
+                timeOfExamination: selection.selectedItems[0]?.time,
+                reason: selection.selectedItems[0]?.reason,
+                appUserId: selection.selectedItems[0]?.patientId,
+                patientReceptionStatus: AppointmentStatus.Cancel
+            }
+            setLoadingButton(true)
+            const result = ExaminationScheduleService.updateSchedule(requestBody).then(res => {
+                if (res.success) {
+                    setLoadingButton(false)
+                    setShowDialog(false)
+                    showMessageBar(appointmentAction === ApproveCalendarAction.Refuse ? "Từ chối lịch thành công!" : "Hủy lịch thành công!", true, MessageBarStatus.Success)
+                    getSchedule()
+                } else {
+                    setLoadingButton(false)
+                    setShowDialog(false)
+                    showMessageBar(appointmentAction === ApproveCalendarAction.Refuse ? "Từ chối lịch thất bại!" : "Hủy lịch thất bại!", true, MessageBarStatus.Error)
+                }
+            })
+            return result
+        }
+        return new Promise(res => {})
     }
 
     function createData(
         appointmentCode: string,
-        appointmentStatusI: AppointmentStatus,
-        appointmentDateI: string,
-        appointmentTimeI: string,
+        appointmentStatusI: number,
+        appointmentTimeI: Date,
         patientCode: string,
         patientName: string,
         patientDateOfBirth: string,
@@ -94,7 +137,7 @@ function ApproveCalendarPage() {
         // );
 
         let patientGender: string = patientGenderI === 0 ? "Nam" : "Nữ"
-        let appointmentTime: string = appointmentDateI + '  ' + appointmentTimeI
+        let appointmentTime: string = `${new Date(appointmentTimeI).getDate()}/${new Date(appointmentTimeI).getMonth() + 1}/${new Date(appointmentTimeI).getFullYear()} --  ${new Date(appointmentTimeI).getHours()}h:${new Date(appointmentTimeI).getMinutes()}`
         let appointmentStatus: JSX.Element = appointmentStatusI === AppointmentStatus.Success ? <div className='appointment-success'>Đã duyệt</div> : (appointmentStatusI === AppointmentStatus.Cancel ? <div className='appointment-cancel'>Đã hủy</div> : <div className='appointment-waiting'>Chờ duyệt</div>)
         return {
             appointmentCode,
@@ -112,133 +155,52 @@ function ApproveCalendarPage() {
         };
     }
 
-    const rows: ApproveCalendarTableColumns[][] = [
-        [
-            createData(
-                "DL20230001",
-                AppointmentStatus.Success,
-                "11/02/2023",
-                "09:00",
-                "BN20230001",
-                "Ngô Hoài Nam",
-                "19/05/2001",
-                1,
-                "0123456789"
-            ),
-            createData(
-                "DL20230002",
-                AppointmentStatus.Waiting,
-                "11/02/2023",
-                "09:00",
-                "BN20230002",
-                "Ngô Hoài Nam",
-                "19/05/2001",
-                0,
-                "0123456789"
-            ),
-            createData(
-                "DL20230003",
-                AppointmentStatus.Cancel,
-                "11/02/2023",
-                "09:00",
-                "BN20230003",
-                "Ngô Hoài Nam",
-                "19/05/2001",
-                0,
-                "0123456789"
-            )], [
-            createData(
-                "DL20230004",
-                AppointmentStatus.Waiting,
-                "11/02/2023",
-                "09:00",
-                "BN20230004",
-                "Ngô Hoài Nam",
-                "19/05/2001",
-                0,
-                "0123456789"
-            )
-        ]
-    ];
+    const getSchedule = () => {
+        let requestBody = {
+            pageIndex: currentPage,
+            pageSize: 10,
+            searchTerm: searchTerm,
+        }
+        setLoading(true)
+        ExaminationScheduleService.getPagingSchedule(requestBody).then(res => {
+            if (res.success) {
+                setLoading(false)
+                let rows: ApproveCalendarTableColumns[] = []
+                let datas: ApproveCalendarTableDatas[] = []
+                !!res.data?.items && res.data.items.forEach((element: any) => {
+                    rows.push(createData(element?.code, element?.patientReceptionStatus, element?.timeOfExamination, element?.user?.code, element?.user?.fullName, element?.user?.dateOfBird,
+                        element?.user?.sex, element?.user?.phoneNumber))
+                    datas.push({
+                        id: element?.id,
+                        time: element?.timeOfExamination,
+                        reason: element?.reason,
+                        patientId: element?.appUserId,
+                        status: element?.patientReceptionStatus,
+                        code: element?.code
 
-    const datas: ApproveCalendarTableDatas[][] = [
-        [
-            {
-                appointmentId: 'sdklghsdhjfjk34234',
-                appointmentCode: 'HS12345',
-                appointmentDate: '22/03/2003',
-                appointmentTime: '09:45',
-                appointmentReason: 'đau đầu',
-                patientId: 'asdawds2312edawsd',
-                patientCode: 'BN23458',
-                patientName: 'Ngô Hoài Nam',
-                appointmentStatus: 0,
-                patientDateOfBirth: '22/03/2002',
-                patientGender: 0,
-                patientPhoneNumber: '0123456789',
-                patientIdentityNumber: '0123456712312',
-                patientAddress: 'ngõ 118, Tân Triều',
-            },
-            {
-                appointmentId: 'sdgjhsdkjfsdjk223',
-                appointmentCode: 'HS12345',
-                appointmentDate: '22/03/2003',
-                appointmentTime: '09:45',
-                appointmentReason: 'đau đầu',
-                patientId: 'lkdfjklasjdf23123',
-                patientCode: 'BN23458',
-                patientName: 'Ngô Hoài Nam',
-                appointmentStatus: 1,
-                patientDateOfBirth: '22/03/2002',
-                patientGender: 0,
-                patientPhoneNumber: '0123456789',
-                patientIdentityNumber: '0123456712312',
-                patientAddress: 'ngõ 118, Tân Triều',
-            },
-            {
-                appointmentId: 'asfdf2343rfsdfsg',
-                appointmentCode: 'HS12345',
-                appointmentDate: '22/03/2003',
-                appointmentTime: '09:45',
-                appointmentReason: 'đau đầu',
-                patientId: 'sdgdsfhdgfh234rd',
-                patientCode: 'BN23458',
-                patientName: 'Ngô Hoài Nam',
-                appointmentStatus: 2,
-                patientDateOfBirth: '22/03/2002',
-                patientGender: 0,
-                patientPhoneNumber: '0123456789',
-                patientIdentityNumber: '0123456712312',
-                patientAddress: 'ngõ 118, Tân Triều',
+                    })
+                })
+                setRow(rows)
+                setData(datas)
+                setTotalItems(!!res.data?.metaData ? res.data.metaData.totalCount : 0)
+            } else { 
+                setLoading(false)
+                setRow([])
             }
-        ],
-        [
-            {
-                appointmentId: 'aslkjfhsdjkhfjk324234',
-                appointmentCode: 'HS12345',
-                appointmentDate: '22/03/2003',
-                appointmentTime: '09:45',
-                appointmentReason: 'đau đầu',
-                patientId: 'sdfsdflkmmas23m4k32',
-                patientCode: 'BN23458',
-                patientName: 'Ngô Hoài Nam',
-                appointmentStatus: 1,
-                patientDateOfBirth: '22/03/2002',
-                patientGender: 0,
-                patientPhoneNumber: '0123456789',
-                patientIdentityNumber: '0123456712312',
-                patientAddress: 'ngõ 118, Tân Triều',
-            }
-        ]
-    ];
+        })
+    }
+
+    useEffect(() => {
+        getSchedule()
+    }, [])
 
     const renderBodyForm = () => {
         switch (appointmentAction) {
             case ApproveCalendarAction.Accept:
-                return <span>Bạn có chắc chắn muốn <strong>Đồng ý</strong> lịch khám: <strong>DL1234</strong> vào lúc <strong>09:45</strong> ngày <strong>19/04/2023</strong></span>
+                return <span>Bạn có chắc chắn muốn <strong>Đồng ý</strong> lịch khám: <strong>{selection.selectedItems[0]?.code}</strong> vào lúc <strong>{`${new Date(selection.selectedItems[0]?.time).getHours()}h:${new Date(selection.selectedItems[0]?.time).getMinutes()}`}</strong> ngày <strong>{`${new Date(selection.selectedItems[0]?.time).getDate()}/${new Date(selection.selectedItems[0]?.time).getMonth() + 1}/${new Date(selection.selectedItems[0]?.time).getFullYear()}`}</strong></span>
             case ApproveCalendarAction.Refuse:
                 return <div className='dialog-content'>
-                    <span>Bạn có chắc chắn muốn <strong>Từ chối</strong> lịch khám: <strong>DL1234</strong> vào lúc <strong>09:45</strong> ngày <strong>19/04/2023</strong></span>
+                    <span>Bạn có chắc chắn muốn <strong>Từ chối</strong> lịch khám: <strong>{selection.selectedItems[0]?.code}</strong> vào lúc <strong>{`${new Date(selection.selectedItems[0]?.time).getHours()}h:${new Date(selection.selectedItems[0]?.time).getMinutes()}`}</strong> ngày <strong>{`${new Date(selection.selectedItems[0]?.time).getDate()}/${new Date(selection.selectedItems[0]?.time).getMonth() + 1}/${new Date(selection.selectedItems[0]?.time).getFullYear()}`}</strong></span>
                     <Label>Lý do:</Label>
                     <RadioGroup
                         aria-labelledby="demo-controlled-radio-buttons-group"
@@ -251,7 +213,7 @@ function ApproveCalendarPage() {
                     </RadioGroup>
                 </div>
             case ApproveCalendarAction.Cancel:
-                return <span>Bạn có chắc chắn muốn <strong>Hủy</strong> lịch khám: <strong>DL1234</strong> vào lúc <strong>09:45</strong> ngày <strong>19/04/2023</strong></span>
+                return <span>Bạn có chắc chắn muốn <strong>Hủy</strong> lịch khám: <strong>{selection.selectedItems[0]?.code}</strong> vào lúc <strong>{`${new Date(selection.selectedItems[0]?.time).getHours()}h:${new Date(selection.selectedItems[0]?.time).getMinutes()}`}</strong> ngày <strong>{`${new Date(selection.selectedItems[0]?.time).getDate()}/${new Date(selection.selectedItems[0]?.time).getMonth() + 1}/${new Date(selection.selectedItems[0]?.time).getFullYear()}`}</strong></span>
         }
     }
 
@@ -307,15 +269,15 @@ function ApproveCalendarPage() {
                 <TablePager<ApproveCalendarTableColumns, ApproveCalendarTableDatas>
                     tableType={TableType.ApproveCalendarTable}
                     batchActionElements={onRenderActionButtons()}
-                    rowData={rows[currentPage]}
-                    dataTotal={datas[currentPage]}
+                    rowData={row}
+                    dataTotal={data}
                     hasCheckBox
                     hasTablePaging
-                    page={currentPage}
+                    page={currentPage - 1}
                     handleChangePage={(page) => { setCurrentPage(page) }}
-                    total={15}
+                    total={totalItems}
                     hasNavigate={false}
-                    isLoading={false}
+                    isLoading={loading}
 
                 />
             </div>

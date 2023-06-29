@@ -1,30 +1,70 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import './AssignUserPage.scss'
 import BreadCrumb from '../../../common/breadCrumb/BreadCrumb'
-import {TextField} from '../../../common/textField/TextField'
-import {DatePicker} from '../../../common/datePicker/DatePicker'
-import {Label} from '@fluentui/react/lib/Label'
+import { TextField } from '../../../common/textField/TextField'
+import { DatePicker } from '../../../common/datePicker/DatePicker'
+import { Label } from '@fluentui/react/lib/Label'
 import Switch from '@mui/material/Switch'
 import TablePager from '../../../common/tablePager/TablePager'
-import {TableType, UserAssignTableColumns, UserAssignTableDatas} from '../../../model/enum/tableTypeEnum'
+import { TableType, UserAssignTableColumns, UserAssignTableDatas } from '../../../model/enum/tableTypeEnum'
 import PatientListCommandBar from '../patientListPage/PatientListCommandBar'
-import {AccountStatus} from '../accountManagerPage/AccountManagerPage'
+import { AccountStatus } from '../accountManagerPage/AccountManagerPage'
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DialogView from '../../../common/dialog/Dialog'
-import {MessageBarStatus} from '../../../model/enum/messageBarEnum'
-import {useStateValue} from '../../../context/StateProvider'
-import {actionType} from '../../../context/Reducer'
-import {SearchBoxView} from '../../../common/searchBox/SearchBox'
-import {ButtonColorType, ButtonVariantType} from '../../../model/enum/buttonEnum'
+import { MessageBarStatus } from '../../../model/enum/messageBarEnum'
+import { useStateValue } from '../../../context/StateProvider'
+import { actionType } from '../../../context/Reducer'
+import { SearchBoxView } from '../../../common/searchBox/SearchBox'
+import { ButtonColorType, ButtonVariantType, LoadingPosition } from '../../../model/enum/buttonEnum'
 import Button from '@mui/material/Button'
+import { useParams } from 'react-router-dom'
+import { RoleService, UserService } from '../../../api/apiPage/apiPage'
+import { Skeleton } from '@mui/material'
+import SubmitButton from '../../../common/button/SubmitButton'
 
 function AssignUserPage() {
+    const roleIdFromProps = useParams().id;
+    const [roleId, setRoleId] = useState<string>(roleIdFromProps || '')
+    const [roleName, setRoleName] = useState<string>()
+    const [roleCode, setRoleCode] = useState<string>()
+    const [roleDescription, setRoleDescription] = useState<string>()
+    const [roleStatus, setRoleStatus] = useState<boolean>(true)
+    const [roleStartTime, setRoleStart] = useState<Date>(new Date())
+    const [roleEndTime, setRoleEnd] = useState<Date>(new Date())
     const [{ selection }, dispatch] = useStateValue();
     const [showDialog, setShowDialog] = useState<boolean>(false)
-    const [rows, setRow] = useState<UserAssignTableColumns[]>([])
-    const [rowDatas, setRowData] = useState<UserAssignTableDatas[]>([])
+    const [rows, setRow] = useState<UserAssignTableColumns[]>([{
+        userName: '',
+        fullName: '',
+        insuranceNumber: '',
+        phoneNumber: ''
+    }])
+    const [datas, setRowData] = useState<UserAssignTableDatas[]>([{
+        id: '',
+        userName: '',
+        fullName: '',
+        insuranceNumber: '',
+        phoneNumber: ''
+    }])
+    const [rowForms, setRowForm] = useState<UserAssignTableColumns[]>([{
+        userName: '',
+        fullName: '',
+        insuranceNumber: '',
+        phoneNumber: ''
+    }])
+    const [dataForms, setdataForm] = useState<UserAssignTableDatas[]>([{
+        id: '',
+        userName: '',
+        fullName: '',
+        insuranceNumber: '',
+        phoneNumber: ''
+    }])
     const [currentPage, setCurrentPage] = useState<number>(0);
+    const [loadingAccount, setLoadingAccount] = useState<boolean>(false)
+    const [loadingButton, setLoadingButton] = useState<boolean>(false)
+    const [loadingRoleDetail, setLoadingRoleDetail] = useState<boolean>(false)
+
     const onSearch = (newValue: string) => {
         console.log(newValue);
 
@@ -40,28 +80,68 @@ function AssignUserPage() {
         ])
     }
 
-    function createData(
-        userName: string,
-        fullName: string,
-        phoneNumber: string,
-        insuranceNumber: string,
-    ): UserAssignTableColumns {
-        let task: JSX.Element = <IconButton aria-label="delete" size="small" onClick={() => { }}>
-            <DeleteIcon color='error' />
-        </IconButton>
-        return {
-            userName,
-            fullName,
-            phoneNumber,
-            insuranceNumber,
-            task
-        };
-    }
+    useEffect(() => {
+        if (!!roleId) {
+            setLoadingRoleDetail(true)
+            RoleService.getRoleDetail(roleId).then(res => {
+                if (res.success) {
+                    setRoleId(res?.data?.id)
+                    setRoleCode(res?.data?.code)
+                    setRoleDescription(res?.data?.description)
+                    setRoleName(res?.data?.name)
+                    setRoleStart(res?.data?.startDate)
+                    setRoleEnd(res?.data?.endDate)
+                    setRoleStatus(res?.data?.status)
+                    let userFromRole: UserAssignTableDatas[] = []
+                    !!res?.data?.users && res?.data?.users.forEach((user: any) => {
+                        userFromRole.push({
+                            id: user.id,
+                            userName: user.userName,
+                            fullName: user.fullName,
+                            phoneNumber: user.phoneNumber,
+                            insuranceNumber: user.cmnd
+                        })
+                    })
+                    setRowData(userFromRole)
+                    setLoadingRoleDetail(false)
+                } else {
+                    setLoadingRoleDetail(false)
+                }
+            })
+        }
+    }, [])
 
-    // const rows: UserAssignTableColumns[] = [
-    //     createData('ngo_hoai_nam1', 'Ngô Hoài Nam', '0123456788', '012345678'),
-    //     createData('ngo_hoai_nam2', 'Ngô Hoài Nam', '0123456788', '012345678'),
-    // ];
+    useEffect(() => {
+        if (showDialog) {
+            let requestBody = {
+                pageIndex: 1,
+                pageSize: 1000,
+                searchTerm: ""
+            }
+            setLoadingAccount(true)
+            UserService.getUserPaging(requestBody).then(res => {
+                if (res.success) {
+                    setLoadingAccount(false)
+                    let rows: UserAssignTableColumns[] = []
+                    let dataForms: UserAssignTableDatas[] = []
+                    !!res.data?.items && res.data?.items.forEach((element: any) => {
+                        rows.push(createDataForm(element?.userName, element?.fullName, element?.phoneNumber, element?.cmnd))
+                        dataForms.push({
+                            id: element?.id,
+                            userName: element?.userName,
+                            fullName: element?.fullName,
+                            phoneNumber: element?.phoneNumber,
+                            insuranceNumber: element?.cmnd
+                        })
+                    })
+                    setRowForm(rows)
+                    setdataForm(dataForms)
+                } else {
+                    setLoadingAccount(false)
+                }
+            })
+        }
+    }, [showDialog])
 
     function createDataForm(
         userName: string,
@@ -77,132 +157,6 @@ function AssignUserPage() {
         };
     }
 
-    const rowForms: UserAssignTableColumns[] = [
-        createDataForm('ngo_hoai_nam1', 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createDataForm('ngo_hoai_nam2', 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createDataForm('ngo_hoai_nam3', 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createDataForm('ngo_hoai_nam1', 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createDataForm('ngo_hoai_nam2', 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createDataForm('ngo_hoai_nam3', 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createDataForm('ngo_hoai_nam1', 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createDataForm('ngo_hoai_nam2', 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createDataForm('ngo_hoai_nam3', 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createDataForm('ngo_hoai_nam1', 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createDataForm('ngo_hoai_nam2', 'Ngô Hoài Nam', '0123456788', '012345678'),
-        createDataForm('ngo_hoai_nam3', 'Ngô Hoài Nam', '0123456788', '012345678'),
-    ];
-
-    const datas: UserAssignTableDatas[] = [
-        {
-            id: 'asd2klhdfjksk',
-            userName: 'ngo_hoai_nam1',
-            fullName: 'Ngô Hoài Nam',
-            phoneNumber: '0123456788',
-            insuranceNumber: '012345678',
-            gender: 0,
-            status: AccountStatus.Able
-        },
-        {
-            id: 'aksjhdakjsh29',
-            userName: 'ngo_hoai_nam2',
-            fullName: 'Ngô Hoài Nam',
-            phoneNumber: '0123456788',
-            insuranceNumber: '012345678',
-            gender: 1,
-            status: AccountStatus.Enable
-        },
-        {
-            id: 'qwefdf2412rf',
-            userName: 'ngo_hoai_nam3',
-            fullName: 'Ngô Hoài Nam',
-            phoneNumber: '0123456788',
-            insuranceNumber: '012345678',
-            gender: 1,
-            status: AccountStatus.Enable
-        },
-        {
-            id: 'asd2klhdfjksk',
-            userName: 'ngo_hoai_nam1',
-            fullName: 'Ngô Hoài Nam',
-            phoneNumber: '0123456788',
-            insuranceNumber: '012345678',
-            gender: 0,
-            status: AccountStatus.Able
-        },
-        {
-            id: 'aksjhdakjsh29',
-            userName: 'ngo_hoai_nam2',
-            fullName: 'Ngô Hoài Nam',
-            phoneNumber: '0123456788',
-            insuranceNumber: '012345678',
-            gender: 1,
-            status: AccountStatus.Enable
-        },
-        {
-            id: 'qwefdf2412rf',
-            userName: 'ngo_hoai_nam3',
-            fullName: 'Ngô Hoài Nam',
-            phoneNumber: '0123456788',
-            insuranceNumber: '012345678',
-            gender: 1,
-            status: AccountStatus.Enable
-        },
-        {
-            id: 'asd2klhdfjksk',
-            userName: 'ngo_hoai_nam1',
-            fullName: 'Ngô Hoài Nam',
-            phoneNumber: '0123456788',
-            insuranceNumber: '012345678',
-            gender: 0,
-            status: AccountStatus.Able
-        },
-        {
-            id: 'aksjhdakjsh29',
-            userName: 'ngo_hoai_nam2',
-            fullName: 'Ngô Hoài Nam',
-            phoneNumber: '0123456788',
-            insuranceNumber: '012345678',
-            gender: 1,
-            status: AccountStatus.Enable
-        },
-        {
-            id: 'qwefdf2412rf',
-            userName: 'ngo_hoai_nam3',
-            fullName: 'Ngô Hoài Nam',
-            phoneNumber: '0123456788',
-            insuranceNumber: '012345678',
-            gender: 1,
-            status: AccountStatus.Enable
-        },
-        {
-            id: 'asd2klhdfjksk',
-            userName: 'ngo_hoai_nam1',
-            fullName: 'Ngô Hoài Nam',
-            phoneNumber: '0123456788',
-            insuranceNumber: '012345678',
-            gender: 0,
-            status: AccountStatus.Able
-        },
-        {
-            id: 'aksjhdakjsh29',
-            userName: 'ngo_hoai_nam2',
-            fullName: 'Ngô Hoài Nam',
-            phoneNumber: '0123456788',
-            insuranceNumber: '012345678',
-            gender: 1,
-            status: AccountStatus.Enable
-        },
-        {
-            id: 'qwefdf2412rf',
-            userName: 'ngo_hoai_nam3',
-            fullName: 'Ngô Hoài Nam',
-            phoneNumber: '0123456788',
-            insuranceNumber: '012345678',
-            gender: 1,
-            status: AccountStatus.Enable
-        },
-    ];
-    
     const renderBodyForm = () => {
         return (
             <div className="adduserassign-form">
@@ -216,44 +170,82 @@ function AssignUserPage() {
                     <TablePager<UserAssignTableColumns, UserAssignTableDatas>
                         tableType={TableType.AddUserAssignTable}
                         rowData={rowForms}
-                        dataTotal={datas}
+                        dataTotal={dataForms}
                         hasCheckBox
                         page={currentPage}
                         handleChangePage={(page) => { setCurrentPage(page) }}
                         total={10}
-                        isLoading={false}
+                        isLoading={loadingAccount}
 
                     />
                 </div>
             </div>
         )
     }
-    
+
     const showMessageBar = (message: string, isOpen: boolean, status: MessageBarStatus) => {
         dispatch({ type: actionType.SET_MESSAGE_BAR, messageBar: { isOpen: isOpen, text: message, status: status } })
     }
 
     const onSave = () => {
-        setShowDialog(false)
+        closeForm()
         setRowData(selection.selectedItems)
     }
 
+    const assignUser = () => {
+        if (!!datas.length) {
+            let userId: string[] = []
+            datas.forEach(user => {
+                userId.push(user?.id)
+            })
+            setLoadingButton(true)
+            const result = RoleService.assignUser(roleId, userId).then(res => {
+                if (res.success) {
+                    setLoadingButton(true)
+                    showMessageBar("Gán người dùng thành công!", true, MessageBarStatus.Success)
+                } else {
+                    setLoadingButton(true)
+                    showMessageBar("Gán người dùng thất bại!", true, MessageBarStatus.Error)
+                }
+            })
+            return result
+        }
+        return new Promise(res => {})
+    }
+
     useEffect(() => {
-        setRow(rowDatas.map((e: UserAssignTableDatas) => {
+        setRow(datas.map((e: UserAssignTableDatas) => {
             return {
-                userName: e.userName,
-                fullName: e.fullName,
-                phoneNumber: e.phoneNumber,
-                insuranceNumber: e.insuranceNumber,
+                userName: e?.userName,
+                fullName: e?.fullName,
+                phoneNumber: e?.phoneNumber,
+                insuranceNumber: e?.insuranceNumber,
                 task: <IconButton aria-label="delete" size="small" onClick={() => { removeRole(e.id) }}>
                     <DeleteIcon color='error' />
                 </IconButton>
             }
         }))
-    }, [rows, rowDatas])
-    
+    }, [datas])
+
     const removeRole = (idDel: string) => {
-        setRowData(rowDatas.filter((e) => idDel !== e.id))
+        setRowData(datas.filter((e) => idDel !== e.id))
+    }
+
+    const closeForm = () => {
+        setShowDialog(false)
+        setRowForm([{
+            userName: '',
+            fullName: '',
+            insuranceNumber: '',
+            phoneNumber: ''
+        }])
+        setdataForm([{
+            id: '',
+            userName: '',
+            fullName: '',
+            insuranceNumber: '',
+            phoneNumber: ''
+        }])
     }
 
     return (
@@ -271,67 +263,85 @@ function AssignUserPage() {
                 <div className="assignuser-page-sub-title">
                     Thông tin vai trò
                 </div>
-                <div className="assignuser-page-wrap">
-                    <div className="assignuser-info-item">
-                        <TextField
-                            label='Mã vai trò'
-                            required
-                            placeholder='--'
-                            value={'appointmentInfo.appointmentReason'}
-                            onChange={(_, value) => {
-                                // onChangeOneField(AppointmentInfoModelProperty.appointmentReason, value)
-                            }}
-                        />
+                {loadingRoleDetail ? (
+                    <div className="assignuser-page-wrap">
+                        <Skeleton variant="rounded" height={40} className='assignuser-info-item' />
+                        <Skeleton variant="rounded" height={40} className='assignuser-info-item' />
+                        <Skeleton variant="rounded" height={40} className='assignuser-info-item' />
+                        <Skeleton variant="rounded" height={40} className='assignuser-info-item' />
+                        <Skeleton variant="rounded" height={40} className='assignuser-info-item' />
+                        <Skeleton variant="rounded" height={40} className='assignuser-info-item' />
                     </div>
-                    <div className="assignuser-info-item">
-                        <TextField
-                            label='Tên vai trò'
-                            required
-                            placeholder='--'
-                            value={'appointmentInfo.appointmentReason'}
-                            onChange={(_, value) => {
-                                // onChangeOneField(AppointmentInfoModelProperty.appointmentReason, value)
-                            }}
-                        />
-                    </div>
-                    <div className="assignuser-info-item">
-                        <DatePicker
-                            placeholder="Chọn một giá trị"
-                            ariaLabel="Chọn một giá trị"
-                            label='Thời gian bắt đầu'
-                            isRequired={true}
-                            // strings={defaultDatePickerStrings}
-                            onSelectDate={(date) => {
-                                // onChangeOneField(AppointmentInfoModelProperty.appointmentDate, `${date!.getMonth() + 1}/${date!.getDate()}/${date!.getFullYear()}`)
-                            }}
-                            value={new Date()}
-                            // parseDateFromString={()}'
-                            minDate={new Date()}
-                        />
-                    </div>
-                    <div className="assignuser-info-item">
-                        <DatePicker
-                            placeholder="Chọn một giá trị"
-                            ariaLabel="Chọn một giá trị"
-                            label='Thời gian kết thúc'
-                            isRequired={true}
-                            // strings={defaultDatePickerStrings}
-                            onSelectDate={(date) => {
-                                // onChangeOneField(AppointmentInfoModelProperty.appointmentDate, `${date!.getMonth() + 1}/${date!.getDate()}/${date!.getFullYear()}`)
-                            }}
-                            value={new Date()}
-                            // parseDateFromString={()}'
-                            minDate={new Date()}
-                        />
-                    </div>
-                    <div className="assignuser-info-item">
-                        <Label required>Trạng thái</Label>
-                        <Switch
-                            checked
-                            onChange={() => { }}
-                        />
-                    </div>
-                </div>
+                ) :
+                    <div className="assignuser-page-wrap">
+                        <div className="assignuser-info-item">
+                            <TextField
+                                label='Mã vai trò'
+                                required
+                                placeholder='--'
+                                value={roleCode}
+                                onChange={(_, value) => {
+                                    setRoleCode(value)
+                                }}
+                            />
+                        </div>
+                        <div className="assignuser-info-item">
+                            <TextField
+                                label='Tên vai trò'
+                                required
+                                placeholder='--'
+                                value={roleName}
+                                onChange={(_, value) => {
+                                    setRoleName(value)
+                                }}
+                            />
+                        </div>
+                        <div className="assignuser-info-item">
+                            <TextField
+                                label='Mô tả'
+                                required
+                                placeholder='--'
+                                value={roleDescription}
+                                onChange={(_, value) => {
+                                    setRoleDescription(value)
+                                }}
+                            />
+                        </div>
+                        <div className="assignuser-info-item">
+                            <DatePicker
+                                placeholder="Chọn một giá trị"
+                                ariaLabel="Chọn một giá trị"
+                                label='Thời gian bắt đầu'
+                                isRequired={true}
+                                onSelectDate={(date) => {
+                                    setRoleStart(date!)
+                                }}
+                                value={new Date(roleStartTime)}
+                                minDate={new Date()}
+                            />
+                        </div>
+                        <div className="assignuser-info-item">
+                            <DatePicker
+                                placeholder="Chọn một giá trị"
+                                ariaLabel="Chọn một giá trị"
+                                label='Thời gian kết thúc'
+                                isRequired={true}
+                                // strings={defaultDatePickerStrings}
+                                onSelectDate={(date) => {
+                                    setRoleEnd(date!)
+                                }}
+                                value={new Date(roleEndTime)}
+                                minDate={new Date()}
+                            />
+                        </div>
+                        <div className="assignuser-info-item">
+                            <Label required>Trạng thái</Label>
+                            <Switch
+                                checked={roleStatus}
+                                onChange={(_, checked) => { setRoleStatus(checked) }}
+                            />
+                        </div>
+                    </div>}
                 <div className="assignuser-page-sub-title">
                     Danh sách người dùng
                 </div>
@@ -346,13 +356,21 @@ function AssignUserPage() {
                         handleChangePage={(page) => { setCurrentPage(page) }}
                         total={10}
                         className='assignuser-table'
-                        isLoading={false}
-
+                        isLoading={loadingRoleDetail}
                     />
                 </div>
                 <div className="assignuser-page-button">
                     <Button variant={ButtonVariantType.Outlined} color={ButtonColorType.Inherit}>Hủy</Button>
-                    {true && <Button variant={ButtonVariantType.Contained}>Lưu</Button>}
+                    {true && <SubmitButton
+                        id={'common-dialog-default'}
+                        text={'Lưu'}
+                        // disable={!canUpdate}
+                        buttonVariantType={ButtonVariantType.Contained}
+                        promise={assignUser}
+                        loading={loadingButton}
+                        loadingPosition={LoadingPosition.Center}
+
+                    />}
                 </div>
                 <DialogView
                     title={'Thêm người dùng'}
@@ -363,7 +381,7 @@ function AssignUserPage() {
                     confirmButtonText={'Lưu'}
                     confirm={onSave}
                     closeButtonText='Hủy bỏ'
-                    close={() => { setShowDialog(false) }}
+                    close={closeForm}
                 />
             </div>
         </div>
